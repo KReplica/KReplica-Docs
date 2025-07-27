@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.cache.CacheManager
 import org.springframework.context.ApplicationListener
-import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -22,7 +21,6 @@ class GradleDaemonWarmupService(
         primeCacheAndWarmupDaemon()
     }
 
-    @Async
     fun primeCacheAndWarmupDaemon() {
         val permanentCache = cacheManager.getCache("playground-templates-cache") ?: return
         val templates = codeSnippetProvider.getPlaygroundTemplates()
