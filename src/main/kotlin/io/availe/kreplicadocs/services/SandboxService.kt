@@ -14,7 +14,7 @@ class SandboxService(private val compilerService: CompilerService) {
     private val compilationSemaphore =
         Semaphore((Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1), true)
 
-    @Cacheable("playground-cache")
+    @Cacheable("playground-cache", key = "#request.sourceCode")
     fun compile(request: CompileRequest): CompileResponse {
         if (!compilationSemaphore.tryAcquire(30, TimeUnit.SECONDS)) {
             throw TimeoutException("Could not acquire compilation lock within 30 seconds. The server may be busy.")
