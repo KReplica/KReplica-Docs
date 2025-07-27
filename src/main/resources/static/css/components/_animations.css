@@ -10,6 +10,6 @@
 }
 
 .flash-highlight {
-    animation: highlight-fade 5.5s ease-out;
+    animation: highlight-fade 2.0s ease-out;
     border-radius: 8px;
 }
