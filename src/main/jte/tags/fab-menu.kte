@@ -17,6 +17,7 @@
                            @click="handleFabLinkClick($event, '${section.id}')">${section.title}</a>
                     @else
                         <button type="button" class="fab-parent-item"
+                                data-section-id="${section.id}"
                                 @click="openSection = openSection === '${section.id}' ? null : '${section.id}'; handleFabNavClick($event, '${section.id}')">
                             <span class="fab-parent-link">${section.title}</span>
                             <svg class="fab-toggle-icon"

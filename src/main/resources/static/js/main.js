@@ -55,7 +55,6 @@ function scrollToActiveExample() {
 let scrollSpyTimeoutId;
 let isScrollSpyPaused = false;
 let activeScrollListener = null;
-let isProgrammaticScroll = false;
 
 function throttle(func, limit) {
     let inThrottle;
@@ -75,7 +74,7 @@ function updateActiveNav(targetId) {
     if (!navContainers.length) return;
 
     navContainers.forEach(container => {
-        container.querySelectorAll('a.active').forEach(link => link.classList.remove('active'));
+        container.querySelectorAll('a.active, .fab-parent-item.active').forEach(link => link.classList.remove('active'));
     });
 
     if (!targetId) return;
@@ -89,25 +88,25 @@ function updateActiveNav(targetId) {
             const fabContainer = fabSubmenu.closest('.fab-container');
             const parentLi = fabSubmenu.closest('li');
             if (fabContainer && parentLi && fabContainer.__x) {
-                const parentLink = parentLi.querySelector('.fab-parent-link');
-                if (parentLink) {
-                    const parentId = parentLink.getAttribute('href').substring(1);
-                    fabContainer.__x.getUnwrappedData().openSection = parentId;
+                const parentButton = parentLi.querySelector('.fab-parent-item');
+                if (parentButton && parentButton.dataset.sectionId) {
+                    fabContainer.__x.getUnwrappedData().openSection = parentButton.dataset.sectionId;
                 }
             }
         }
     });
 }
 
+
 function initScrollSpy() {
     if (activeScrollListener) {
         window.removeEventListener('scroll', activeScrollListener);
     }
 
-    const sidebarLinksContainer = document.getElementById('guide-sidebar-links');
-    if (!sidebarLinksContainer) return;
+    const linksContainer = document.getElementById('guide-sidebar-links');
+    if (!linksContainer) return;
 
-    let sections = Array.from(sidebarLinksContainer.querySelectorAll('a[href^="#"]'))
+    let sections = Array.from(linksContainer.querySelectorAll('a[href^="#"]'))
         .map(link => document.getElementById(link.getAttribute('href').substring(1)))
         .filter(section => section !== null);
 
@@ -118,7 +117,7 @@ function initScrollSpy() {
     let lastActiveId = null;
 
     const handleScroll = () => {
-        if (isProgrammaticScroll || isScrollSpyPaused) return;
+        if (isScrollSpyPaused) return;
 
         let newActiveId = null;
         const scrollBottom = Math.ceil(window.innerHeight + window.scrollY);
@@ -145,7 +144,6 @@ function initScrollSpy() {
         if (newActiveId !== lastActiveId) {
             lastActiveId = newActiveId;
             updateActiveNav(newActiveId);
-
             const scrollContainer = document.querySelector('.examples-sidebar');
             if (scrollContainer && scrollContainer.scrollHeight > scrollContainer.clientHeight) {
                 const activeLinkInSidebar = scrollContainer.querySelector('a.active');
@@ -159,41 +157,54 @@ function initScrollSpy() {
         }
     };
 
-    sidebarLinksContainer.addEventListener('click', function (e) {
-        const anchorLink = e.target.closest('a[href^="#"]');
-        if (anchorLink) {
-            e.preventDefault();
-            const id = anchorLink.getAttribute('href').substring(1);
-            const targetSection = document.getElementById(id);
-            if (targetSection) {
-                isScrollSpyPaused = true;
-                const headerOffset = 80;
-                const elementPosition = targetSection.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.scrollY - headerOffset;
-
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-
-                applyHighlight(targetSection);
-                updateActiveNav(id);
-                lastActiveId = id;
-
-                clearTimeout(scrollSpyTimeoutId);
-                scrollSpyTimeoutId = setTimeout(() => {
-                    isScrollSpyPaused = false;
-                }, 1000);
-            }
-        }
-    });
-
     activeScrollListener = throttle(handleScroll, 100);
     window.addEventListener('scroll', activeScrollListener);
     handleScroll();
 }
 
+function handleNavClick(event, sectionId) {
+    event.preventDefault();
+    isScrollSpyPaused = true;
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        const headerOffset = 80;
+        const elementPosition = targetSection.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
+
+        applyHighlight(targetSection);
+        updateActiveNav(sectionId);
+
+        clearTimeout(scrollSpyTimeoutId);
+        scrollSpyTimeoutId = setTimeout(() => {
+            isScrollSpyPaused = false;
+        }, 1000);
+    }
+}
+
+window.handleFabNavClick = (event, sectionId) => {
+    handleNavClick(event, sectionId);
+};
+
+window.handleFabLinkClick = (event, sectionId) => {
+    handleNavClick(event, sectionId);
+};
+
 document.addEventListener('DOMContentLoaded', function () {
+    const sidebarLinksContainer = document.getElementById('guide-sidebar-links');
+    if (sidebarLinksContainer) {
+        sidebarLinksContainer.addEventListener('click', function (e) {
+            const anchorLink = e.target.closest('a[href^="#"]');
+            if (anchorLink) {
+                handleNavClick(e, anchorLink.getAttribute('href').substring(1));
+            }
+        });
+    }
+
     const editorEl = document.getElementById('kreplica-editor');
     if (editorEl && !window.kreplicaEditor && typeof window.initKReplicaPlayground === 'function') {
         window.initKReplicaPlayground();
