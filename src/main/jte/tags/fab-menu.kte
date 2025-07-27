@@ -1,6 +1,7 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
 <div class="fab-container"
+     data-js-id="fab-container"
      x-data="{ isOpen: false, openSection: null }"
      x-init="$watch('isOpen', value => { if (!value) openSection = null; })"
      :class="{ 'is-open': isOpen }"
@@ -8,7 +9,7 @@
      @click.outside="isOpen = false"
      x-cloak>
 
-    <div class="fab-menu">
+    <div class="fab-menu" data-js-id="fab-menu">
         <h4 class="fab-menu-header">Guide Sections</h4>
         <ul>
             @for ((index, section) in vm.guideNav.withIndex())

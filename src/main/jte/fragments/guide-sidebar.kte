@@ -1,6 +1,6 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
-<div id="guide-sidebar-links">
+<div data-js-id="guide-sidebar-links">
     <h4>Guide Sections</h4>
     <ul>
         @for(section in vm.guideNav)
