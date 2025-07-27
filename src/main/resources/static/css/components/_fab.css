@@ -56,20 +56,19 @@
 
 .fab-menu ul {
     list-style: none;
-    padding: 12px;
+    padding: 8px;
     margin: 0;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: var(--surface-color);
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
     max-height: calc(100vh - 150px);
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .fab-menu-header {
-    padding: 4px 16px 8px;
+    padding: 4px 8px 8px;
     margin: 0;
 }
 
@@ -83,8 +82,8 @@
 
 .fab-menu a {
     display: block;
-    padding: 10px 16px;
-    border-radius: 8px;
+    padding: 10px 12px;
+    border-radius: 4px;
     color: var(--primary-color);
     font-weight: 500;
     text-decoration: none;
@@ -92,12 +91,12 @@
 }
 
 .fab-menu a:hover {
-    background: rgba(0, 0, 0, 0.05);
+    background-color: var(--bg-color);
     text-decoration: none;
 }
 
 .fab-menu a.active {
-    background: var(--secondary-color);
+    background-color: var(--secondary-color);
     color: #fff;
     font-weight: 600;
 }
@@ -106,21 +105,27 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 10px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    text-align: left;
+    transition: background-color .2s ease, color .2s ease;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.fab-parent-item:hover {
+    background-color: var(--bg-color);
 }
 
 .fab-parent-link {
     flex-grow: 1;
-}
-
-.fab-toggle-button {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    pointer-events: none;
 }
 
 .fab-toggle-icon {
@@ -128,6 +133,7 @@
     height: 20px;
     fill: var(--text-light);
     transition: transform 0.2s ease-in-out;
+    pointer-events: none;
 }
 
 .fab-toggle-icon.is-open {
@@ -135,8 +141,15 @@
 }
 
 .fab-submenu {
-    padding: 4px 0 4px 20px;
-    margin: 0;
+    padding: 8px 0;
+    margin: 4px 0;
+    overflow: hidden;
+    background-color: var(--bg-color);
+    border-radius: 4px;
+}
+
+.fab-submenu a {
+    padding-left: 24px;
 }
 
 .fab-container.is-open .fab-button {

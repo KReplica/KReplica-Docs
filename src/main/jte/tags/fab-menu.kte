@@ -13,26 +13,23 @@
             @for ((index, section) in vm.guideNav.withIndex())
                 <li style="--stagger-delay: ${index * 30}ms;">
                     @if(section.subsections.isEmpty())
-                        <a href="#${section.id}" @click="isOpen = false">${section.title}</a>
+                        <a href="#${section.id}"
+                           @click="handleFabLinkClick($event, '${section.id}')">${section.title}</a>
                     @else
-                        <div class="fab-parent-item">
-                            <a href="#${section.id}" @click="isOpen = false"
-                               class="fab-parent-link">${section.title}</a>
-                            <button type="button" class="fab-toggle-button" aria-label="Toggle subsection"
-                                    @click="openSection = openSection === '${section.id}' ? null : '${section.id}'">
-                                <svg class="fab-toggle-icon"
-                                     :class="{ 'is-open': openSection === '${section.id}' }"
-                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-                                </svg>
-                            </button>
-                        </div>
-                        <ul x-show="openSection === '${section.id}'" class="fab-submenu"
-                            x-transition.opacity.duration.200ms>
+                        <button type="button" class="fab-parent-item"
+                                @click="openSection = openSection === '${section.id}' ? null : '${section.id}'; handleFabNavClick($event, '${section.id}')">
+                            <span class="fab-parent-link">${section.title}</span>
+                            <svg class="fab-toggle-icon"
+                                 :class="{ 'is-open': openSection === '${section.id}' }"
+                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                            </svg>
+                        </button>
+                        <ul x-show="openSection === '${section.id}'" class="fab-submenu" x-collapse>
                             @for (subsection in section.subsections)
                                 <li>
                                     <a href="#${subsection.id}"
-                                       @click="isOpen = false">${subsection.title}</a>
+                                       @click="handleFabLinkClick($event, '${subsection.id}')">${subsection.title}</a>
                                 </li>
                             @endfor
                         </ul>
