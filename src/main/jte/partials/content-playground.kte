@@ -50,6 +50,7 @@
                     </button>
                 </div>
             </div>
+            <span class="htmx-indicator">Loading...</span>
         </div>
     </form>
 

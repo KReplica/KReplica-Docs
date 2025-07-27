@@ -1,12 +1,27 @@
-document.body.addEventListener('htmx:afterSwap', function (evt) {
-    Prism.highlightAllUnder(evt.detail.elt);
+document.body.addEventListener('htmx:afterSwap', function (e) {
+    Prism.highlightAllUnder(e.detail.elt);
     initScrollSpy();
 
-    const requestPath = new URL(evt.detail.xhr.responseURL).pathname;
+    const requestPath = new URL(e.detail.xhr.responseURL).pathname;
     if (requestPath.startsWith('/guide/')) {
         setTimeout(() => scrollToActiveExample(), 0);
         const exampleShell = document.querySelector('#examples-main .examples-shell');
         applyHighlight(exampleShell);
+    }
+
+    const editorEl = document.getElementById('kreplica-editor');
+    if (editorEl && !window.kreplicaEditor && typeof window.initKReplicaPlayground === 'function') {
+        window.initKReplicaPlayground();
+    }
+
+    if (e.detail.target.id === 'editor-source-container') {
+        if (window.kreplicaEditor) {
+            const newSource = e.detail.target.querySelector('textarea[name="source"]').value;
+            window.kreplicaEditor.setValue(newSource);
+        }
+        if (window.clearPlaygroundOutput) {
+            window.clearPlaygroundOutput();
+        }
     }
 });
 
@@ -14,19 +29,6 @@ document.body.addEventListener('htmx:beforeSwap', function (evt) {
     if (evt.detail.target.id !== 'playground-output' && window.kreplicaEditor) {
         window.kreplicaEditor.dispose();
         window.kreplicaEditor = null;
-    }
-});
-
-document.body.addEventListener('htmx:afterSwap', function (e) {
-    const editorEl = document.getElementById('kreplica-editor');
-
-    if (editorEl && !window.kreplicaEditor && typeof window.initKReplicaPlayground === 'function') {
-        window.initKReplicaPlayground();
-    }
-
-    if (e.detail.target.id === 'editor-source-container' && window.kreplicaEditor) {
-        const newSource = e.detail.target.querySelector('textarea[name="source"]').value;
-        window.kreplicaEditor.setValue(newSource);
     }
 });
 
