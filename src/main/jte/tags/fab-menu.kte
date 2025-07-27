@@ -25,7 +25,9 @@
                                 <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
                             </svg>
                         </button>
-                        <ul x-show="openSection === '${section.id}'" class="fab-submenu" x-collapse>
+                        <ul x-show="openSection === '${section.id}'"
+                            x-collapse
+                            class="fab-submenu">
                             @for (subsection in section.subsections)
                                 <li>
                                     <a href="#${subsection.id}"
