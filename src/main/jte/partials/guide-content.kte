@@ -56,7 +56,8 @@
                 for the <code>UserAccount</code> model, as shown in the examples above.
             </li>
             <li><strong>Global Variants</strong> (e.g., <code>KReplicaPatchVariant&lt;V&gt;</code>): This is the key to
-                writing reusable code. Use these to create patterns that work *across any KReplica model*, such as a
+                writing reusable code. Use these to create patterns that work <em>across any KReplica model</em>, such
+                as a
                 generic API mapper, which we'll explore in the Core Patterns section.
             </li>
         </ul>
@@ -106,7 +107,7 @@
                 annotations (like <code>@Serializable</code>) to the generated DTOs.
             </li>
             <li><strong><code>@Replicate.SchemaVersion(number: Int)</code></strong>: Manually specifies a version number
-                for versioned schemas if you don't use the `V1`, `V2` naming convention.
+                for versioned schemas if you don't use the <code>V1</code>, <code>V2</code> naming convention.
             </li>
             <li><strong><code>@Replicate.Hide</code></strong>: Disables code generation for the annotated model, useful
                 for temporarily testing the impact of removing a schema.
@@ -142,7 +143,8 @@
             <div class="workflow-content" x-show="activeTab === 'auto'" x-cloak>
                 <p>Let KReplica handle the complexity. Simply nest the base interface of the child model
                     (<code>V1</code>).
-                    KReplica automatically ensures that the <code>Create</code> variant of the parent uses the <code>Create</code>
+                    KReplica automatically ensures that the <code>Create</code>
+                    variant of the parent uses the <code>Create</code>
                     variant of
                     the child, and so on.</p>
                 @template.tags.code(language="kotlin", content=@`${snippets[io.availe.kreplicadocs.common.CodeSnippet.NESTING_AUTOMATIC]}`)
