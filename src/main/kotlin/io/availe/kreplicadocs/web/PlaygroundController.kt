@@ -29,6 +29,7 @@ class PlaygroundController(
         return if (hxRequest != null) {
             FragmentsRendering.with(PartialTemplate.CONTENT_PLAYGROUND.path)
                 .fragment(FragmentTemplate.NAV_UPDATE_OOB.path)
+                .fragment(FragmentTemplate.FAB_UPDATE_OOB.path)
                 .build()
         } else {
             "pages/playground"

@@ -76,9 +76,11 @@
     </footer>
 </div>
 
-@if(vm is io.availe.kreplicadocs.model.view.GuideViewModel)
-    @template.tags.fab-menu(vm = vm)
-@endif
+<div id="fab-slot">
+    @if(vm is io.availe.kreplicadocs.model.view.GuideViewModel)
+        @template.tags.fab-menu(vm = vm)
+    @endif
+</div>
 
 <script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js" defer></script>
 <script src="/js/playground.js" defer></script>

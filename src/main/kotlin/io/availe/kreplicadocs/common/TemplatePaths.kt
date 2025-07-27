@@ -13,5 +13,6 @@ enum class PartialTemplate(val path: String) {
 }
 
 enum class FragmentTemplate(val path: String) {
-    NAV_UPDATE_OOB("fragments/nav-update-oob")
+    NAV_UPDATE_OOB("fragments/nav-update-oob"),
+    FAB_UPDATE_OOB("fragments/fab-update-oob")
 }

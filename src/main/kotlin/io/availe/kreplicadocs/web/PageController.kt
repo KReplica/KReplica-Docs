@@ -21,6 +21,7 @@ class PageController(private val viewModelFactory: ViewModelFactory) {
             FragmentsRendering
                 .with(PartialTemplate.CONTENT_INDEX.path)
                 .fragment(FragmentTemplate.NAV_UPDATE_OOB.path)
+                .fragment(FragmentTemplate.FAB_UPDATE_OOB.path)
                 .build()
         } else {
             PageTemplate.INDEX.path
@@ -34,6 +35,7 @@ class PageController(private val viewModelFactory: ViewModelFactory) {
             FragmentsRendering
                 .with(PartialTemplate.CONTENT_GUIDE.path)
                 .fragment(FragmentTemplate.NAV_UPDATE_OOB.path)
+                .fragment(FragmentTemplate.FAB_UPDATE_OOB.path)
                 .build()
         } else {
             PageTemplate.GUIDE.path
