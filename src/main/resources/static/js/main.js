@@ -73,32 +73,53 @@ function throttle(func, limit) {
 
 function updateActiveNav(targetId) {
     const navContainers = document.querySelectorAll('#guide-sidebar-links, .fab-menu');
-    if (!navContainers.length) return;
-
     navContainers.forEach(container => {
-        container.querySelectorAll('a.active, .fab-parent-item.active').forEach(link => link.classList.remove('active'));
+        container.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
     });
 
     if (!targetId) return;
 
-    const targetLinks = document.querySelectorAll(`#guide-sidebar-links a[href="#${targetId}"], .fab-menu a[href="#${targetId}"]`);
+    const sidebarLink = document.querySelector(`#guide-sidebar-links a[href="#${targetId}"]`);
+    if (sidebarLink) {
+        sidebarLink.classList.add('active');
+    }
 
-    targetLinks.forEach(link => {
-        link.classList.add('active');
-        const fabSubmenu = link.closest('.fab-submenu');
-        if (fabSubmenu) {
-            const fabContainer = fabSubmenu.closest('.fab-container');
-            const parentLi = fabSubmenu.closest('li');
-            if (fabContainer && parentLi && fabContainer.__x) {
-                const parentButton = parentLi.querySelector('.fab-parent-item');
-                if (parentButton && parentButton.dataset.sectionId) {
-                    fabContainer.__x.getUnwrappedData().openSection = parentButton.dataset.sectionId;
-                }
+    const fabMenu = document.querySelector('.fab-menu');
+    if (!fabMenu) return;
+
+    const fabLink = fabMenu.querySelector(`a[href="#${targetId}"]`);
+    const fabButton = fabMenu.querySelector(`button[data-section-id="${targetId}"]`);
+
+    if (fabLink) {
+        const submenu = fabLink.closest('.fab-submenu');
+        if (submenu && submenu.offsetParent !== null) {
+            fabLink.classList.add('active');
+        } else {
+            const parentButton = submenu?.closest('li')?.querySelector('.fab-parent-item');
+            if (parentButton) {
+                parentButton.classList.add('active');
+            } else {
+                fabLink.classList.add('active');
             }
         }
-    });
-}
+    } else if (fabButton) {
+        fabButton.classList.add('active');
+    }
 
+    const fabContainer = document.querySelector('.fab-container');
+    const alpineData = fabContainer?.__x?.getUnwrappedData();
+    const activeFabLink = fabMenu.querySelector('a.active');
+
+    if (activeFabLink) {
+        const submenu = activeFabLink.closest('.fab-submenu');
+        if (submenu) {
+            const parentButton = submenu.closest('li').querySelector('.fab-parent-item');
+            if (parentButton && alpineData?.isOpen) {
+                alpineData.openSection = parentButton.dataset.sectionId;
+            }
+        }
+    }
+}
 
 function initScrollSpy() {
     if (activeScrollListener) {

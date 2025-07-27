@@ -21,6 +21,7 @@
     justify-content: center;
     color: white;
     transition: transform .2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color .2s ease;
+    touch-action: manipulation;
 }
 
 .fab-button:hover {
@@ -47,10 +48,9 @@
 
 .fab-menu {
     position: absolute;
-    bottom: 0;
+    bottom: 75px;
     right: 0;
     width: 260px;
-    padding-bottom: 75px;
     visibility: hidden;
 }
 
@@ -64,6 +64,7 @@
     max-height: calc(100vh - 150px);
     overflow-y: auto;
     overflow-x: hidden;
+    border: 1px solid var(--border-color);
 }
 
 .fab-menu-header {
@@ -86,7 +87,9 @@
 }
 
 .fab-menu a {
-    display: block;
+    display: flex;
+    align-items: center;
+    min-height: 48px;
     padding: 12px 16px;
     color: var(--primary-color);
     font-weight: 500;
@@ -113,17 +116,28 @@
     background: transparent;
     border: none;
     padding: 12px 16px;
+    min-height: 48px;
     cursor: pointer;
     font-family: inherit;
     font-size: inherit;
     text-align: left;
-    transition: background-color .2s ease;
+    transition: background-color .2s ease, color .2s ease;
     color: var(--primary-color);
     font-weight: 500;
 }
 
 .fab-parent-item:hover {
     background-color: var(--bg-color);
+}
+
+.fab-parent-item.active {
+    background-color: var(--secondary-color);
+    color: #fff;
+    font-weight: 600;
+}
+
+.fab-parent-item.active .fab-toggle-icon {
+    fill: #fff;
 }
 
 .fab-parent-link {
@@ -147,6 +161,7 @@
     padding: 0;
     margin: 0;
     overflow: hidden;
+    background-color: #f7f9fc;
 }
 
 .fab-submenu li {
