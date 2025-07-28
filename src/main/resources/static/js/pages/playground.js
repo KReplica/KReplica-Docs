@@ -35,9 +35,12 @@ function initKReplicaPlayground() {
                 );
 
                 const updateEditorHeight = () => {
-                    if (kreplicaEditor) {
+                    if (kreplicaEditor && window.innerWidth >= 992) {
                         const contentHeight = kreplicaEditor.getContentHeight();
-                        editorNode.style.height = `${contentHeight}px`;
+                        const editorParent = editorNode.parentElement;
+                        if (editorParent) {
+                            editorParent.style.minHeight = `${contentHeight}px`;
+                        }
                     }
                 };
 
@@ -65,6 +68,7 @@ function clearPlaygroundOutput() {
     if (output) {
         output.innerHTML = '<div class="placeholder-text">Click "Run" to see the generated code.</div>';
     }
+    window.dispatchEvent(new Event('clear-output'));
 }
 
 function resetPlayground() {
@@ -81,9 +85,23 @@ function resetPlayground() {
 }
 
 function setupEventListeners() {
-    document.getElementById('reset-all-btn')?.addEventListener('click', resetPlayground);
-    document.getElementById('reset-all-dropdown-btn')?.addEventListener('click', resetPlayground);
-    document.getElementById('clear-output-btn')?.addEventListener('click', clearPlaygroundOutput);
+    const desktopResetButton = document.getElementById('reset-all-btn-desktop');
+    desktopResetButton?.addEventListener('click', (e) => {
+        if (!e.target.closest('.split-button-arrow')) {
+            resetPlayground();
+        }
+    });
+    document.getElementById('reset-all-dropdown-btn-desktop')?.addEventListener('click', resetPlayground);
+    document.getElementById('clear-output-btn-desktop')?.addEventListener('click', clearPlaygroundOutput);
+
+    const mobileResetButton = document.getElementById('reset-all-btn-mobile');
+    mobileResetButton?.addEventListener('click', (e) => {
+        if (!e.target.closest('.split-button-arrow')) {
+            resetPlayground();
+        }
+    });
+    document.getElementById('reset-all-dropdown-btn-mobile')?.addEventListener('click', resetPlayground);
+    document.getElementById('clear-output-btn-mobile')?.addEventListener('click', clearPlaygroundOutput);
 }
 
 export function init() {

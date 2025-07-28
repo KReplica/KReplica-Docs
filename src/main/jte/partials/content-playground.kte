@@ -1,35 +1,86 @@
 @param vm: io.availe.kreplicadocs.model.view.PlaygroundViewModel
 
-<div class="playground-container">
-    <div class="playground-controls">
-        @template.tags.custom-select(
-        label = "Starter Template:",
-        id = "template-select",
-        options = vm.availableTemplates,
-        hxGet = "/playground/templates",
-        hxTarget = "#editor-source-container",
-        hxPushUrl = "false",
-        hxIndicator = ".playground-actions .htmx-indicator",
-        hxSwap = "innerHTML"
-        )
-    </div>
+<div class="playground-container"
+     x-data="{ activeTab: 'editor', isOutputReady: false }"
+     @output-ready.window="isOutputReady = true; if (window.innerWidth < 992) activeTab = 'output'"
+     @clear-output.window="isOutputReady = false; activeTab = 'editor'">
 
-    <form class="playground-form"
-          hx-post="/playground/compile"
-          hx-target="#playground-output">
-
-        <div class="playground-editor-area" data-template-slug="${vm.activeTemplateSlug}">
-            <div id="editor-source-container">
-                <textarea name="source" hidden>${vm.initialSourceCode}</textarea>
-            </div>
-            <div id="kreplica-editor"></div>
+    <div class="playground-main-content">
+        <div class="playground-tabs-mobile" role="tablist">
+            <button role="tab"
+                    @click="activeTab = 'editor'"
+                    :class="{ 'active': activeTab === 'editor' }">
+                Editor
+            </button>
+            <button role="tab"
+                    @click="activeTab = 'output'"
+                    :disabled="!isOutputReady"
+                    :class="{ 'active': activeTab === 'output', 'disabled': !isOutputReady }">
+                Output
+            </button>
         </div>
 
-        <div class="playground-actions">
-            <button type="submit" id="run-btn" class="button-run">Run</button>
+        <form class="playground-io-container" id="playground-form"
+              hx-post="/playground/compile"
+              hx-target="#playground-output">
 
+            <div class="playground-input-column" x-show="activeTab === 'editor'" x-cloak>
+                <div class="playground-controls">
+                    @template.tags.custom-select(
+                    label = "Starter Template:",
+                    id = "template-select",
+                    options = vm.availableTemplates,
+                    hxGet = "/playground/templates",
+                    hxTarget = "#editor-source-container",
+                    hxPushUrl = "false",
+                    hxIndicator = ".htmx-indicator",
+                    hxSwap = "innerHTML"
+                    )
+                </div>
+                <div class="playground-editor-area" data-template-slug="${vm.activeTemplateSlug}">
+                    <div id="editor-source-container">
+                        <textarea name="source" hidden>${vm.initialSourceCode}</textarea>
+                    </div>
+                    <div id="kreplica-editor"></div>
+                </div>
+            </div>
+
+            <div class="playground-output-column" x-show="activeTab === 'output'" x-cloak>
+                <div class="playground-actions-desktop">
+                    <button type="submit" form="playground-form" id="run-btn-desktop" class="button-run">Run</button>
+                    <div class="split-button-container" x-data="{ isOpen: false }">
+                        <button type="button" id="reset-all-btn-desktop" class="button-reset split-button">
+                            <span class="split-button-label">Reset All</span>
+                            <span class="split-button-arrow" @click.stop="isOpen = !isOpen">
+                                <svg :class="{'rotate-180': isOpen}" xmlns="http://www.w3.org/2000/svg"
+                                     width="18" height="18" viewBox="0 0 24 24">
+                                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                                </svg>
+                            </span>
+                        </button>
+                        <div x-show="isOpen" @click.outside="isOpen = false" class="dropdown-menu" x-cloak>
+                            <button type="button" id="reset-all-dropdown-btn-desktop" class="dropdown-item"
+                                    @click="isOpen = false">
+                                Reset All
+                            </button>
+                            <button type="button" id="clear-output-btn-desktop" class="dropdown-item"
+                                    @click="isOpen = false">
+                                Clear Output
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="playground-output" class="playground-output-content">
+                    <div class="placeholder-text">Click "Run" to see the generated code.</div>
+                </div>
+            </div>
+        </form>
+
+        <div class="playground-actions-mobile">
+            <span class="actions-spacer"></span>
+            <button type="submit" form="playground-form" id="run-btn-mobile" class="button-run">Run</button>
             <div class="split-button-container" x-data="{ isOpen: false }">
-                <button type="button" id="reset-all-btn" class="button-reset split-button">
+                <button type="button" id="reset-all-btn-mobile" class="button-reset split-button">
                     <span class="split-button-label">Reset All</span>
                     <span class="split-button-arrow" @click.stop="isOpen = !isOpen">
                         <svg :class="{'rotate-180': isOpen}" xmlns="http://www.w3.org/2000/svg"
@@ -38,25 +89,17 @@
                         </svg>
                     </span>
                 </button>
-
                 <div x-show="isOpen" @click.outside="isOpen = false" class="dropdown-menu" x-cloak>
-                    <button type="button" id="reset-all-dropdown-btn" class="dropdown-item" @click="isOpen = false">
+                    <button type="button" id="reset-all-dropdown-btn-mobile" class="dropdown-item"
+                            @click="isOpen = false">
                         Reset All
                     </button>
-                    <button type="button" id="clear-output-btn" class="dropdown-item"
-                            @click="isOpen = false">
+                    <button type="button" id="clear-output-btn-mobile" class="dropdown-item" @click="isOpen = false">
                         Clear Output
                     </button>
                 </div>
             </div>
             <span class="htmx-indicator">Loading...</span>
-        </div>
-    </form>
-
-    <div class="playground-output-area">
-        <h3>Output</h3>
-        <div id="playground-output">
-            <div class="placeholder-text">Click "Run" to see the generated code.</div>
         </div>
     </div>
 </div>

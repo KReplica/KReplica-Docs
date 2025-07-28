@@ -18,6 +18,10 @@ document.body.addEventListener('htmx:afterSwap', (e) => {
     Prism.highlightAllUnder(e.detail.elt);
     void initializeApp();
 
+    if (e.detail.target.id === 'playground-output') {
+        window.dispatchEvent(new CustomEvent('output-ready'));
+    }
+
     if (e.detail.target.id === 'editor-source-container') {
         import('./pages/playground.js').then(playground => {
             const editor = playground.getEditorInstance();
