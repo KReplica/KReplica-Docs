@@ -1,4 +1,4 @@
-import {rafThrottle} from "../utils/throttle";
+import {throttle} from '../utils/throttle.js';
 
 let activeScrollListener = null;
 let isScrollSpyPaused = false;
@@ -61,7 +61,7 @@ export function initScrollSpy() {
         }
     };
 
-    activeScrollListener = rafThrottle(handleScroll);
+    activeScrollListener = throttle(handleScroll, 100);
     window.addEventListener('scroll', activeScrollListener);
     handleScroll();
 }
