@@ -1,12 +1,11 @@
-export function throttle(func, limit) {
-    let inThrottle;
+export function rafThrottle(fn) {
+    let ticking = false;
     return function () {
-        const args = arguments;
-        const context = this;
-        if (!inThrottle) {
-            func.apply(context, args);
-            inThrottle = true;
-            setTimeout(() => inThrottle = false, limit);
-        }
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+            fn.apply(this, arguments);
+            ticking = false;
+        });
     };
 }
