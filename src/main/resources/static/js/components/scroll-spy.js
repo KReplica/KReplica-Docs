@@ -1,4 +1,4 @@
-import {rafThrottle} from "../utils/throttle";
+import {rafThrottle} from "../utils/throttle.js";
 
 let activeScrollListener = null;
 let isScrollSpyPaused = false;
