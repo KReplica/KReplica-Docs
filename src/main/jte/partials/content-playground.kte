@@ -41,7 +41,9 @@
                 </div>
                 <div class="playground-editor-area" data-template-slug="${vm.activeTemplateSlug}">
                     <div id="editor-source-container">
-                        <textarea name="source" hidden>${vm.initialSourceCode}</textarea>
+                        <div data-template-slug="${vm.activeTemplateSlug}">
+                            <textarea name="source" hidden>${vm.initialSourceCode}</textarea>
+                        </div>
                     </div>
                     <div id="kreplica-editor"></div>
                 </div>

@@ -99,13 +99,11 @@ function clearPlaygroundOutput() {
 
 function resetPlayground() {
     clearPlaygroundOutput();
-
-    const editorArea = document.querySelector('.playground-editor-area');
-    if (!editorArea) return;
-
-    const slug = editorArea.dataset.templateSlug;
+    const container = document.getElementById('editor-source-container');
+    if (!container) return;
+    const slugEl = container.querySelector('[data-template-slug]');
+    const slug = slugEl ? slugEl.dataset.templateSlug : null;
     if (!slug) return;
-
     const url = `/playground/templates?template-select=${slug}`;
     htmx.ajax('GET', url, {target: '#editor-source-container', swap: 'innerHTML'});
 }
@@ -141,6 +139,10 @@ export function getEditorInstance() {
 
 export function disposeEditor() {
     if (kreplicaEditor) {
+        const model = kreplicaEditor.getModel();
+        if (model) {
+            model.dispose();
+        }
         kreplicaEditor.dispose();
         kreplicaEditor = null;
     }

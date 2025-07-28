@@ -4,7 +4,8 @@
     <div x-data="{ activeTab: '${files.keys.first()}' }">
         <div class="playground-tabs" role="tablist">
             @for((filename, _) in files)
-                <button role="tab"
+                <button type="button"
+                        role="tab"
                         :class="activeTab === '${filename}' ? 'active' : ''"
                         @click="activeTab = '${filename}'">
                     ${filename}
