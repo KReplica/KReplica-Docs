@@ -34,14 +34,11 @@ function initKReplicaPlayground() {
                     }
                 );
 
-                const updateEditorHeight = () => {
-                    if (kreplicaEditor && window.innerWidth >= 992) {
-                        const contentHeight = kreplicaEditor.getContentHeight();
-                        const editorParent = editorNode.parentElement;
-                        if (editorParent) {
-                            editorParent.style.minHeight = `${contentHeight}px`;
-                        }
-                    }
+                const syncHeightToContent = () => {
+                    if (!kreplicaEditor) return;
+                    const contentHeight = kreplicaEditor.getContentHeight();
+                    editorNode.style.height = contentHeight + 'px';
+                    kreplicaEditor.layout();
                 };
 
                 monaco.languages.registerCompletionItemProvider('kotlin', {
@@ -51,14 +48,15 @@ function initKReplicaPlayground() {
                     }
                 });
 
+                kreplicaEditor.onDidContentSizeChange(syncHeightToContent);
+
                 kreplicaEditor.onDidChangeModelContent(() => {
                     if (hiddenTextarea) {
                         hiddenTextarea.value = kreplicaEditor.getValue();
                     }
-                    updateEditorHeight();
                 });
 
-                updateEditorHeight();
+                syncHeightToContent();
             });
     });
 }
@@ -117,6 +115,10 @@ export function disposeEditor() {
     if (kreplicaEditor) {
         kreplicaEditor.dispose();
         kreplicaEditor = null;
+    }
+    const node = document.getElementById('kreplica-editor');
+    if (node) {
+        node.style.height = '';
     }
 }
 
