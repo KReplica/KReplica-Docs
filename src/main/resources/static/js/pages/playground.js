@@ -81,9 +81,9 @@ function resetPlayground() {
 }
 
 export function init() {
-    if (document.getElementById('kreplica-editor')) {
-        initKReplicaPlayground();
-    }
+    initKReplicaPlayground();
+    window.resetPlayground = resetPlayground;
+    window.clearPlaygroundOutput = clearPlaygroundOutput;
 }
 
 export function getEditorInstance() {
@@ -97,14 +97,8 @@ export function disposeEditor() {
     }
 }
 
-export function getEditorValue() {
-    return kreplicaEditor ? kreplicaEditor.getValue() : null;
-}
-
 export function setEditorValue(value) {
     if (kreplicaEditor) {
         kreplicaEditor.setValue(value);
     }
 }
-
-export {clearPlaygroundOutput, resetPlayground};
