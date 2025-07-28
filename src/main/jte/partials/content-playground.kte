@@ -29,8 +29,7 @@
             <button type="submit" id="run-btn" class="button-run">Run</button>
 
             <div class="split-button-container" x-data="{ isOpen: false }">
-                <button type="button" class="button-reset split-button"
-                        @click="resetPlayground()">
+                <button type="button" id="reset-all-btn" class="button-reset split-button">
                     <span class="split-button-label">Reset All</span>
                     <span class="split-button-arrow" @click.stop="isOpen = !isOpen">
                         <svg :class="{'rotate-180': isOpen}" xmlns="http://www.w3.org/2000/svg"
@@ -41,11 +40,11 @@
                 </button>
 
                 <div x-show="isOpen" @click.outside="isOpen = false" class="dropdown-menu" x-cloak>
-                    <button type="button" class="dropdown-item" @click="resetPlayground(); isOpen = false">
+                    <button type="button" id="reset-all-dropdown-btn" class="dropdown-item" @click="isOpen = false">
                         Reset All
                     </button>
                     <button type="button" id="clear-output-btn" class="dropdown-item"
-                            @click="clearPlaygroundOutput(); isOpen = false">
+                            @click="isOpen = false">
                         Clear Output
                     </button>
                 </div>

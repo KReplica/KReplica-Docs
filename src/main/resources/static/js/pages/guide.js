@@ -1,4 +1,4 @@
-import {initScrollSpy} from '../components/scroll-spy.js';
+import {initScrollSpy, pauseScrollSpy, resumeScrollSpy} from '../components/scroll-spy.js';
 import {initGuideNavigation} from '../components/guide-navigation.js';
 
 let scrollSpyTimeoutId;
@@ -13,7 +13,7 @@ function applyHighlight(targetElement) {
 
 function handleNavClick(event, sectionId) {
     event.preventDefault();
-    window.isScrollSpyPaused = true;
+    pauseScrollSpy();
     const targetSection = document.getElementById(sectionId);
     if (targetSection) {
         const headerOffset = 80;
@@ -30,32 +30,40 @@ function handleNavClick(event, sectionId) {
         document.body.dispatchEvent(customEvent);
 
         clearTimeout(scrollSpyTimeoutId);
-        scrollSpyTimeoutId = setTimeout(() => {
-            window.isScrollSpyPaused = false;
-        }, 1000);
+        scrollSpyTimeoutId = setTimeout(resumeScrollSpy, 1000);
+    } else {
+        resumeScrollSpy();
+    }
+}
+
+function setupEventListeners() {
+    const sidebar = document.querySelector('[data-js-id="guide-sidebar-links"]');
+    if (sidebar) {
+        sidebar.addEventListener('click', (e) => {
+            const anchor = e.target.closest('a[href^="#"]');
+            if (anchor) {
+                handleNavClick(e, anchor.getAttribute('href').substring(1));
+            }
+        });
+    }
+
+    const fab = document.querySelector('[data-js-id="fab-container"]');
+    if (fab) {
+        fab.addEventListener('click', (e) => {
+            const anchor = e.target.closest('a[href^="#"]');
+            if (anchor) {
+                const fabContainer = e.target.closest('[x-data]');
+                if (fabContainer && fabContainer.__x) {
+                    fabContainer.__x.data.isOpen = false;
+                }
+                handleNavClick(e, anchor.getAttribute('href').substring(1));
+            }
+        });
     }
 }
 
 export function init() {
-    window.isScrollSpyPaused = false;
     initScrollSpy();
     initGuideNavigation();
-
-    window.handleFabNavClick = (event, sectionId) => {
-        handleNavClick(event, sectionId);
-    };
-
-    window.handleFabLinkClick = (event, sectionId) => {
-        handleNavClick(event, sectionId);
-    };
-
-    const sidebarLinksContainer = document.querySelector('[data-js-id="guide-sidebar-links"]');
-    if (sidebarLinksContainer) {
-        sidebarLinksContainer.addEventListener('click', function (e) {
-            const anchorLink = e.target.closest('a[href^="#"]');
-            if (anchorLink) {
-                handleNavClick(e, anchorLink.getAttribute('href').substring(1));
-            }
-        });
-    }
+    setupEventListeners();
 }

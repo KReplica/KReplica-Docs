@@ -80,10 +80,15 @@ function resetPlayground() {
     htmx.ajax('GET', url, {target: '#editor-source-container', swap: 'innerHTML'});
 }
 
+function setupEventListeners() {
+    document.getElementById('reset-all-btn')?.addEventListener('click', resetPlayground);
+    document.getElementById('reset-all-dropdown-btn')?.addEventListener('click', resetPlayground);
+    document.getElementById('clear-output-btn')?.addEventListener('click', clearPlaygroundOutput);
+}
+
 export function init() {
     initKReplicaPlayground();
-    window.resetPlayground = resetPlayground;
-    window.clearPlaygroundOutput = clearPlaygroundOutput;
+    setupEventListeners();
 }
 
 export function getEditorInstance() {

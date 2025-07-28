@@ -15,8 +15,7 @@
             @for ((index, section) in vm.guideNav.withIndex())
                 <li style="--stagger-delay: ${index * 30}ms;">
                     @if(section.subsections.isEmpty())
-                        <a href="#${section.id}"
-                           @click="handleFabLinkClick($event, '${section.id}')">${section.title}</a>
+                        <a href="#${section.id}">${section.title}</a>
                     @else
                         <button type="button" class="fab-parent-item"
                                 data-section-id="${section.id}"
@@ -33,13 +32,11 @@
                             x-collapse
                             class="fab-submenu">
                             <li>
-                                <a href="#${section.id}"
-                                   @click="handleFabLinkClick($event, '${section.id}')">Overview</a>
+                                <a href="#${section.id}">Overview</a>
                             </li>
                             @for (subsection in section.subsections)
                                 <li>
-                                    <a href="#${subsection.id}"
-                                       @click="handleFabLinkClick($event, '${subsection.id}')">${subsection.title}</a>
+                                    <a href="#${subsection.id}">${subsection.title}</a>
                                 </li>
                             @endfor
                         </ul>

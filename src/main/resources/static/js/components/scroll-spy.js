@@ -1,6 +1,15 @@
 import {throttle} from '../utils/throttle.js';
 
 let activeScrollListener = null;
+let isScrollSpyPaused = false;
+
+export function pauseScrollSpy() {
+    isScrollSpyPaused = true;
+}
+
+export function resumeScrollSpy() {
+    isScrollSpyPaused = false;
+}
 
 export function initScrollSpy() {
     if (activeScrollListener) {
@@ -21,7 +30,7 @@ export function initScrollSpy() {
     let lastActiveId = null;
 
     const handleScroll = () => {
-        if (window.isScrollSpyPaused) return;
+        if (isScrollSpyPaused) return;
 
         let newActiveId = null;
         const scrollBottom = Math.ceil(window.innerHeight + window.scrollY);
