@@ -37,7 +37,8 @@ document.body.addEventListener('htmx:afterSwap', (e) => {
 });
 
 document.body.addEventListener('htmx:beforeSwap', (evt) => {
-    if (evt.detail.target.id !== 'playground-output') {
+    const target = evt.detail.target;
+    if (target && target.classList && target.classList.contains('main-content')) {
         import('./pages/playground.js').then(playground => {
             if (playground.getEditorInstance()) {
                 playground.disposeEditor();

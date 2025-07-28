@@ -1,11 +1,15 @@
 let kreplicaEditor = null;
 
+function getHiddenTextarea() {
+    return document.querySelector('textarea[name="source"]');
+}
+
 function initKReplicaPlayground() {
     if (kreplicaEditor) {
         return;
     }
 
-    require.config({paths: {vs: 'https://unpkg.com/monaco-editor@0.45.0/min/vs'}});
+    require.config({paths: {vs: 'https://unpkg.com/monaco-editor@0.52.2/min/vs'}});
     require(['vs/editor/editor.main'], function () {
         fetch('/api/completions')
             .then(response => response.json())
@@ -17,8 +21,8 @@ function initKReplicaPlayground() {
                     insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
                 }));
 
-                const hiddenTextarea = document.querySelector('textarea[name="source"]');
-                const initialCode = hiddenTextarea ? hiddenTextarea.value : '';
+                const hiddenTextareaEl = getHiddenTextarea();
+                const initialCode = hiddenTextareaEl ? hiddenTextareaEl.value : '';
                 const editorNode = document.getElementById('kreplica-editor');
 
                 kreplicaEditor = monaco.editor.create(
@@ -51,12 +55,15 @@ function initKReplicaPlayground() {
                 kreplicaEditor.onDidContentSizeChange(syncHeightToContent);
 
                 kreplicaEditor.onDidChangeModelContent(() => {
-                    if (hiddenTextarea) {
-                        hiddenTextarea.value = kreplicaEditor.getValue();
+                    const currentTextarea = getHiddenTextarea();
+                    if (currentTextarea) {
+                        currentTextarea.value = kreplicaEditor.getValue();
                     }
                 });
 
-                syncHeightToContent();
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(syncHeightToContent);
+                });
             });
     });
 }
@@ -115,10 +122,6 @@ export function disposeEditor() {
     if (kreplicaEditor) {
         kreplicaEditor.dispose();
         kreplicaEditor = null;
-    }
-    const node = document.getElementById('kreplica-editor');
-    if (node) {
-        node.style.height = '';
     }
 }
 
