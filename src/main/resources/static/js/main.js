@@ -1,5 +1,6 @@
 import {initScrollSpy} from './components/scroll-spy.js';
 import {initGuideNavigation} from './components/guide-navigation.js';
+import * as playground from './pages/playground.js';
 
 let scrollSpyTimeoutId;
 window.isScrollSpyPaused = false;
@@ -45,49 +46,48 @@ window.handleFabLinkClick = (event, sectionId) => {
     handleNavClick(event, sectionId);
 };
 
-document.addEventListener('DOMContentLoaded', function () {
-    initScrollSpy();
-    initGuideNavigation();
+window.resetPlayground = playground.resetPlayground;
+window.clearPlaygroundOutput = playground.clearPlaygroundOutput;
 
-    const sidebarLinksContainer = document.querySelector('[data-js-id="guide-sidebar-links"]');
-    if (sidebarLinksContainer) {
-        sidebarLinksContainer.addEventListener('click', function (e) {
-            const anchorLink = e.target.closest('a[href^="#"]');
-            if (anchorLink) {
-                handleNavClick(e, anchorLink.getAttribute('href').substring(1));
+function init() {
+    document.addEventListener('DOMContentLoaded', function () {
+        initScrollSpy();
+        initGuideNavigation();
+        playground.init();
+
+        const sidebarLinksContainer = document.querySelector('[data-js-id="guide-sidebar-links"]');
+        if (sidebarLinksContainer) {
+            sidebarLinksContainer.addEventListener('click', function (e) {
+                const anchorLink = e.target.closest('a[href^="#"]');
+                if (anchorLink) {
+                    handleNavClick(e, anchorLink.getAttribute('href').substring(1));
+                }
+            });
+        }
+    });
+
+    document.body.addEventListener('htmx:afterSwap', function (e) {
+        Prism.highlightAllUnder(e.detail.elt);
+        initScrollSpy();
+        playground.init();
+
+        if (e.detail.target.id === 'editor-source-container') {
+            const editor = playground.getEditorInstance();
+            if (editor) {
+                const newSource = e.detail.target.querySelector('textarea[name="source"]').value;
+                playground.setEditorValue(newSource);
             }
-        });
-    }
-
-    const editorEl = document.getElementById('kreplica-editor');
-    if (editorEl && !window.kreplicaEditor && typeof window.initKReplicaPlayground === 'function') {
-        window.initKReplicaPlayground();
-    }
-});
-
-document.body.addEventListener('htmx:afterSwap', function (e) {
-    Prism.highlightAllUnder(e.detail.elt);
-    initScrollSpy();
-
-    const editorEl = document.getElementById('kreplica-editor');
-    if (editorEl && !window.kreplicaEditor && typeof window.initKReplicaPlayground === 'function') {
-        window.initKReplicaPlayground();
-    }
-
-    if (e.detail.target.id === 'editor-source-container') {
-        if (window.kreplicaEditor) {
-            const newSource = e.detail.target.querySelector('textarea[name="source"]').value;
-            window.kreplicaEditor.setValue(newSource);
+            if (playground.clearPlaygroundOutput) {
+                playground.clearPlaygroundOutput();
+            }
         }
-        if (window.clearPlaygroundOutput) {
-            window.clearPlaygroundOutput();
-        }
-    }
-});
+    });
 
-document.body.addEventListener('htmx:beforeSwap', function (evt) {
-    if (evt.detail.target.id !== 'playground-output' && window.kreplicaEditor) {
-        window.kreplicaEditor.dispose();
-        window.kreplicaEditor = null;
-    }
-});
+    document.body.addEventListener('htmx:beforeSwap', function (evt) {
+        if (evt.detail.target.id !== 'playground-output' && playground.getEditorInstance()) {
+            playground.disposeEditor();
+        }
+    });
+}
+
+init();
