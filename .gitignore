@@ -41,3 +41,6 @@ out/
 
 ### JTE ###
 jte-classes/
+
+### Node/JS ###
+/node_modules
