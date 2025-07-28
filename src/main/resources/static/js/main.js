@@ -27,7 +27,11 @@ document.body.addEventListener('htmx:afterSwap', (e) => {
             const editor = playground.getEditorInstance();
             if (editor) {
                 const newSource = e.detail.target.querySelector('textarea[name="source"]').value;
-                playground.setEditorValue(newSource);
+                if (playground.setEditorModelFromSource) {
+                    playground.setEditorModelFromSource(newSource);
+                } else {
+                    playground.setEditorValue(newSource);
+                }
             }
             if (playground.clearPlaygroundOutput) {
                 playground.clearPlaygroundOutput();

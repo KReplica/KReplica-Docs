@@ -1,7 +1,30 @@
 let kreplicaEditor = null;
+let lastContentHeight = 0;
 
 function getHiddenTextarea() {
     return document.querySelector('textarea[name="source"]');
+}
+
+function fitToContent(heightHint) {
+    if (!kreplicaEditor) return;
+    const editorNode = document.getElementById('kreplica-editor');
+    const measured = typeof heightHint === 'number' ? heightHint : kreplicaEditor.getContentHeight();
+    lastContentHeight = measured > 0 ? measured : lastContentHeight;
+    const width = editorNode.clientWidth || editorNode.offsetWidth || 0;
+    editorNode.style.height = lastContentHeight + 'px';
+    if (width > 0) {
+        kreplicaEditor.layout({width, height: lastContentHeight});
+    } else {
+        kreplicaEditor.layout();
+    }
+}
+
+function scheduleFit() {
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            fitToContent();
+        });
+    });
 }
 
 function initKReplicaPlayground() {
@@ -34,16 +57,10 @@ function initKReplicaPlayground() {
                         theme: 'vs-dark',
                         minimap: {enabled: false},
                         folding: true,
-                        scrollBeyondLastLine: false
+                        scrollBeyondLastLine: false,
+                        lineHeight: 20
                     }
                 );
-
-                const syncHeightToContent = () => {
-                    if (!kreplicaEditor) return;
-                    const contentHeight = kreplicaEditor.getContentHeight();
-                    editorNode.style.height = contentHeight + 'px';
-                    kreplicaEditor.layout();
-                };
 
                 monaco.languages.registerCompletionItemProvider('kotlin', {
                     triggerCharacters: ['@', '.'],
@@ -52,7 +69,13 @@ function initKReplicaPlayground() {
                     }
                 });
 
-                kreplicaEditor.onDidContentSizeChange(syncHeightToContent);
+                kreplicaEditor.onDidContentSizeChange((e) => {
+                    fitToContent(e.contentHeight);
+                });
+
+                kreplicaEditor.onDidChangeModel(() => {
+                    scheduleFit();
+                });
 
                 kreplicaEditor.onDidChangeModelContent(() => {
                     const currentTextarea = getHiddenTextarea();
@@ -61,9 +84,7 @@ function initKReplicaPlayground() {
                     }
                 });
 
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(syncHeightToContent);
-                });
+                scheduleFit();
             });
     });
 }
@@ -128,7 +149,27 @@ export function disposeEditor() {
 export function setEditorValue(value) {
     if (kreplicaEditor) {
         kreplicaEditor.setValue(value);
+        const currentTextarea = getHiddenTextarea();
+        if (currentTextarea) {
+            currentTextarea.value = value;
+        }
+        scheduleFit();
     }
+}
+
+export function setEditorModelFromSource(value) {
+    if (!kreplicaEditor) return;
+    const oldModel = kreplicaEditor.getModel();
+    const newModel = monaco.editor.createModel(value, 'kotlin');
+    kreplicaEditor.setModel(newModel);
+    if (oldModel && oldModel !== newModel) {
+        oldModel.dispose();
+    }
+    const currentTextarea = getHiddenTextarea();
+    if (currentTextarea) {
+        currentTextarea.value = value;
+    }
+    scheduleFit();
 }
 
 export {clearPlaygroundOutput};
