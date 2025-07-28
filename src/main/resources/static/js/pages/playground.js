@@ -107,3 +107,5 @@ export function setEditorValue(value) {
         kreplicaEditor.setValue(value);
     }
 }
+
+export {clearPlaygroundOutput};

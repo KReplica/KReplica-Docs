@@ -10,11 +10,13 @@ async function initializeApp() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', initializeApp);
+document.addEventListener('DOMContentLoaded', () => {
+    void initializeApp();
+});
 
 document.body.addEventListener('htmx:afterSwap', (e) => {
     Prism.highlightAllUnder(e.detail.elt);
-    initializeApp();
+    void initializeApp();
 
     if (e.detail.target.id === 'editor-source-container') {
         import('./pages/playground.js').then(playground => {
