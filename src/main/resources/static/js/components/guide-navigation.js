@@ -1,3 +1,5 @@
+let isInitialized = false;
+
 function updateSidebar(sectionId) {
     const sidebarLinks = document.querySelector('[data-js-id="guide-sidebar-links"]');
     if (!sidebarLinks) return;
@@ -42,6 +44,10 @@ function updateFabMenu(sectionId) {
 }
 
 export function initGuideNavigation() {
+    if (isInitialized) {
+        return;
+    }
+
     document.body.addEventListener('section-active', (event) => {
         const {sectionId} = event.detail;
         if (sectionId) {
@@ -49,4 +55,6 @@ export function initGuideNavigation() {
             updateFabMenu(sectionId);
         }
     });
+
+    isInitialized = true;
 }

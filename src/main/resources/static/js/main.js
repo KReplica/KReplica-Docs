@@ -40,6 +40,13 @@ document.body.addEventListener('htmx:afterSwap', (e) => {
     }
 });
 
+document.body.addEventListener('htmx:afterSettle', async () => {
+    if (document.querySelector('[data-js-id="guide-sidebar-links"]')) {
+        const {initScrollSpy} = await import('./components/scroll-spy.js');
+        initScrollSpy();
+    }
+});
+
 document.body.addEventListener('htmx:beforeSwap', (evt) => {
     const target = evt.detail.target;
     if (target && target.classList && target.classList.contains('main-content')) {

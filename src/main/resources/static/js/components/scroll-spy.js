@@ -1,6 +1,7 @@
 import {rafThrottle} from "../utils/throttle.js";
 
 let activeScrollListener = null;
+let activeResizeListener = null;
 let isScrollSpyPaused = false;
 
 export function pauseScrollSpy() {
@@ -14,6 +15,9 @@ export function resumeScrollSpy() {
 export function initScrollSpy() {
     if (activeScrollListener) {
         window.removeEventListener('scroll', activeScrollListener);
+    }
+    if (activeResizeListener) {
+        window.removeEventListener('resize', activeResizeListener);
     }
 
     const linksContainer = document.querySelector('[data-js-id="guide-sidebar-links"]');
@@ -62,6 +66,10 @@ export function initScrollSpy() {
     };
 
     activeScrollListener = rafThrottle(handleScroll);
+    activeResizeListener = rafThrottle(initScrollSpy);
+
     window.addEventListener('scroll', activeScrollListener);
-    handleScroll();
+    window.addEventListener('resize', activeResizeListener);
+
+    requestAnimationFrame(handleScroll);
 }

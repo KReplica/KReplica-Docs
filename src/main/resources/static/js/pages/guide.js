@@ -63,7 +63,7 @@ function setupEventListeners() {
 }
 
 export function init() {
-    initScrollSpy();
     initGuideNavigation();
+    initScrollSpy();
     setupEventListeners();
 }
