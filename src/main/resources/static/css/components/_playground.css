@@ -313,7 +313,7 @@
 }
 
 @media (max-width: 991px) {
-    .main-content {
+    .page-playground .main-content {
         padding: 20px 0 0 0;
         height: calc(100svh - 60px);
     }
