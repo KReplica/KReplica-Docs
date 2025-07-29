@@ -7,5 +7,5 @@
             @click="navigator.clipboard.writeText($el.nextElementSibling.textContent); copied = true; setTimeout(() => copied = false, 2000)">
         <span x-text="copied ? 'Copied!' : 'Copy'"></span>
     </button>
-    <pre><code class="language-${language}">${content}</code></pre>
+    <pre class="language-${language}"><code class="language-${language}">${content}</code></pre>
 </div>

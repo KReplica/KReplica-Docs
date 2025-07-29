@@ -299,3 +299,27 @@
         margin-top: 1.5rem;
     }
 }
+
+.page-playground #playground-output > div {
+    min-height: 0;
+}
+
+.page-playground #playground-output .playground-tabs {
+    flex: 0 0 auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.page-playground #playground-output .playground-tabs button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.page-playground #playground-output .playground-content {
+    padding: 0;
+}
+
+.page-playground #playground-output .playground-content pre.language-kotlin {
+    padding: 0;
+    border-radius: 0;
+}
