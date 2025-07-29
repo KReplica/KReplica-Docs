@@ -17,4 +17,7 @@
     --shadow-light: rgba(255, 255, 255, 0.9);
     --shadow-dark: rgba(0, 0, 0, 0.12);
     --retro-shadow-color: #a0a0a0;
+
+    --header-height: 60px;
+    --sidebar-width: 240px;
 }

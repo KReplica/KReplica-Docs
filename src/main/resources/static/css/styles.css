@@ -2,12 +2,12 @@
 @import "base/_typography.css";
 @import "components/_buttons.css";
 @import "components/_code-blocks.css";
-@import "components/_playground.css";
 @import "components/_animations.css";
 @import "components/_fab.css";
 @import "layout/_header.css";
 @import "layout/_footer.css";
 @import "layout/_sidebar.css";
+@import "pages/_playground.css";
 
 *, *::before, *::after {
     box-sizing: border-box;
@@ -72,6 +72,10 @@
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.feature-highlight {
+    margin-top: 4rem;
 }
 
 .htmx-indicator {
@@ -175,7 +179,7 @@
 
 @media (min-width: 769px) {
     .examples-container {
-        grid-template-columns: 240px 1fr;
+        grid-template-columns: var(--sidebar-width) 1fr;
     }
 }
 
