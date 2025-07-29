@@ -218,14 +218,11 @@
     .page-playground .main-content {
         padding: 20px 0 0 0;
         height: calc(100svh - var(--header-height));
+        overflow: auto;
     }
 
     .playground-container {
         padding: 0 20px 0;
-    }
-
-    .playground-main-content {
-        border-top: 1px solid var(--border-color);
     }
 
     .playground-actions-desktop {
@@ -235,6 +232,17 @@
     .dropdown-menu {
         top: auto;
         bottom: 100%;
+    }
+
+    .playground-actions-mobile {
+        position: sticky;
+        bottom: 0;
+        z-index: 5;
+        background-color: var(--surface-color);
+    }
+
+    .playground-io-container {
+        padding-bottom: 84px;
     }
 }
 

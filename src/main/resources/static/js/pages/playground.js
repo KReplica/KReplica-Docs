@@ -5,15 +5,38 @@ function getHiddenTextarea() {
     return document.querySelector('textarea[name="source"]');
 }
 
+function isMobile() {
+    return window.innerWidth <= 991;
+}
+
+function computeAvailableEditorMaxHeight() {
+    const scroller = document.querySelector('.page-playground .main-content');
+    const actions = document.querySelector('.playground-actions-mobile');
+    const editorNode = document.getElementById('kreplica-editor');
+    if (!scroller || !actions || !editorNode) return null;
+    const scrollerRect = scroller.getBoundingClientRect();
+    const editorRect = editorNode.getBoundingClientRect();
+    const reserved = actions.offsetHeight || 0;
+    const available = Math.floor(scrollerRect.bottom - editorRect.top - reserved - 16);
+    return available > 0 ? available : null;
+}
+
 function fitToContent(heightHint) {
     if (!kreplicaEditor) return;
     const editorNode = document.getElementById('kreplica-editor');
     const measured = typeof heightHint === 'number' ? heightHint : kreplicaEditor.getContentHeight();
     lastContentHeight = measured > 0 ? measured : lastContentHeight;
+    let targetHeight = lastContentHeight;
+    if (isMobile()) {
+        const maxH = computeAvailableEditorMaxHeight();
+        if (typeof maxH === 'number') {
+            targetHeight = Math.min(targetHeight, maxH);
+        }
+    }
     const width = editorNode.clientWidth || editorNode.offsetWidth || 0;
-    editorNode.style.height = lastContentHeight + 'px';
+    editorNode.style.height = targetHeight + 'px';
     if (width > 0) {
-        kreplicaEditor.layout({width, height: lastContentHeight});
+        kreplicaEditor.layout({width, height: targetHeight});
     } else {
         kreplicaEditor.layout();
     }
@@ -84,6 +107,8 @@ function initKReplicaPlayground() {
                     }
                 });
 
+                window.addEventListener('resize', scheduleFit, {passive: true});
+
                 scheduleFit();
             });
     });
@@ -131,6 +156,8 @@ function setupEventListeners() {
                 break;
         }
     });
+
+    window.addEventListener('resize', scheduleFit, {passive: true});
 }
 
 export function init() {
