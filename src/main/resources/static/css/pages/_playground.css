@@ -48,7 +48,7 @@
     flex-direction: column;
 }
 
-#playground-output .playground-tabs {
+#playground-output .tabs-nav {
     border-bottom: 1px solid var(--border-color);
     background-color: var(--surface-color);
 }
@@ -99,84 +99,6 @@
     color: #fff;
 }
 
-.split-button-container {
-    position: relative;
-    display: inline-flex;
-    height: 100%;
-}
-
-.split-button {
-    display: flex;
-    justify-content: normal;
-    height: 100%;
-    overflow: hidden;
-    border-radius: 8px;
-    width: 100%;
-}
-
-.split-button-label {
-    flex: 1 1 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 24px;
-    height: 100%;
-}
-
-.split-button-arrow {
-    width: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    border-left: 1px solid rgba(0, 0, 0, 0.15);
-}
-
-.split-button-arrow svg {
-    width: 14px;
-    height: 14px;
-    transition: transform .2s ease-in-out;
-    fill: #fff;
-}
-
-.rotate-180 {
-    transform: rotate(180deg);
-}
-
-.dropdown-menu {
-    position: absolute;
-    bottom: 100%;
-    right: 0;
-    margin-bottom: 8px;
-    background-color: var(--surface-color);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
-    z-index: 10;
-    min-width: 180px;
-    padding: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.dropdown-item {
-    width: 100%;
-    text-align: left;
-    padding: 8px 16px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: .95rem;
-    border-radius: 4px;
-    color: var(--primary-color);
-}
-
-.dropdown-item:hover {
-    background-color: var(--bg-color);
-    color: var(--secondary-color);
-}
-
 .playground-actions-desktop {
     display: none;
 }
@@ -219,13 +141,13 @@
     clip-path: polygon(100% 0%, 0 0%, 50% 100%);
 }
 
-.playground-tabs {
+.tabs-nav {
     display: flex;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
 
-.playground-tabs button {
+.tabs-nav button {
     padding: .75rem 1.25rem;
     border: none;
     background: transparent;
@@ -238,46 +160,24 @@
     font-weight: 500;
 }
 
-.playground-tabs button:hover {
+.tabs-nav button:hover {
     color: var(--primary-color);
 }
 
-.playground-tabs button.active,
-.playground-tabs button[aria-selected="true"] {
+.tabs-nav button.active,
+.tabs-nav button[aria-selected="true"] {
     color: var(--secondary-color);
     font-weight: 600;
     border-bottom-color: var(--secondary-color);
 }
 
 .playground-tabs-mobile {
-    display: flex;
     border-bottom: 1px solid var(--border-color);
 }
 
 .playground-tabs-mobile button {
-    padding: .75rem 1.25rem;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-size: .9rem;
-    color: var(--text-light);
-    border-bottom: 3px solid transparent;
-    transition: all .2s ease;
-    white-space: nowrap;
-    font-weight: 500;
     flex-grow: 1;
     text-align: center;
-}
-
-.playground-tabs-mobile button:hover {
-    color: var(--primary-color);
-}
-
-.playground-tabs-mobile button.active,
-.playground-tabs-mobile button[aria-selected="true"] {
-    color: var(--secondary-color);
-    font-weight: 600;
-    border-bottom-color: var(--secondary-color);
 }
 
 .playground-tabs-mobile button.disabled {

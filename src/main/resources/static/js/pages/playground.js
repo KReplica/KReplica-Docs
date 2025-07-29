@@ -64,7 +64,7 @@ function initKReplicaPlayground() {
 
                 monaco.languages.registerCompletionItemProvider('kotlin', {
                     triggerCharacters: ['@', '.'],
-                    provideCompletionItems: function () {
+                    provideCompletionItems() {
                         return {suggestions: KREPLICA_COMPLETIONS};
                     }
                 });
@@ -109,23 +109,28 @@ function resetPlayground() {
 }
 
 function setupEventListeners() {
-    const desktopResetButton = document.getElementById('reset-all-btn-desktop');
-    desktopResetButton?.addEventListener('click', (e) => {
-        if (!e.target.closest('.split-button-arrow')) {
-            resetPlayground();
-        }
-    });
-    document.getElementById('reset-all-dropdown-btn-desktop')?.addEventListener('click', resetPlayground);
-    document.getElementById('clear-output-btn-desktop')?.addEventListener('click', clearPlaygroundOutput);
+    const playgroundContainer = document.querySelector('.playground-container');
+    if (!playgroundContainer) return;
 
-    const mobileResetButton = document.getElementById('reset-all-btn-mobile');
-    mobileResetButton?.addEventListener('click', (e) => {
-        if (!e.target.closest('.split-button-arrow')) {
-            resetPlayground();
+    playgroundContainer.addEventListener('click', (e) => {
+        const actionTarget = e.target.closest('[data-action]');
+        if (!actionTarget) return;
+
+        const action = actionTarget.dataset.action;
+
+        switch (action) {
+            case 'run':
+                break;
+            case 'reset-all':
+                if (!e.target.closest('.split-button-arrow')) {
+                    resetPlayground();
+                }
+                break;
+            case 'clear-output':
+                clearPlaygroundOutput();
+                break;
         }
     });
-    document.getElementById('reset-all-dropdown-btn-mobile')?.addEventListener('click', resetPlayground);
-    document.getElementById('clear-output-btn-mobile')?.addEventListener('click', clearPlaygroundOutput);
 }
 
 export function init() {

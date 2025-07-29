@@ -6,7 +6,7 @@
      @clear-output.window="isOutputReady = false; activeTab = 'editor'">
 
     <div class="playground-main-content">
-        <div class="playground-tabs-mobile" role="tablist">
+        <div class="tabs-nav playground-tabs-mobile" role="tablist">
             <button role="tab"
                     :aria-selected="activeTab === 'editor'"
                     @click="activeTab = 'editor'"
@@ -51,9 +51,9 @@
 
             <div class="playground-output-column" x-show="activeTab === 'output'" x-cloak>
                 <div class="playground-actions-desktop">
-                    <button type="submit" form="playground-form" id="run-btn-desktop" class="button-run">Run</button>
+                    <button type="submit" form="playground-form" data-action="run" class="button-run">Run</button>
                     <div class="split-button-container" x-data="{ isOpen: false }">
-                        <button type="button" id="reset-all-btn-desktop" class="button-reset split-button">
+                        <button type="button" data-action="reset-all" class="button-reset split-button">
                             <span class="split-button-label">Reset All</span>
                             <span class="split-button-arrow" @click.stop="isOpen = !isOpen">
                                 <svg :class="{'rotate-180': isOpen}" xmlns="http://www.w3.org/2000/svg"
@@ -63,11 +63,11 @@
                             </span>
                         </button>
                         <div x-show="isOpen" @click.outside="isOpen = false" class="dropdown-menu" x-cloak>
-                            <button type="button" id="reset-all-dropdown-btn-desktop" class="dropdown-item"
+                            <button type="button" data-action="reset-all" class="dropdown-item"
                                     @click="isOpen = false">
                                 Reset All
                             </button>
-                            <button type="button" id="clear-output-btn-desktop" class="dropdown-item"
+                            <button type="button" data-action="clear-output" class="dropdown-item"
                                     @click="isOpen = false">
                                 Clear Output
                             </button>
@@ -82,9 +82,9 @@
 
         <div class="playground-actions-mobile">
             <span class="actions-spacer"></span>
-            <button type="submit" form="playground-form" id="run-btn-mobile" class="button-run">Run</button>
+            <button type="submit" form="playground-form" data-action="run" class="button-run">Run</button>
             <div class="split-button-container" x-data="{ isOpen: false }">
-                <button type="button" id="reset-all-btn-mobile" class="button-reset split-button">
+                <button type="button" data-action="reset-all" class="button-reset split-button">
                     <span class="split-button-label">Reset All</span>
                     <span class="split-button-arrow" @click.stop="isOpen = !isOpen">
                         <svg :class="{'rotate-180': isOpen}" xmlns="http://www.w3.org/2000/svg"
@@ -94,11 +94,11 @@
                     </span>
                 </button>
                 <div x-show="isOpen" @click.outside="isOpen = false" class="dropdown-menu" x-cloak>
-                    <button type="button" id="reset-all-dropdown-btn-mobile" class="dropdown-item"
+                    <button type="button" data-action="reset-all" class="dropdown-item"
                             @click="isOpen = false">
                         Reset All
                     </button>
-                    <button type="button" id="clear-output-btn-mobile" class="dropdown-item" @click="isOpen = false">
+                    <button type="button" data-action="clear-output" class="dropdown-item" @click="isOpen = false">
                         Clear Output
                     </button>
                 </div>

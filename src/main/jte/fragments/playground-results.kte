@@ -2,7 +2,7 @@
 
 @if(files.isNotEmpty())
     <div x-data="{ activeTab: '${files.keys.first()}' }">
-        <div class="playground-tabs" role="tablist">
+        <div class="tabs-nav playground-tabs" role="tablist">
             @for((filename, _) in files)
                 <button type="button"
                         role="tab"
@@ -23,7 +23,7 @@
     </div>
 @else
     <div class="placeholder-text">
-        <p>Compilation successful, but no files were generated.</p>
+        <p>Compilation was successful, but no files were generated.</p>
         <p>This can happen if no interfaces are annotated for replication.</p>
     </div>
 @endif
