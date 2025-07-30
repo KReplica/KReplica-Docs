@@ -111,6 +111,6 @@
     }
 
     .nav-menu-container {
-        display: none !important;
+        display: none;
     }
 }

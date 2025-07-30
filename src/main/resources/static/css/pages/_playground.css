@@ -233,7 +233,7 @@
     }
 
     .playground-actions-desktop {
-        display: none !important;
+        display: none;
     }
 
     .dropdown-menu {

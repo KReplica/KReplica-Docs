@@ -1,12 +1,12 @@
 @import "base/_variables.css";
 @import "base/_typography.css";
+@import "layout/_header.css";
+@import "layout/_footer.css";
+@import "layout/_sidebar.css";
 @import "components/_buttons.css";
 @import "components/_code-blocks.css";
 @import "components/_animations.css";
 @import "components/_fab.css";
-@import "layout/_header.css";
-@import "layout/_footer.css";
-@import "layout/_sidebar.css";
 @import "pages/_playground.css";
 
 *, *::before, *::after {
@@ -169,7 +169,6 @@
     text-align: center;
     margin-top: 30px;
 }
-
 
 @media (prefers-reduced-motion: reduce) {
     * {
