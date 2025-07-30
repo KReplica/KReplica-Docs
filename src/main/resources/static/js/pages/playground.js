@@ -1,8 +1,19 @@
 let kreplicaEditor = null;
 let cleanupFns = [];
+let resizeObserver = null;
 
 function getHiddenTextarea() {
     return document.querySelector('textarea[name="source"]');
+}
+
+function resizeEditorToContent() {
+    if (!kreplicaEditor) return;
+    const editorNode = document.getElementById('kreplica-editor');
+    if (!editorNode) return;
+    const height = kreplicaEditor.getContentHeight();
+    editorNode.style.height = height + 'px';
+    const width = editorNode.clientWidth || editorNode.parentElement.clientWidth || 0;
+    kreplicaEditor.layout({width, height});
 }
 
 function initKReplicaPlayground() {
@@ -29,11 +40,12 @@ function initKReplicaPlayground() {
                 kreplicaEditor = monaco.editor.create(editorNode, {
                     value: initialCode,
                     language: 'kotlin',
-                    automaticLayout: true,
+                    automaticLayout: false,
                     theme: 'vs-dark',
                     minimap: {enabled: false},
                     folding: true,
                     scrollBeyondLastLine: false,
+                    scrollbar: {vertical: 'hidden'},
                     lineHeight: 20
                 });
 
@@ -51,37 +63,34 @@ function initKReplicaPlayground() {
                     }
                 });
 
-                if (window.visualViewport) {
-                    const onVVResize = () => {
-                        if (kreplicaEditor) kreplicaEditor.layout();
-                    };
-                    window.visualViewport.addEventListener('resize', onVVResize);
-                    cleanupFns.push(() => window.visualViewport.removeEventListener('resize', onVVResize));
-                }
+                kreplicaEditor.onDidContentSizeChange(() => {
+                    resizeEditorToContent();
+                });
+
+                resizeEditorToContent();
+
+                resizeObserver = new ResizeObserver(() => {
+                    resizeEditorToContent();
+                });
+                const observeTarget = editorNode.parentElement || editorNode;
+                resizeObserver.observe(observeTarget);
+                cleanupFns.push(() => {
+                    if (resizeObserver) {
+                        try {
+                            resizeObserver.disconnect();
+                        } catch (_) {
+                        }
+                        resizeObserver = null;
+                    }
+                });
 
                 const onVisibility = () => {
-                    if (document.visibilityState === 'visible' && kreplicaEditor) {
-                        kreplicaEditor.layout();
+                    if (document.visibilityState === 'visible') {
+                        resizeEditorToContent();
                     }
                 };
                 document.addEventListener('visibilitychange', onVisibility);
                 cleanupFns.push(() => document.removeEventListener('visibilitychange', onVisibility));
-
-                const column = document.querySelector('.playground-input-column');
-                if (column) {
-                    const mo = new MutationObserver(() => {
-                        const node = document.getElementById('kreplica-editor');
-                        if (node && node.offsetParent !== null && kreplicaEditor) {
-                            kreplicaEditor.layout();
-                        }
-                    });
-                    mo.observe(column, {attributes: true, attributeFilter: ['style', 'class']});
-                    cleanupFns.push(() => mo.disconnect());
-                }
-
-                requestAnimationFrame(() => {
-                    if (kreplicaEditor) kreplicaEditor.layout();
-                });
             });
     });
 }
@@ -168,7 +177,7 @@ export function setEditorValue(value) {
             currentTextarea.value = value;
         }
         requestAnimationFrame(() => {
-            if (kreplicaEditor) kreplicaEditor.layout();
+            resizeEditorToContent();
         });
     }
 }
@@ -186,7 +195,7 @@ export function setEditorModelFromSource(value) {
         currentTextarea.value = value;
     }
     requestAnimationFrame(() => {
-        if (kreplicaEditor) kreplicaEditor.layout();
+        resizeEditorToContent();
     });
 }
 

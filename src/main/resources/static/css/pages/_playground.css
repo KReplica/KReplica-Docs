@@ -28,7 +28,7 @@
 
 #kreplica-editor {
     width: 100%;
-    flex: 1;
+    flex: 0 0 auto;
     min-height: 240px;
 }
 
@@ -228,7 +228,7 @@
 
     .playground-main-content {
         display: grid;
-        grid-template-rows: auto auto minmax(0, 1fr) auto;
+        grid-template-rows: auto auto minmax(0, 1fr);
         row-gap: 12px;
     }
 
