@@ -125,7 +125,7 @@
     }
 
     .workflow-container {
-        background-color: var(--surface-color);
+        background-color: oklch(100% 0 0);
         border: 1px solid var(--border-color);
         border-radius: 0.75rem;
         box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
@@ -178,6 +178,14 @@
 }
 
 @layer utilities {
+    [data-page="guide"] {
+        --bg-color: oklch(97% 0.01 150);
+    }
+
+    [data-page="playground"] {
+        --bg-color: oklch(97% 0.015 250);
+    }
+
     @media (prefers-reduced-motion: reduce) {
         * {
             transition: none;
