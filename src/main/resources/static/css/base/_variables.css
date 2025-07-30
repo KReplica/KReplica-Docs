@@ -8,6 +8,8 @@
         --bg-color: oklch(97.7% 0 0);
         --surface-color: oklch(100% 0 0);
         --border-color: oklch(93.63% 0.01 257.7);
+        --sidebar-active-bg: var(--secondary-color);
+        --sidebar-active-text: #ffffff;
         --code-bg: oklch(26.6% 0 0);
         --code-text: oklch(97.14% 0.01 110.36);
         --inline-code-bg: oklch(91.4% 0 0);
@@ -63,6 +65,8 @@
         --bg-color: oklch(18% 0.02 255);
         --surface-color: oklch(23% 0.02 255);
         --border-color: oklch(33% 0.02 255);
+        --sidebar-active-bg: oklch(33% 0.03 255);
+        --sidebar-active-text: oklch(85% 0.1 260);
         --code-bg: oklch(20% 0.02 255);
         --inline-code-bg: oklch(28% 0.02 255);
         --inline-code-text: oklch(80% 0.01 240);
