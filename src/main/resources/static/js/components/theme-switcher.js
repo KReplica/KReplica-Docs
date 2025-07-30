@@ -8,6 +8,7 @@ function applyTheme(theme) {
             btn.classList.remove('active');
         }
     });
+    window.dispatchEvent(new CustomEvent('theme-changed', {detail: {theme: theme}}));
 }
 
 function handleThemeSelection(e) {

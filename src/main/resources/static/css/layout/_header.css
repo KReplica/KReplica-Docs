@@ -38,9 +38,12 @@
             font-weight: 500;
             transition: color 0.2s ease-in-out;
 
-            &:hover,
-            &.active {
+            &:hover {
                 color: var(--secondary-color);
+            }
+
+            &.active {
+                color: var(--nav-active-color);
             }
         }
     }

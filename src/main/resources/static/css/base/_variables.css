@@ -2,6 +2,7 @@
     :root {
         --primary-color: oklch(34.21% 0.04 256.05);
         --secondary-color: oklch(62.75% 0.16 238.24);
+        --nav-active-color: var(--secondary-color);
         --text-color: oklch(29.23% 0 0);
         --text-light: oklch(59.57% 0.02 216.59);
         --bg-color: oklch(97.7% 0 0);
@@ -55,7 +56,8 @@
 
     [data-theme="dark"] {
         --primary-color: oklch(72% 0.14 265);
-        --secondary-color: oklch(98% 0 0);
+        --secondary-color: oklch(78% 0.12 265);
+        --nav-active-color: oklch(98% 0 0);
         --text-color: oklch(95% 0.005 240);
         --text-light: oklch(70% 0.01 240);
         --bg-color: oklch(18% 0.02 255);

@@ -4,6 +4,13 @@ let resizeObserver = null;
 
 const MOBILE_BREAKPOINT_PX = 992;
 
+function getMonacoTheme(siteTheme) {
+    if (siteTheme === 'blue') {
+        return 'vs';
+    }
+    return 'vs-dark';
+}
+
 function isMobile() {
     return window.innerWidth < MOBILE_BREAKPOINT_PX;
 }
@@ -51,12 +58,13 @@ function initKReplicaPlayground() {
                 const hiddenTextareaEl = getHiddenTextarea();
                 const initialCode = hiddenTextareaEl ? hiddenTextareaEl.value : '';
                 const editorNode = document.getElementById('kreplica-editor');
+                const currentSiteTheme = document.documentElement.getAttribute('data-theme') || 'light';
 
                 kreplicaEditor = monaco.editor.create(editorNode, {
                     value: initialCode,
                     language: 'kotlin',
                     automaticLayout: false,
-                    theme: 'vs-dark',
+                    theme: getMonacoTheme(currentSiteTheme),
                     minimap: {enabled: false},
                     folding: true,
                     scrollBeyondLastLine: false,
@@ -155,6 +163,14 @@ function setupEventListeners() {
 
     playgroundContainer.addEventListener('click', onClick);
     cleanupFns.push(() => playgroundContainer.removeEventListener('click', onClick));
+
+    const themeChangeHandler = (e) => {
+        if (kreplicaEditor) {
+            monaco.editor.setTheme(getMonacoTheme(e.detail.theme));
+        }
+    };
+    window.addEventListener('theme-changed', themeChangeHandler);
+    cleanupFns.push(() => window.removeEventListener('theme-changed', themeChangeHandler));
 }
 
 export function init() {
