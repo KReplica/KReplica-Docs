@@ -7,6 +7,7 @@
         padding: 0.25rem;
         border-radius: 999px;
         border: 1px solid var(--border-color);
+        transition: background-color 0.2s, border-color 0.2s;
     }
 
     .theme-switcher button {
@@ -19,28 +20,14 @@
         border: none;
         background-color: transparent;
         cursor: pointer;
-        color: var(--text-light);
         transition: color 0.2s, background-color 0.2s;
-    }
-
-    .theme-switcher button:hover {
-        color: var(--primary-color);
     }
 
     .theme-switcher button.active {
         background-color: var(--primary-color);
-        color: var(--surface-color);
     }
 
     .nav-menu-container .theme-switcher {
         margin-block-start: 1.5rem;
-    }
-
-    .desktop-nav-container .theme-switcher {
-        display: flex;
-    }
-
-    .nav-menu-container .theme-switcher {
-        display: inline-flex;
     }
 }

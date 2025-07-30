@@ -22,11 +22,7 @@
                                 :class="{ 'is-open': openSection === '${section.id}' }"
                                 @click="openSection = openSection === '${section.id}' ? null : '${section.id}'">
                             <span class="fab-parent-link">${section.title}</span>
-                            <svg class="fab-toggle-icon"
-                                 :class="{ 'is-open': openSection === '${section.id}' }"
-                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-                            </svg>
+                            @template.icons.chevron-down(cssClass="fab-toggle-icon", width="20", height="20")
                         </button>
                         <ul x-show="openSection === '${section.id}'"
                             x-collapse
@@ -50,6 +46,9 @@
             class="fab-button"
             @click="isOpen = !isOpen"
             aria-label="Toggle Table of Contents">
-        ...
+        <div class="fab-icon-wrapper">
+            @template.icons.list(cssClass="fab-icon-menu", width="28", height="28")
+            @template.icons.close(cssClass="fab-icon-close", width="28", height="28")
+        </div>
     </button>
 </div>

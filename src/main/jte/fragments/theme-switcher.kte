@@ -1,0 +1,11 @@
+<div class="theme-switcher">
+    <button type="button" data-theme-set="light" aria-label="Switch to light theme" title="Light Theme">
+        @template.icons.sun()
+    </button>
+    <button type="button" data-theme-set="blue" aria-label="Switch to pale blue theme" title="Blue Theme">
+        @template.icons.water-drop()
+    </button>
+    <button type="button" data-theme-set="dark" aria-label="Switch to dark theme" title="Dark Theme">
+        @template.icons.moon()
+    </button>
+</div>

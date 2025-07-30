@@ -17,6 +17,8 @@
         --shadow-dark: rgba(0, 0, 0, 0.12);
         --retro-shadow-color: oklch(69.8% 0 0);
         --fab-bg: var(--primary-color);
+        --on-primary: oklch(100% 0 0);
+        --on-secondary: oklch(100% 0 0);
 
         --header-height: 3.75rem;
         --sidebar-width: 15rem;
@@ -63,5 +65,7 @@
         --shadow-dark: rgba(0, 0, 0, 0.5);
         --retro-shadow-color: oklch(15% 0.01 250);
         --fab-bg: oklch(40% 0.05 255);
+        --on-primary: oklch(22% 0.02 250);
+        --on-secondary: oklch(22% 0.02 250);
     }
 }

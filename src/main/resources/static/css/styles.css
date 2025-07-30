@@ -2,6 +2,7 @@
 
 @import "base/_variables.css" layer(base);
 @import "base/_typography.css" layer(base);
+@import "components/_icons.css" layer(components);
 @import "components/_buttons.css" layer(components);
 @import "components/_code-blocks.css" layer(components);
 @import "components/_animations.css" layer(components);
