@@ -30,19 +30,19 @@
         margin: 0;
         padding: 0;
         display: flex;
-    }
 
-    .nav-links a {
-        display: block;
-        text-decoration: none;
-        color: var(--primary-color);
-        font-weight: 500;
-        transition: color 0.2s ease-in-out;
-    }
+        a {
+            display: block;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            transition: color 0.2s ease-in-out;
 
-    .nav-links a:hover,
-    .nav-links a.active {
-        color: var(--secondary-color);
+            &:hover,
+            &.active {
+                color: var(--secondary-color);
+            }
+        }
     }
 
     .desktop-nav {
@@ -73,22 +73,22 @@
         align-items: flex-start;
         justify-content: center;
         transition: opacity 0.2s ease-in-out;
-    }
 
-    .nav-menu-container.is-open {
-        display: flex;
-    }
+        &.is-open {
+            display: flex;
+        }
 
-    .nav-menu-container .nav-links {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-    }
+        .nav-links {
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
 
-    .nav-menu-container .nav-links a {
-        font-size: 1.2rem;
-        padding: 0.625rem 1.25rem;
-        font-weight: 600;
+            a {
+                font-size: 1.2rem;
+                padding: 0.625rem 1.25rem;
+                font-weight: 600;
+            }
+        }
     }
 
     .page-progress {
@@ -101,11 +101,11 @@
     @media (min-width: 48.0625rem) {
         .desktop-nav {
             display: block;
-        }
 
-        .desktop-nav .nav-links a {
-            padding-inline: 0.9375rem;
-            font-size: 1rem;
+            .nav-links a {
+                padding-inline: 0.9375rem;
+                font-size: 1rem;
+            }
         }
 
         .hamburger-button {

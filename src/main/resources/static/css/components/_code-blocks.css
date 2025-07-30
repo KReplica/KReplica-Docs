@@ -37,17 +37,17 @@
         cursor: pointer;
         opacity: 0.7;
         transition: opacity 0.2s ease-in-out;
-    }
 
-    .copy-code-button:hover {
-        opacity: 1;
-    }
+        &:hover {
+            opacity: 1;
+        }
 
-    .copy-code-button:disabled {
-        opacity: 1;
-        cursor: default;
-        background-color: var(--secondary-color);
-        border-color: var(--secondary-color);
-        color: #ffffff;
+        &:disabled {
+            opacity: 1;
+            cursor: default;
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: #ffffff;
+        }
     }
 }

@@ -14,6 +14,16 @@
         position: relative;
         user-select: none;
         border: none;
+
+        &:hover {
+            transform: translate(-0.125rem, -0.125rem);
+            box-shadow: 0.3125rem 0.3125rem 0 0 var(--retro-shadow-color);
+        }
+
+        &:active {
+            transform: translate(0.0625rem, 0.0625rem);
+            box-shadow: 0.125rem 0.125rem 0 0 var(--retro-shadow-color);
+        }
     }
 
     .button-run {
@@ -28,18 +38,6 @@
         border-bottom: 0.1875rem solid #c0392b;
         box-shadow: 0.1875rem 0.1875rem 0 0 var(--retro-shadow-color);
         padding: 0;
-    }
-
-    .button-run:hover,
-    .button-reset:hover {
-        transform: translate(-0.125rem, -0.125rem);
-        box-shadow: 0.3125rem 0.3125rem 0 0 var(--retro-shadow-color);
-    }
-
-    .button-run:active,
-    .button-reset:active {
-        transform: translate(0.0625rem, 0.0625rem);
-        box-shadow: 0.125rem 0.125rem 0 0 var(--retro-shadow-color);
     }
 
     .split-button-container {
@@ -73,13 +71,13 @@
         justify-content: center;
         block-size: 100%;
         border-inline-start: 1px solid rgba(0, 0, 0, 0.15);
-    }
 
-    .split-button-arrow svg {
-        inline-size: 0.875rem;
-        block-size: 0.875rem;
-        transition: transform 0.2s ease-in-out;
-        fill: #ffffff;
+        svg {
+            inline-size: 0.875rem;
+            block-size: 0.875rem;
+            transition: transform 0.2s ease-in-out;
+            fill: #ffffff;
+        }
     }
 
     .rotate-180 {
@@ -124,10 +122,10 @@
         font-size: 0.95rem;
         border-radius: 0.25rem;
         color: var(--primary-color);
-    }
 
-    .dropdown-item:hover {
-        background-color: var(--bg-color);
-        color: var(--secondary-color);
+        &:hover {
+            background-color: var(--bg-color);
+            color: var(--secondary-color);
+        }
     }
 }

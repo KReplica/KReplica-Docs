@@ -1,21 +1,21 @@
 @layer base {
     :root {
-        --primary-color: #2c3e50;
-        --secondary-color: #3498db;
-        --text-color: #333333;
-        --text-light: #7f8c8d;
-        --bg-color: #f8f9fa;
-        --surface-color: #ffffff;
-        --border-color: #e9ecef;
-        --code-bg: #2d2d2d;
-        --code-text: #f8f8f2;
-        --alert-info-bg: #e7f3fe;
-        --alert-info-border: #b3d7f9;
-        --success-color: #2ecc71;
-        --danger-color: #e74c3c;
+        --primary-color: oklch(34.21% 0.04 256.05);
+        --secondary-color: oklch(62.75% 0.16 238.24);
+        --text-color: oklch(29.23% 0 0);
+        --text-light: oklch(59.57% 0.02 216.59);
+        --bg-color: oklch(97.74% 0.01 257.65);
+        --surface-color: oklch(100% 0 0);
+        --border-color: oklch(93.63% 0.01 257.7);
+        --code-bg: oklch(26.6% 0 0);
+        --code-text: oklch(97.14% 0.01 110.36);
+        --alert-info-bg: oklch(95.04% 0.04 246.59);
+        --alert-info-border: oklch(85.74% 0.07 248.1);
+        --success-color: oklch(70.92% 0.19 160.29);
+        --danger-color: oklch(62.36% 0.2 29.35);
         --shadow-light: rgba(255, 255, 255, 0.9);
         --shadow-dark: rgba(0, 0, 0, 0.12);
-        --retro-shadow-color: #a0a0a0;
+        --retro-shadow-color: oklch(69.8% 0 0);
 
         --header-height: 3.75rem;
         --sidebar-width: 15rem;

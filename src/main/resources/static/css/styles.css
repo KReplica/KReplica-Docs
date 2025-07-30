@@ -67,17 +67,17 @@
     .hero-section {
         text-align: center;
         padding: 3.75rem 1.25rem 0;
-    }
 
-    .hero-section h1 {
-        font-size: 3rem;
-    }
+        h1 {
+            font-size: 3rem;
+        }
 
-    .hero-section p {
-        font-size: 1.2rem;
-        color: var(--text-color);
-        max-inline-size: 37.5rem;
-        margin-inline: auto;
+        p {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            max-inline-size: 37.5rem;
+            margin-inline: auto;
+        }
     }
 
     .feature-highlight {
@@ -106,10 +106,10 @@
         margin-block-start: 3.75rem;
         padding-block-start: 1.875rem;
         border-block-start: 1px solid var(--border-color);
-    }
 
-    .technical-notes h3 {
-        margin-block-start: 0;
+        h3 {
+            margin-block-start: 0;
+        }
     }
 
     .section-divider {
@@ -138,37 +138,37 @@
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         border-block-end: 1px solid var(--border-color);
-    }
 
-    .workflow-tabs button {
-        padding: 0.85rem 1.25rem;
-        border: none;
-        background: transparent;
-        cursor: pointer;
-        font-size: 0.9rem;
-        color: var(--text-light);
-        border-block-end: 0.1875rem solid transparent;
-        transition: all 0.2s ease;
-        font-weight: 600;
-    }
+        button {
+            padding: 0.85rem 1.25rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            border-block-end: 0.1875rem solid transparent;
+            transition: all 0.2s ease;
+            font-weight: 600;
 
-    .workflow-tabs button:hover {
-        color: var(--primary-color);
-    }
+            &:hover {
+                color: var(--primary-color);
+            }
 
-    .workflow-tabs button.active {
-        color: var(--secondary-color);
-        border-block-end-color: var(--secondary-color);
+            &.active {
+                color: var(--secondary-color);
+                border-block-end-color: var(--secondary-color);
+            }
+        }
     }
 
     .workflow-content {
         padding: 1.5rem 1.5rem 0.5rem;
-    }
 
-    .workflow-content p {
-        margin-block-start: 0;
-        font-size: 1rem;
-        line-height: 1.6;
+        p {
+            margin-block-start: 0;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
     }
 
     .tour-cta {
@@ -193,14 +193,14 @@
     @media (max-width: 48rem) {
         .hero-section {
             padding: 2.5rem 0.9375rem;
-        }
 
-        .hero-section h1 {
-            font-size: clamp(2rem, 6vw, 2.4rem);
-        }
+            h1 {
+                font-size: clamp(2rem, 6vw, 2.4rem);
+            }
 
-        .hero-section p {
-            font-size: 1rem;
+            p {
+                font-size: 1rem;
+            }
         }
     }
 
