@@ -296,7 +296,7 @@
 
         .playground-input-column,
         .playground-output-column {
-            display: flex;
+            display: flex !important;
             flex: 1;
             min-inline-size: 0;
         }

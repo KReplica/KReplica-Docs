@@ -69,10 +69,14 @@
         backdrop-filter: blur(5px);
         z-index: 1005;
         padding-block-start: 5rem;
-        display: none;
+        display: flex;
         align-items: flex-start;
         justify-content: center;
         transition: opacity 0.2s ease-in-out;
+    }
+
+    .nav-menu-container.is-open {
+        display: flex;
     }
 
     .nav-menu-container .nav-links {

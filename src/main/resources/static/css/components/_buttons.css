@@ -101,6 +101,17 @@
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(0.5rem);
+        transition: opacity 0.2s, transform 0.2s, visibility 0s 0.2s;
+    }
+
+    .split-button-container.is-open .dropdown-menu {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 0.2s, transform 0.2s, visibility 0s 0s;
     }
 
     .dropdown-item {
