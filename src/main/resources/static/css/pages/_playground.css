@@ -206,7 +206,6 @@
     @container (max-width: 61.9375rem) {
         .page-playground .main-content {
             padding: 1.25rem 0 0 0;
-            min-block-size: calc(100svh - var(--header-height));
         }
 
         .playground-container {
@@ -215,8 +214,9 @@
 
         .playground-main-content {
             display: grid;
-            grid-template-rows: auto auto minmax(0, 1fr) auto;
-            row-gap: 0.75rem;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 0.75rem;
+            height: calc(100svh - var(--header-height) - 1.25rem);
         }
 
         .playground-actions-desktop {
@@ -229,19 +229,9 @@
         }
 
         .playground-io-container {
-            grid-row: 3;
+            min-height: 0;
             overflow: hidden;
             gap: 0;
-        }
-
-        .playground-tabs-mobile {
-            grid-row: 2;
-            flex: 0 0 auto;
-            inline-size: 100%;
-        }
-
-        .playground-actions-mobile {
-            grid-row: 4;
         }
 
         .playground-output-column {

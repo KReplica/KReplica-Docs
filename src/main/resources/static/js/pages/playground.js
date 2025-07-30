@@ -16,13 +16,15 @@ function resizeEditorToContent() {
     if (!kreplicaEditor) return;
     const editorNode = document.getElementById('kreplica-editor');
     if (!editorNode) return;
+
+    editorNode.style.height = '';
+
     if (isMobile()) {
         editorNode.style.height = '100%';
-        const width = editorNode.clientWidth || (editorNode.parentElement ? editorNode.parentElement.clientWidth : 0) || 0;
-        const height = editorNode.clientHeight || (editorNode.parentElement ? editorNode.parentElement.clientHeight : 0) || 0;
-        kreplicaEditor.layout({width, height});
+        kreplicaEditor.layout();
         return;
     }
+
     const height = kreplicaEditor.getContentHeight();
     editorNode.style.height = height + 'px';
     const width = editorNode.clientWidth || editorNode.parentElement.clientWidth || 0;
@@ -53,7 +55,7 @@ function initKReplicaPlayground() {
                 kreplicaEditor = monaco.editor.create(editorNode, {
                     value: initialCode,
                     language: 'kotlin',
-                    automaticLayout: isMobile(),
+                    automaticLayout: false,
                     theme: 'vs-dark',
                     minimap: {enabled: false},
                     folding: true,
