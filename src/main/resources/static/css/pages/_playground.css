@@ -70,6 +70,7 @@
         flex-wrap: nowrap;
         padding: 0.75rem;
         block-size: 4.5rem;
+        padding-block-end: calc(env(safe-area-inset-bottom) + 0.75rem);
     }
 
     .actions-spacer {
@@ -205,8 +206,7 @@
     @container (max-width: 61.9375rem) {
         .page-playground .main-content {
             padding: 1.25rem 0 0 0;
-            block-size: calc(100dvh - var(--header-height));
-            overflow: hidden;
+            min-block-size: calc(100svh - var(--header-height));
         }
 
         .playground-container {
@@ -215,7 +215,7 @@
 
         .playground-main-content {
             display: grid;
-            grid-template-rows: auto auto minmax(0, 1fr);
+            grid-template-rows: auto auto minmax(0, 1fr) auto;
             row-gap: 0.75rem;
         }
 
@@ -226,12 +226,6 @@
         .dropdown-menu {
             inset-block-start: auto;
             inset-block-end: 100%;
-        }
-
-        .playground-actions-mobile {
-            position: sticky;
-            inset-block-end: 0;
-            z-index: 5;
         }
 
         .playground-io-container {
@@ -246,12 +240,22 @@
             inline-size: 100%;
         }
 
+        .playground-actions-mobile {
+            grid-row: 4;
+        }
+
         .playground-output-column {
             margin-block-start: 0.5rem;
         }
 
+        .playground-editor-area {
+            block-size: 100%;
+        }
+
         #kreplica-editor {
             min-block-size: 0;
+            block-size: 100%;
+            flex: 1 1 auto;
         }
     }
 
