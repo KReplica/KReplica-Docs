@@ -6,6 +6,7 @@
 @import "components/_code-blocks.css" layer(components);
 @import "components/_animations.css" layer(components);
 @import "components/_fab.css" layer(components);
+@import "components/_theme-switcher.css" layer(components);
 @import "layout/_header.css" layer(layout);
 @import "layout/_footer.css" layer(layout);
 @import "layout/_sidebar.css" layer(layout);
@@ -14,6 +15,10 @@
 @layer reset {
     *, *::before, *::after {
         box-sizing: border-box;
+    }
+
+    html {
+        color-scheme: light dark;
     }
 
     [x-cloak] {
@@ -125,7 +130,7 @@
     }
 
     .workflow-container {
-        background-color: oklch(100% 0 0);
+        background-color: var(--surface-color);
         border: 1px solid var(--border-color);
         border-radius: 0.75rem;
         box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
@@ -178,14 +183,6 @@
 }
 
 @layer utilities {
-    [data-page="guide"] {
-        --bg-color: oklch(97% 0.01 150);
-    }
-
-    [data-page="playground"] {
-        --bg-color: oklch(97% 0.015 250);
-    }
-
     @media (prefers-reduced-motion: reduce) {
         * {
             transition: none;

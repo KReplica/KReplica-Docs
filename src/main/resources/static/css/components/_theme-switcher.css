@@ -1,0 +1,46 @@
+@layer components {
+    .theme-switcher {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: var(--bg-color);
+        padding: 0.25rem;
+        border-radius: 999px;
+        border: 1px solid var(--border-color);
+    }
+
+    .theme-switcher button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        color: var(--text-light);
+        transition: color 0.2s, background-color 0.2s;
+    }
+
+    .theme-switcher button:hover {
+        color: var(--primary-color);
+    }
+
+    .theme-switcher button.active {
+        background-color: var(--primary-color);
+        color: var(--surface-color);
+    }
+
+    .nav-menu-container .theme-switcher {
+        margin-block-start: 1.5rem;
+    }
+
+    .desktop-nav-container .theme-switcher {
+        display: flex;
+    }
+
+    .nav-menu-container .theme-switcher {
+        display: inline-flex;
+    }
+}

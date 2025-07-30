@@ -38,7 +38,7 @@
         inline-size: 3.75rem;
         block-size: 3.75rem;
         border-radius: 50%;
-        background-color: var(--primary-color);
+        background-color: var(--fab-bg, var(--primary-color));
         box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.25);
         border: none;
         cursor: pointer;

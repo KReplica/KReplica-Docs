@@ -1,3 +1,5 @@
+import {initThemeSwitcher} from './components/theme-switcher.js';
+
 async function initializeApp() {
     if (document.querySelector('[data-js-id="guide-sidebar-links"]')) {
         const guide = await import('./pages/guide.js');
@@ -11,6 +13,7 @@ async function initializeApp() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    initThemeSwitcher();
     void initializeApp();
 });
 
