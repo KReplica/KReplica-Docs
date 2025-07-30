@@ -15,8 +15,8 @@
     }
 
     :not(pre) > code {
-        background: #e9ecef;
-        color: var(--primary-color);
+        background: var(--inline-code-bg);
+        color: var(--inline-code-text);
         padding: 0.2em 0.4em;
         border-radius: 0.1875rem;
         font-family: var(--font-mono, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace);
