@@ -1,203 +1,212 @@
-@import "base/_variables.css";
-@import "base/_typography.css";
-@import "layout/_header.css";
-@import "layout/_footer.css";
-@import "layout/_sidebar.css";
-@import "components/_buttons.css";
-@import "components/_code-blocks.css";
-@import "components/_animations.css";
-@import "components/_fab.css";
-@import "pages/_playground.css";
+@layer reset, base, layout, components, pages, utilities;
 
-*, *::before, *::after {
-    box-sizing: border-box;
-}
+@import "base/_variables.css" layer(base);
+@import "base/_typography.css" layer(base);
+@import "components/_buttons.css" layer(components);
+@import "components/_code-blocks.css" layer(components);
+@import "components/_animations.css" layer(components);
+@import "components/_fab.css" layer(components);
+@import "layout/_header.css" layer(layout);
+@import "layout/_footer.css" layer(layout);
+@import "layout/_sidebar.css" layer(layout);
+@import "pages/_playground.css" layer(pages);
 
-[x-cloak] {
-    display: none !important;
-}
+@layer reset {
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
 
-.page-wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.main-content {
-    flex-grow: 1;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-.guide-content section + section {
-    margin-top: 2.5rem;
-}
-
-.examples-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-}
-
-.guide-main-content {
-    min-width: 0;
-}
-
-.alert {
-    padding: 15px;
-    margin: 20px 0;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    background-color: var(--alert-info-bg);
-    border-color: var(--alert-info-border);
-    color: #0c5460;
-}
-
-.hero-section {
-    text-align: center;
-    padding: 60px 20px 0;
-}
-
-.hero-section h1 {
-    font-size: 3rem;
-}
-
-.hero-section p {
-    font-size: 1.2rem;
-    color: var(--text-color);
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.feature-highlight {
-    margin-top: 4rem;
-}
-
-.htmx-indicator {
-    opacity: 0;
-    transition: opacity .2s ease-in;
-}
-
-.htmx-request .htmx-indicator,
-.htmx-request.htmx-indicator {
-    opacity: 1;
-}
-
-.htmx-request .page-progress {
-    width: 100%;
-}
-
-.nav-item-next {
-    margin-left: auto;
-}
-
-.technical-notes {
-    margin-top: 60px;
-    padding-top: 30px;
-    border-top: 1px solid var(--border-color);
-}
-
-.technical-notes h3 {
-    margin-top: 0;
-}
-
-.section-divider {
-    margin-top: 40px;
-    border-top: 1px solid var(--border-color);
-    padding-top: 40px;
-}
-
-.placeholder-text {
-    padding: 2rem;
-    text-align: center;
-    color: var(--text-light);
-}
-
-.workflow-container {
-    background-color: var(--surface-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, .05);
-    overflow: hidden;
-}
-
-.workflow-tabs {
-    display: flex;
-    padding: 0 1rem;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.workflow-tabs button {
-    padding: .85rem 1.25rem;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-size: .9rem;
-    color: var(--text-light);
-    border-bottom: 3px solid transparent;
-    transition: all .2s ease;
-    font-weight: 600;
-}
-
-.workflow-tabs button:hover {
-    color: var(--primary-color);
-}
-
-.workflow-tabs button.active {
-    color: var(--secondary-color);
-    border-bottom-color: var(--secondary-color);
-}
-
-.workflow-content {
-    padding: 1.5rem 1.5rem 0.5rem;
-}
-
-.workflow-content p {
-    margin-top: 0;
-    font-size: 1rem;
-    line-height: 1.6;
-}
-
-.tour-cta {
-    text-align: center;
-    margin-top: 30px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    * {
-        transition: none !important;
+    [x-cloak] {
+        display: none !important;
     }
 }
 
-@media (min-width: 769px) {
+@layer layout {
+    .page-wrapper {
+        display: flex;
+        flex-direction: column;
+        min-block-size: 100dvh;
+    }
+
+    .main-content {
+        flex-grow: 1;
+        inline-size: 100%;
+        max-inline-size: var(--container-max);
+        margin-inline: auto;
+        padding: 2.5rem 1.25rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .guide-content section + section {
+        margin-block-start: 2.5rem;
+    }
+
     .examples-container {
-        grid-template-columns: var(--sidebar-width) 1fr;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .guide-main-content {
+        min-inline-size: 0;
     }
 }
 
-@media (max-width: 768px) {
+@layer components {
+    .alert {
+        padding: 0.9375rem;
+        margin: 1.25rem 0;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+        background-color: var(--alert-info-bg);
+        border-color: var(--alert-info-border);
+        color: #0c5460;
+    }
+
     .hero-section {
-        padding: 40px 15px;
+        text-align: center;
+        padding: 3.75rem 1.25rem 0;
     }
 
     .hero-section h1 {
-        font-size: clamp(2rem, 6vw, 2.4rem);
+        font-size: 3rem;
     }
 
     .hero-section p {
+        font-size: 1.2rem;
+        color: var(--text-color);
+        max-inline-size: 37.5rem;
+        margin-inline: auto;
+    }
+
+    .feature-highlight {
+        margin-block-start: 4rem;
+    }
+
+    .htmx-indicator {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+    }
+
+    .htmx-request .htmx-indicator,
+    .htmx-request.htmx-indicator {
+        opacity: 1;
+    }
+
+    .htmx-request .page-progress {
+        inline-size: 100%;
+    }
+
+    .nav-item-next {
+        margin-inline-start: auto;
+    }
+
+    .technical-notes {
+        margin-block-start: 3.75rem;
+        padding-block-start: 1.875rem;
+        border-block-start: 1px solid var(--border-color);
+    }
+
+    .technical-notes h3 {
+        margin-block-start: 0;
+    }
+
+    .section-divider {
+        margin-block-start: 2.5rem;
+        border-block-start: 1px solid var(--border-color);
+        padding-block-start: 2.5rem;
+    }
+
+    .placeholder-text {
+        padding: 2rem;
+        text-align: center;
+        color: var(--text-light);
+    }
+
+    .workflow-container {
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 0.75rem;
+        box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .workflow-tabs {
+        display: flex;
+        padding-inline: 1rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-block-end: 1px solid var(--border-color);
+    }
+
+    .workflow-tabs button {
+        padding: 0.85rem 1.25rem;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: var(--text-light);
+        border-block-end: 0.1875rem solid transparent;
+        transition: all 0.2s ease;
+        font-weight: 600;
+    }
+
+    .workflow-tabs button:hover {
+        color: var(--primary-color);
+    }
+
+    .workflow-tabs button.active {
+        color: var(--secondary-color);
+        border-block-end-color: var(--secondary-color);
+    }
+
+    .workflow-content {
+        padding: 1.5rem 1.5rem 0.5rem;
+    }
+
+    .workflow-content p {
+        margin-block-start: 0;
         font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .tour-cta {
+        text-align: center;
+        margin-block-start: 1.875rem;
     }
 }
 
-@media (max-width: 480px) {
-    .main-content {
-        padding: 30px 15px;
+@layer utilities {
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            transition: none;
+        }
+    }
+
+    @media (min-width: 48.0625rem) {
+        .examples-container {
+            grid-template-columns: var(--sidebar-width) 1fr;
+        }
+    }
+
+    @media (max-width: 48rem) {
+        .hero-section {
+            padding: 2.5rem 0.9375rem;
+        }
+
+        .hero-section h1 {
+            font-size: clamp(2rem, 6vw, 2.4rem);
+        }
+
+        .hero-section p {
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 30rem) {
+        .main-content {
+            padding: 1.875rem 0.9375rem;
+        }
     }
 }

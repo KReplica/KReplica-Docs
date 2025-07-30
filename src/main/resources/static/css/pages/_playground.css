@@ -1,346 +1,335 @@
-.playground-container {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    min-height: 0;
-}
-
-.playground-controls {
-    margin-bottom: 1rem;
-}
-
-.playground-main-content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-}
-
-.playground-editor-area {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    min-height: 0;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-}
-
-#kreplica-editor {
-    width: 100%;
-    flex: 0 0 auto;
-    min-height: 240px;
-}
-
-.playground-output-content {
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    height: 100%;
-    overflow: hidden;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.playground-output-content > div {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-#playground-output .tabs-nav {
-    border-bottom: 1px solid var(--border-color);
-    background-color: var(--surface-color);
-}
-
-.playground-output-content .playground-content {
-    flex-grow: 1;
-    overflow: auto;
-}
-
-.playground-actions-mobile {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: nowrap;
-    padding: 12px;
-    border-top: 1px solid var(--border-color);
-    height: 72px;
-}
-
-.actions-spacer {
-    flex-grow: 1;
-}
-
-.copy-code-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #4a4a4a;
-    color: #ccc;
-    border: 1px solid #666;
-    border-radius: 4px;
-    padding: 4px 8px;
-    font-family: var(--font-sans);
-    font-size: 0.8rem;
-    cursor: pointer;
-    opacity: 0.7;
-    transition: opacity .2s ease-in-out;
-}
-
-.copy-code-button:hover {
-    opacity: 1;
-}
-
-.copy-code-button:disabled {
-    opacity: 1;
-    cursor: default;
-    background-color: var(--secondary-color);
-    border-color: var(--secondary-color);
-    color: #fff;
-}
-
-.playground-actions-desktop {
-    display: none;
-}
-
-.custom-select-wrapper {
-    position: relative;
-    max-width: 400px;
-}
-
-.custom-select-wrapper label {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--text-light);
-    margin-bottom: 0.25rem;
-    display: block;
-}
-
-.custom-select-wrapper select {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 100%;
-    padding: .75rem 2.5rem .75rem 1rem;
-    font-size: 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    background-color: var(--surface-color);
-    color: var(--primary-color);
-    cursor: pointer;
-    font-weight: 500;
-}
-
-.custom-select-wrapper::after {
-    content: '';
-    position: absolute;
-    right: 1rem;
-    top: 60%;
-    width: 0.6em;
-    height: 0.4em;
-    background-color: var(--primary-color);
-    clip-path: polygon(100% 0%, 0 0%, 50% 100%);
-}
-
-.tabs-nav {
-    display: flex;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-.tabs-nav button {
-    padding: .75rem 1.25rem;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-size: .9rem;
-    color: var(--text-light);
-    border-bottom: 3px solid transparent;
-    transition: all .2s ease;
-    white-space: nowrap;
-    font-weight: 500;
-}
-
-.tabs-nav button:hover {
-    color: var(--primary-color);
-}
-
-.tabs-nav button.active,
-.tabs-nav button[aria-selected="true"] {
-    color: var(--secondary-color);
-    font-weight: 600;
-    border-bottom-color: var(--secondary-color);
-}
-
-.playground-tabs-mobile {
-    border-bottom: 1px solid var(--border-color);
-}
-
-.playground-tabs-mobile button {
-    flex-grow: 1;
-    text-align: center;
-}
-
-.playground-tabs-mobile button.disabled {
-    color: #ccc;
-    cursor: not-allowed;
-    border-bottom-color: transparent;
-}
-
-.playground-tabs-mobile button.disabled:hover {
-    color: #ccc;
-}
-
-.playground-content {
-    padding: 1rem;
-    position: relative;
-}
-
-.playground-input-column,
-.playground-output-column {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    flex-grow: 1;
-    height: 100%;
-}
-
-.playground-io-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    flex-grow: 1;
-    min-height: 0;
-    padding-bottom: 0;
-}
-
-@media (max-width: 991px) {
-    .page-playground .main-content {
-        padding: 20px 0 0 0;
-        height: calc(100svh - var(--header-height));
-        overflow: hidden;
-    }
-
+@layer pages {
     .playground-container {
-        padding: 0 20px 0;
-    }
-
-    .playground-main-content {
-        display: grid;
-        grid-template-rows: auto auto minmax(0, 1fr);
-        row-gap: 12px;
-    }
-
-    .playground-actions-desktop {
-        display: none;
-    }
-
-    .dropdown-menu {
-        top: auto;
-        bottom: 100%;
-    }
-
-    .playground-actions-mobile {
-        position: sticky;
-        bottom: 0;
-        z-index: 5;
-    }
-
-    .playground-io-container {
-        grid-row: 3;
-        overflow: hidden;
-        gap: 0;
-    }
-
-    .playground-tabs-mobile {
-        grid-row: 2;
-        flex: 0 0 auto;
-        width: 100%;
-    }
-
-    .playground-output-column {
-        margin-top: 8px;
-    }
-
-    #kreplica-editor {
-        min-height: 0;
-    }
-}
-
-@media (min-width: 992px) {
-    .playground-main-content {
-        display: grid;
-        grid-template:
-            "controls actions" auto
-            "io-container io-container" 1fr / 1fr 1fr;
-        row-gap: 0;
-        column-gap: 1.5rem;
-    }
-
-    .playground-actions-mobile {
-        display: none;
-    }
-
-    .playground-tabs-mobile {
-        display: none;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        min-block-size: 0;
+        padding: 0;
+        container-type: inline-size;
     }
 
     .playground-controls {
-        grid-area: controls;
-        margin-bottom: 0;
+        margin-block-end: 1rem;
+    }
+
+    .playground-main-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        min-block-size: 0;
+    }
+
+    .playground-editor-area {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        min-block-size: 0;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-3);
+    }
+
+    #kreplica-editor {
+        inline-size: 100%;
+        flex: 0 0 auto;
+        min-block-size: 15rem;
+    }
+
+    .playground-output-content {
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-3);
+        block-size: 100%;
+        overflow: hidden;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .playground-output-content > div {
+        inline-size: 100%;
+        block-size: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #playground-output .tabs {
+        border-block-end: 1px solid var(--border-color);
+        background-color: var(--surface-color);
+    }
+
+    .playground-output-content .playground-content {
+        flex-grow: 1;
+        overflow: auto;
+        min-block-size: 0;
+    }
+
+    .playground-actions-mobile {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        flex-wrap: nowrap;
+        padding: 0.75rem;
+        border-block-start: 1px solid var(--border-color);
+        block-size: 4.5rem;
+    }
+
+    .actions-spacer {
+        flex-grow: 1;
     }
 
     .playground-actions-desktop {
-        grid-area: actions;
-        display: flex;
-        justify-content: flex-end;
-        height: 48px;
-        gap: 12px;
+        display: none;
     }
 
-    .playground-io-container {
-        grid-area: io-container;
+    .custom-select-wrapper {
+        position: relative;
+        max-inline-size: 25rem;
+    }
+
+    .custom-select-wrapper label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-light);
+        margin-block-end: 0.25rem;
+        display: block;
+    }
+
+    .custom-select-wrapper select {
+        appearance: none;
+        -webkit-appearance: none;
+        inline-size: 100%;
+        padding: 0.75rem 2.5rem 0.75rem 1rem;
+        font-size: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0.375rem;
+        background-color: var(--surface-color);
+        color: var(--primary-color);
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .custom-select-wrapper::after {
+        content: '';
+        position: absolute;
+        inset-inline-end: 1rem;
+        inset-block-start: 60%;
+        inline-size: 0.6em;
+        block-size: 0.4em;
+        background-color: var(--primary-color);
+        clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+    }
+
+    .tabs,
+    .tabs-nav,
+    .workflow-tabs {
         display: flex;
-        flex-direction: row;
-        gap: 1.5rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tabs button,
+    .tabs-nav button,
+    .workflow-tabs button {
+        padding: 0.75rem 1.25rem;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: var(--text-light);
+        border-block-end: 0.1875rem solid transparent;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        font-weight: 500;
+    }
+
+    .tabs button:hover,
+    .tabs-nav button:hover,
+    .workflow-tabs button:hover {
+        color: var(--primary-color);
+    }
+
+    .tabs button.active,
+    .tabs-nav button.active,
+    .tabs-nav button[aria-selected="true"],
+    .workflow-tabs button.active {
+        color: var(--secondary-color);
+        font-weight: 600;
+        border-block-end-color: var(--secondary-color);
+    }
+
+    .playground-tabs {
+        border-block-end: 1px solid var(--border-color);
+    }
+
+    .playground-tabs-mobile {
+        border-block-end: 1px solid var(--border-color);
+    }
+
+    .playground-tabs-mobile button {
+        flex-grow: 1;
+        text-align: center;
+    }
+
+    .playground-tabs-mobile button.disabled {
+        color: #cccccc;
+        cursor: not-allowed;
+        border-block-end-color: transparent;
+    }
+
+    .playground-tabs-mobile button.disabled:hover {
+        color: #cccccc;
+    }
+
+    .playground-content {
+        padding: 1rem;
+        position: relative;
     }
 
     .playground-input-column,
     .playground-output-column {
-        display: flex !important;
-        flex: 1;
-        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        min-block-size: 0;
+        flex-grow: 1;
+        block-size: 100%;
     }
 
-    .playground-input-column {
-        margin-top: 1.5rem;
+    .playground-io-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        flex-grow: 1;
+        min-block-size: 0;
+        padding-block-end: 0;
     }
-}
 
-.page-playground #playground-output > div {
-    min-height: 0;
-}
+    @container (max-width: 61.9375rem) {
+        .page-playground .main-content {
+            padding: 1.25rem 0 0 0;
+            block-size: calc(100dvh - var(--header-height));
+            overflow: hidden;
+        }
 
-.page-playground #playground-output .playground-tabs {
-    flex: 0 0 auto;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-}
+        .playground-container {
+            padding-inline: 1.25rem;
+        }
 
-.page-playground #playground-output .playground-tabs button {
-    flex: 0 0 auto;
-    white-space: nowrap;
-}
+        .playground-main-content {
+            display: grid;
+            grid-template-rows: auto auto minmax(0, 1fr);
+            row-gap: 0.75rem;
+        }
 
-.page-playground #playground-output .playground-content {
-    padding: 0;
-}
+        .playground-actions-desktop {
+            display: none;
+        }
 
-.page-playground #playground-output .playground-content pre.language-kotlin {
-    padding: 0;
-    border-radius: 0;
+        .dropdown-menu {
+            inset-block-start: auto;
+            inset-block-end: 100%;
+        }
+
+        .playground-actions-mobile {
+            position: sticky;
+            inset-block-end: 0;
+            z-index: 5;
+        }
+
+        .playground-io-container {
+            grid-row: 3;
+            overflow: hidden;
+            gap: 0;
+        }
+
+        .playground-tabs-mobile {
+            grid-row: 2;
+            flex: 0 0 auto;
+            inline-size: 100%;
+        }
+
+        .playground-output-column {
+            margin-block-start: 0.5rem;
+        }
+
+        #kreplica-editor {
+            min-block-size: 0;
+        }
+    }
+
+    @container (min-width: 62rem) {
+        .playground-main-content {
+            display: grid;
+            grid-template:
+            "controls actions" auto
+            "io io" 1fr / 1fr 1fr;
+            row-gap: 0;
+            column-gap: 1.5rem;
+        }
+
+        .playground-actions-mobile {
+            display: none;
+        }
+
+        .playground-tabs-mobile {
+            display: none;
+        }
+
+        .playground-controls {
+            grid-area: controls;
+            margin-block-end: 0;
+        }
+
+        .playground-actions-desktop {
+            grid-area: actions;
+            display: flex;
+            justify-content: flex-end;
+            block-size: 3rem;
+            gap: 0.75rem;
+        }
+
+        .playground-io-container {
+            grid-area: io;
+            display: flex;
+            flex-direction: row;
+            gap: 1.5rem;
+        }
+
+        .playground-input-column,
+        .playground-output-column {
+            display: flex;
+            flex: 1;
+            min-inline-size: 0;
+        }
+
+        .playground-input-column {
+            margin-block-start: 1.5rem;
+        }
+    }
+
+    .page-playground #playground-output > div {
+        min-block-size: 0;
+    }
+
+    .page-playground #playground-output .playground-tabs {
+        flex: 0 0 auto;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        position: sticky;
+        inset-block-start: 0;
+        z-index: 1;
+    }
+
+    .page-playground #playground-output .playground-tabs button {
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+
+    .page-playground #playground-output .playground-content {
+        padding: 0;
+    }
+
+    .page-playground #playground-output .playground-content pre.language-kotlin {
+        padding: 0;
+        border-radius: 0;
+    }
 }
