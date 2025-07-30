@@ -200,10 +200,6 @@
     }
 
     @container (max-width: 61.9375rem) {
-        .page-playground .main-content {
-            padding: 1rem 0 0 0;
-        }
-
         .playground-container {
             padding-inline: 1.25rem;
         }
@@ -296,12 +292,8 @@
         }
     }
 
-    .page-playground #playground-output {
-        > div {
-            min-block-size: 0;
-        }
-
-        .playground-tabs {
+    @scope (#playground-output) {
+        #playground-output .playground-tabs {
             flex: 0 0 auto;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -315,7 +307,7 @@
             }
         }
 
-        .playground-content {
+        #playground-output .playground-content {
             padding: 0;
 
             pre.language-kotlin {
