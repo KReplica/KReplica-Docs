@@ -15,12 +15,12 @@ function handleThemeSelection(e) {
     if (!button) return;
 
     const theme = button.dataset.themeSet;
-    sessionStorage.setItem('theme', theme);
+    localStorage.setItem('theme', theme);
     applyTheme(theme);
 }
 
 export function initThemeSwitcher() {
-    const savedTheme = sessionStorage.getItem('theme') || 'light';
+    const savedTheme = localStorage.getItem('theme') || 'light';
     applyTheme(savedTheme);
 
     document.querySelectorAll('.theme-switcher').forEach(switcher => {
