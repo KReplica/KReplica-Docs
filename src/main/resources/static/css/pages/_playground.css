@@ -28,6 +28,8 @@
 
 #kreplica-editor {
     width: 100%;
+    flex: 1;
+    min-height: 240px;
 }
 
 .playground-output-content {
@@ -237,7 +239,6 @@
         position: sticky;
         bottom: 0;
         z-index: 5;
-        background-color: transparent;
     }
 
     .playground-io-container {

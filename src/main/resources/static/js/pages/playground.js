@@ -1,53 +1,8 @@
 let kreplicaEditor = null;
-let lastContentHeight = 0;
+let cleanupFns = [];
 
 function getHiddenTextarea() {
     return document.querySelector('textarea[name="source"]');
-}
-
-function isMobile() {
-    return window.innerWidth <= 991;
-}
-
-function computeAvailableEditorMaxHeight() {
-    const scroller = document.querySelector('.page-playground .main-content');
-    const actions = document.querySelector('.playground-actions-mobile');
-    const editorNode = document.getElementById('kreplica-editor');
-    if (!scroller || !actions || !editorNode) return null;
-    const scrollerRect = scroller.getBoundingClientRect();
-    const editorRect = editorNode.getBoundingClientRect();
-    const reserved = actions.offsetHeight || 0;
-    const available = Math.floor(scrollerRect.bottom - editorRect.top - reserved - 16);
-    return available > 0 ? available : null;
-}
-
-function fitToContent(heightHint) {
-    if (!kreplicaEditor) return;
-    const editorNode = document.getElementById('kreplica-editor');
-    const measured = typeof heightHint === 'number' ? heightHint : kreplicaEditor.getContentHeight();
-    lastContentHeight = measured > 0 ? measured : lastContentHeight;
-    let targetHeight = lastContentHeight;
-    if (isMobile()) {
-        const maxH = computeAvailableEditorMaxHeight();
-        if (typeof maxH === 'number') {
-            targetHeight = Math.min(targetHeight, maxH);
-        }
-    }
-    const width = editorNode.clientWidth || editorNode.offsetWidth || 0;
-    editorNode.style.height = targetHeight + 'px';
-    if (width > 0) {
-        kreplicaEditor.layout({width, height: targetHeight});
-    } else {
-        kreplicaEditor.layout();
-    }
-}
-
-function scheduleFit() {
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            fitToContent();
-        });
-    });
 }
 
 function initKReplicaPlayground() {
@@ -71,33 +26,22 @@ function initKReplicaPlayground() {
                 const initialCode = hiddenTextareaEl ? hiddenTextareaEl.value : '';
                 const editorNode = document.getElementById('kreplica-editor');
 
-                kreplicaEditor = monaco.editor.create(
-                    editorNode,
-                    {
-                        value: initialCode,
-                        language: 'kotlin',
-                        automaticLayout: true,
-                        theme: 'vs-dark',
-                        minimap: {enabled: false},
-                        folding: true,
-                        scrollBeyondLastLine: false,
-                        lineHeight: 20
-                    }
-                );
+                kreplicaEditor = monaco.editor.create(editorNode, {
+                    value: initialCode,
+                    language: 'kotlin',
+                    automaticLayout: true,
+                    theme: 'vs-dark',
+                    minimap: {enabled: false},
+                    folding: true,
+                    scrollBeyondLastLine: false,
+                    lineHeight: 20
+                });
 
                 monaco.languages.registerCompletionItemProvider('kotlin', {
                     triggerCharacters: ['@', '.'],
                     provideCompletionItems() {
                         return {suggestions: KREPLICA_COMPLETIONS};
                     }
-                });
-
-                kreplicaEditor.onDidContentSizeChange((e) => {
-                    fitToContent(e.contentHeight);
-                });
-
-                kreplicaEditor.onDidChangeModel(() => {
-                    scheduleFit();
                 });
 
                 kreplicaEditor.onDidChangeModelContent(() => {
@@ -107,9 +51,37 @@ function initKReplicaPlayground() {
                     }
                 });
 
-                window.addEventListener('resize', scheduleFit, {passive: true});
+                if (window.visualViewport) {
+                    const onVVResize = () => {
+                        if (kreplicaEditor) kreplicaEditor.layout();
+                    };
+                    window.visualViewport.addEventListener('resize', onVVResize);
+                    cleanupFns.push(() => window.visualViewport.removeEventListener('resize', onVVResize));
+                }
 
-                scheduleFit();
+                const onVisibility = () => {
+                    if (document.visibilityState === 'visible' && kreplicaEditor) {
+                        kreplicaEditor.layout();
+                    }
+                };
+                document.addEventListener('visibilitychange', onVisibility);
+                cleanupFns.push(() => document.removeEventListener('visibilitychange', onVisibility));
+
+                const column = document.querySelector('.playground-input-column');
+                if (column) {
+                    const mo = new MutationObserver(() => {
+                        const node = document.getElementById('kreplica-editor');
+                        if (node && node.offsetParent !== null && kreplicaEditor) {
+                            kreplicaEditor.layout();
+                        }
+                    });
+                    mo.observe(column, {attributes: true, attributeFilter: ['style', 'class']});
+                    cleanupFns.push(() => mo.disconnect());
+                }
+
+                requestAnimationFrame(() => {
+                    if (kreplicaEditor) kreplicaEditor.layout();
+                });
             });
     });
 }
@@ -137,7 +109,7 @@ function setupEventListeners() {
     const playgroundContainer = document.querySelector('.playground-container');
     if (!playgroundContainer) return;
 
-    playgroundContainer.addEventListener('click', (e) => {
+    const onClick = (e) => {
         const actionTarget = e.target.closest('[data-action]');
         if (!actionTarget) return;
 
@@ -155,9 +127,10 @@ function setupEventListeners() {
                 clearPlaygroundOutput();
                 break;
         }
-    });
+    };
 
-    window.addEventListener('resize', scheduleFit, {passive: true});
+    playgroundContainer.addEventListener('click', onClick);
+    cleanupFns.push(() => playgroundContainer.removeEventListener('click', onClick));
 }
 
 export function init() {
@@ -170,6 +143,13 @@ export function getEditorInstance() {
 }
 
 export function disposeEditor() {
+    cleanupFns.forEach(fn => {
+        try {
+            fn();
+        } catch (_) {
+        }
+    });
+    cleanupFns = [];
     if (kreplicaEditor) {
         const model = kreplicaEditor.getModel();
         if (model) {
@@ -187,7 +167,9 @@ export function setEditorValue(value) {
         if (currentTextarea) {
             currentTextarea.value = value;
         }
-        scheduleFit();
+        requestAnimationFrame(() => {
+            if (kreplicaEditor) kreplicaEditor.layout();
+        });
     }
 }
 
@@ -203,7 +185,9 @@ export function setEditorModelFromSource(value) {
     if (currentTextarea) {
         currentTextarea.value = value;
     }
-    scheduleFit();
+    requestAnimationFrame(() => {
+        if (kreplicaEditor) kreplicaEditor.layout();
+    });
 }
 
 export {clearPlaygroundOutput};
