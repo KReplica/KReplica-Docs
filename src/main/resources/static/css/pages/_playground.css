@@ -69,7 +69,6 @@
         align-items: center;
         flex-wrap: nowrap;
         padding: 0.75rem;
-        border-block-start: 1px solid var(--border-color);
         block-size: 4.5rem;
     }
 
