@@ -27,9 +27,9 @@
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body x-data>
+<body x-data="{ isNavOpen: false }" @keydown.escape.window="isNavOpen = false">
 <div class="page-wrapper">
-    <header class="main-header" x-data="{ isOpen: false }" @keydown.escape.window="isOpen = false">
+    <header class="main-header">
         <div class="nav-container">
             <a href="/" class="nav-logo"
                hx-get="/"
@@ -37,24 +37,26 @@
                hx-push-url="true"
                hx-indicator=".page-progress">KReplica</a>
 
-            <button type="button" class="hamburger-button" @click="isOpen = !isOpen" aria-label="Toggle Menu">
-                <div x-show="!isOpen">
-                    @template.icons.hamburger(cssClass="hamburger-icon")
-                </div>
-                <div x-show="isOpen" x-cloak>
-                    @template.icons.close(cssClass="hamburger-icon")
-                </div>
-            </button>
+            <div class="mobile-header-controls">
+                @template.fragments.theme-switcher()
+                <button type="button" class="hamburger-button" @click="isNavOpen = !isNavOpen" aria-label="Toggle Menu">
+                    <div x-show="!isNavOpen">
+                        @template.icons.hamburger(cssClass="hamburger-icon")
+                    </div>
+                    <div x-show="isNavOpen" x-cloak>
+                        @template.icons.close(cssClass="hamburger-icon")
+                    </div>
+                </button>
+            </div>
 
             <div class="nav-menu-container"
-                 x-show="isOpen"
+                 x-show="isNavOpen"
                  x-transition
-                 @click.outside="isOpen = false"
+                 @click.outside="isNavOpen = false"
                  x-cloak>
                 <nav class="main-nav" id="mobile-nav-links">
                     @template.fragments.nav-links(vm = vm, isMobile = true)
                 </nav>
-                @template.fragments.theme-switcher()
             </div>
 
             <div class="desktop-nav-container">
@@ -86,7 +88,7 @@
     </footer>
 </div>
 
-<div id="fab-slot">
+<div id="fab-slot" x-show="!isNavOpen">
     @if(vm is io.availe.kreplicadocs.model.view.GuideViewModel)
         @template.tags.fab-menu(vm = vm)
     @endif

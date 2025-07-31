@@ -9,7 +9,7 @@
        hx-target=".main-content"
        hx-push-url="true"
        hx-indicator=".page-progress"
-       @click="${if (isMobile) "isOpen = false" else ""}"
+       @click="${if (isMobile) "isNavOpen = false" else ""}"
        preload="${if (link.pageId == "playground") "mouseover" else ""}">
         ${link.label}
     </a>

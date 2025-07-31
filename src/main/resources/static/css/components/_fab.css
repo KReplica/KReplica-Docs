@@ -3,7 +3,7 @@
         position: fixed;
         inset-block-end: 1.5625rem;
         inset-inline-end: 1.5625rem;
-        z-index: 1050;
+        z-index: 20;
         display: none;
     }
 
@@ -34,7 +34,7 @@
 
     .fab-button {
         position: relative;
-        z-index: 1051;
+        z-index: 21;
         inline-size: 3.75rem;
         block-size: 3.75rem;
         border-radius: 50%;

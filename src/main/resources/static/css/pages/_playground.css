@@ -40,23 +40,23 @@
         border: 1px solid var(--border-color);
         border-radius: var(--radius-3);
         block-size: 100%;
-        overflow: hidden;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
+    }
 
-        > div {
-            inline-size: 100%;
-            block-size: 100%;
-            display: flex;
-            flex-direction: column;
-        }
+    .playground-output-content > div {
+        inline-size: 100%;
+        block-size: 100%;
+        display: flex;
+        flex-direction: column;
+        min-block-size: 0;
+    }
 
-        .playground-content {
-            flex-grow: 1;
-            overflow: auto;
-            min-block-size: 0;
-        }
+    .playground-output-content .playground-content {
+        flex-grow: 1;
+        overflow: auto;
+        min-block-size: 0;
     }
 
     #playground-output .tabs {
@@ -155,6 +155,11 @@
 
     .playground-tabs {
         border-block-end: 1px solid var(--border-color);
+        flex-shrink: 0;
+    }
+
+    .playground-tabs.is-single {
+        overflow-x: hidden;
     }
 
     .playground-tabs-mobile {

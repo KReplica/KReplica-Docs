@@ -2,7 +2,7 @@
 
 @if(files.isNotEmpty())
     <div x-data="{ activeTab: '${files.keys.first()}' }">
-        <div class="tabs-nav playground-tabs" role="tablist">
+        <div class="tabs-nav playground-tabs ${if(files.size == 1) "is-single" else ""}" role="tablist">
             @for((filename, _) in files)
                 <button type="button"
                         role="tab"
