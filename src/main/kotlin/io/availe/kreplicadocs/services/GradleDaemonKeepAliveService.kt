@@ -15,9 +15,8 @@ class GradleDaemonKeepAliveService(
     private val log = LoggerFactory.getLogger(GradleDaemonKeepAliveService::class.java)
     private val keepAliveTemplateSlug = "basic-replication"
 
-    @Scheduled(fixedRateString = "PT12H")
+    @Scheduled(fixedRateString = "PT10M")
     fun pingDaemon() {
-        log.info("Pinging Gradle daemon to keep it alive...")
         try {
             val sourceCode = codeSnippetProvider.getPlaygroundTemplateSource(keepAliveTemplateSlug)
             val request = CompileRequest(
@@ -25,9 +24,7 @@ class GradleDaemonKeepAliveService(
                 sourceCode = sourceCode
             )
             val response = sandboxService.compile(request)
-            if (response.success) {
-                log.info("Gradle daemon ping successful.")
-            } else {
+            if (!response.success) {
                 log.warn("Gradle daemon ping compilation failed: {}", response.message)
             }
         } catch (e: Exception) {

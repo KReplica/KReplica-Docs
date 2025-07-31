@@ -10,7 +10,6 @@
      x-cloak>
 
     <div class="fab-menu" data-js-id="fab-menu">
-        <h4 class="fab-menu-header">Guide Sections</h4>
         <ul>
             @for ((index, section) in vm.guideNav.withIndex())
                 <li style="--stagger-delay: ${index * 30}ms;">

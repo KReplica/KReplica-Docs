@@ -106,7 +106,6 @@
                     </button>
                 </div>
             </div>
-            <span class="htmx-indicator">Loading...</span>
         </div>
     </div>
 </div>
