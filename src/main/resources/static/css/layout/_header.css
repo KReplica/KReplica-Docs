@@ -61,7 +61,8 @@
     }
 
     .desktop-nav {
-        display: block;
+        display: flex;
+        align-items: center;
     }
 
     .hamburger-button {

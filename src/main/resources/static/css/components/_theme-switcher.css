@@ -16,9 +16,12 @@
         cursor: pointer;
         transition: background-color 0.2s;
         color: var(--text-light);
+        touch-action: manipulation;
     }
 
-    .theme-switcher button:hover {
-        background-color: var(--bg-color);
+    @media (hover: hover) {
+        .theme-switcher button:hover {
+            background-color: var(--bg-color);
+        }
     }
 }
