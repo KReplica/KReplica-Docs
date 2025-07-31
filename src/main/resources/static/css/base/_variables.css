@@ -87,7 +87,7 @@
         --fab-bg: oklch(35% 0.05 255);
         --on-primary: oklch(18% 0.02 250);
         --on-secondary: oklch(23% 0.02 255);
-        --highlight-bg: oklch(35% 0.02 255);
+        --highlight-bg: oklch(50% 0.1 265 / 0.5);
         --highlight-outline: var(--primary-color);
     }
 }
