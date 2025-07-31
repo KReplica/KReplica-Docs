@@ -1,6 +1,7 @@
 let kreplicaEditor = null;
 let cleanupFns = [];
 let resizeObserver = null;
+let outputObserver = null;
 
 const MOBILE_BREAKPOINT_PX = 992;
 
@@ -36,6 +37,36 @@ function resizeEditorToContent() {
     editorNode.style.height = height + 'px';
     const width = editorNode.clientWidth || editorNode.parentElement.clientWidth || 0;
     kreplicaEditor.layout({width, height});
+}
+
+function initOutputObserver() {
+    if (outputObserver) {
+        outputObserver.disconnect();
+    }
+
+    const outputNode = document.getElementById('playground-output');
+    if (!outputNode) return;
+
+    const observerCallback = (mutationsList) => {
+        for (const mutation of mutationsList) {
+            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                outputObserver.disconnect();
+                Prism.highlightAllUnder(outputNode);
+                outputObserver.observe(outputNode, {childList: true, subtree: true});
+                break;
+            }
+        }
+    };
+
+    outputObserver = new MutationObserver(observerCallback);
+    outputObserver.observe(outputNode, {childList: true, subtree: true});
+
+    cleanupFns.push(() => {
+        if (outputObserver) {
+            outputObserver.disconnect();
+            outputObserver = null;
+        }
+    });
 }
 
 function initKReplicaPlayground() {
@@ -176,6 +207,7 @@ function setupEventListeners() {
 export function init() {
     initKReplicaPlayground();
     setupEventListeners();
+    initOutputObserver();
 }
 
 export function getEditorInstance() {
