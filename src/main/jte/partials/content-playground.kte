@@ -63,7 +63,8 @@
 
         <form class="playground-io-container" id="playground-form"
               hx-post="/playground/compile"
-              hx-target="#playground-output">
+              hx-target="#playground-output"
+              hx-swap="outerHTML">
 
             <div class="playground-input-column" x-show="activeTab === 'editor'" x-cloak>
                 <div class="playground-editor-area" data-template-slug="${vm.activeTemplateSlug}">

@@ -1,18 +1,25 @@
 package io.availe.kreplicadocs.web
 
+import gg.jte.TemplateEngine
+import gg.jte.output.StringOutput
 import io.availe.kreplicadocs.common.FragmentTemplate
 import io.availe.kreplicadocs.common.PartialTemplate
 import io.availe.kreplicadocs.common.WebApp
 import io.availe.kreplicadocs.model.CompileRequest
+import io.availe.kreplicadocs.model.CompileResponse
 import io.availe.kreplicadocs.services.CodeSnippetProvider
 import io.availe.kreplicadocs.services.SandboxService
 import io.availe.kreplicadocs.services.ViewModelFactory
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 import org.springframework.web.servlet.view.FragmentsRendering
 import java.util.*
-import java.util.concurrent.TimeoutException
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.TimeUnit
 
 data class CompileRequestForm(val source: String)
 
@@ -20,8 +27,13 @@ data class CompileRequestForm(val source: String)
 class PlaygroundController(
     private val viewModelFactory: ViewModelFactory,
     private val snippetProvider: CodeSnippetProvider,
-    private val sandboxService: SandboxService
+    private val sandboxService: SandboxService,
+    private val templateEngine: TemplateEngine,
 ) {
+
+    private val activeJobs = ConcurrentHashMap<String, CompletableFuture<CompileResponse>>()
+    private val emitters = ConcurrentHashMap<String, SseEmitter>()
+    private val SSE_TIMEOUT = TimeUnit.MINUTES.toMillis(5)
 
     @GetMapping("/playground")
     fun playground(model: Model, @RequestHeader(name = "HX-Request", required = false) hxRequest: String?): Any {
@@ -46,24 +58,71 @@ class PlaygroundController(
 
     @PostMapping(WebApp.Endpoints.Playground.COMPILE)
     fun compile(@ModelAttribute compileRequest: CompileRequestForm, model: Model): String {
-        return try {
-            val jobId = UUID.randomUUID().toString()
-            val request = CompileRequest(jobId, compileRequest.source)
-            val response = sandboxService.compile(request)
+        val jobId = UUID.randomUUID().toString()
+        val request = CompileRequest(jobId, compileRequest.source)
+        val responseFuture = sandboxService.compile(request)
+        activeJobs[jobId] = responseFuture
 
-            if (response.success) {
+        if (responseFuture.isDone && !responseFuture.isCompletedExceptionally()) {
+            val response = responseFuture.getNow(null)
+            if (response != null) {
                 model.addAttribute("files", response.generatedFiles)
-                "fragments/playground-results"
-            } else {
-                model.addAttribute("message", response.message)
-                "fragments/playground-error"
+                activeJobs.remove(jobId)
+                return "fragments/playground-results"
             }
-        } catch (e: TimeoutException) {
-            model.addAttribute("message", "Compilation timed out or the server is busy. Please try again shortly.")
-            "fragments/playground-error"
-        } catch (e: Exception) {
-            model.addAttribute("message", "An unexpected error occurred: ${e.message}")
-            "fragments/playground-error"
         }
+
+        model.addAttribute("jobId", jobId)
+        return "fragments/playground-compiling"
+    }
+
+    @GetMapping("/playground/status/{jobId}")
+    fun getCompilationStatus(@PathVariable jobId: String): SseEmitter {
+        val emitter = SseEmitter(SSE_TIMEOUT)
+        val responseFuture = activeJobs[jobId]
+
+        if (responseFuture == null) {
+            emitter.completeWithError(IllegalStateException("Job not found or already completed."))
+            return emitter
+        }
+
+        emitters[jobId] = emitter
+        val cleanup = Runnable {
+            emitters.remove(jobId)
+            activeJobs.remove(jobId)
+        }
+        emitter.onCompletion(cleanup)
+        emitter.onTimeout(cleanup)
+
+        responseFuture.whenComplete { response, throwable ->
+            val finalEmitter = emitters.remove(jobId)
+            finalEmitter?.let {
+                try {
+                    val modelMap = ModelMap()
+                    val output = StringOutput()
+                    val template: String
+
+                    if (throwable != null) {
+                        modelMap.addAttribute("message", "An unexpected error occurred: ${throwable.message}")
+                        template = "fragments/playground-error"
+                    } else if (response.success) {
+                        modelMap.addAttribute("files", response.generatedFiles)
+                        template = "fragments/playground-results"
+                    } else {
+                        modelMap.addAttribute("message", response.message)
+                        template = "fragments/playground-error"
+                    }
+
+                    templateEngine.render(template, modelMap, output)
+                    it.send(SseEmitter.event().name("message").data(output.toString()))
+                    it.complete()
+                } catch (e: Exception) {
+                    it.completeWithError(e)
+                } finally {
+                    activeJobs.remove(jobId)
+                }
+            }
+        }
+        return emitter
     }
 }

@@ -23,7 +23,7 @@ class GradleDaemonKeepAliveService(
                 jobId = "keep-alive-${UUID.randomUUID()}",
                 sourceCode = sourceCode
             )
-            val response = sandboxService.compile(request)
+            val response = sandboxService.compile(request).get()
             if (!response.success) {
                 log.warn("Gradle daemon ping compilation failed: {}", response.message)
             }
