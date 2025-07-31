@@ -54,8 +54,8 @@
         --bg-color: oklch(99.2% 0.003 255);
         --surface-color: oklch(100% 0 0);
         --border-color: oklch(94% 0.01 255);
-        --sidebar-active-bg: oklch(92% 0.06 260);
-        --sidebar-active-text: var(--primary-color);
+        --sidebar-active-bg: oklch(50% 0.18 260);
+        --sidebar-active-text: #ffffff;
         --retro-shadow-color: oklch(88% 0.01 250);
         --inline-code-bg: oklch(95% 0.015 255);
         --inline-code-text: oklch(45% 0.13 262);
