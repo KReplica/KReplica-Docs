@@ -1,6 +1,7 @@
 package io.availe.kreplicadocs.services
 
 import io.availe.kreplicadocs.model.CompileRequest
+import org.gradle.tooling.GradleConnector
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.cache.CacheManager
@@ -32,7 +33,8 @@ class GradleDaemonWarmupService(
                     jobId = "warmup-${template.slug}-${UUID.randomUUID()}",
                     sourceCode = sourceCode
                 )
-                val response = compilerService.compile(request)
+                val cancellationTokenSource = GradleConnector.newCancellationTokenSource()
+                val response = compilerService.compile(request, cancellationTokenSource)
                 if (response.success) {
                     permanentCache.put(sourceCode, response)
                 }

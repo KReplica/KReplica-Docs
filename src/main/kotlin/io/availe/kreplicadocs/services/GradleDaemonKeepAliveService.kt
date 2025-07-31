@@ -1,6 +1,7 @@
 package io.availe.kreplicadocs.services
 
 import io.availe.kreplicadocs.model.CompileRequest
+import org.gradle.tooling.GradleConnector
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -23,7 +24,8 @@ class GradleDaemonKeepAliveService(
                 jobId = "keep-alive-${UUID.randomUUID()}",
                 sourceCode = sourceCode
             )
-            val response = sandboxService.compile(request).get()
+            val cancellationTokenSource = GradleConnector.newCancellationTokenSource()
+            val response = sandboxService.compile(request, cancellationTokenSource).get()
             if (!response.success) {
                 log.warn("Gradle daemon ping compilation failed: {}", response.message)
             }

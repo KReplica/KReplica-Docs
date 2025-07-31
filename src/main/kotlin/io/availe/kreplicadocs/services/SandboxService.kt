@@ -2,6 +2,7 @@ package io.availe.kreplicadocs.services
 
 import io.availe.kreplicadocs.model.CompileRequest
 import io.availe.kreplicadocs.model.CompileResponse
+import org.gradle.tooling.CancellationTokenSource
 import org.springframework.cache.CacheManager
 import org.springframework.stereotype.Service
 import java.util.concurrent.CompletableFuture
@@ -12,13 +13,16 @@ class SandboxService(
     private val cacheManager: CacheManager
 ) {
 
-    fun compile(request: CompileRequest): CompletableFuture<CompileResponse> {
+    fun compile(
+        request: CompileRequest,
+        cancellationTokenSource: CancellationTokenSource
+    ): CompletableFuture<CompileResponse> {
         val permanentCache = cacheManager.getCache("playground-templates-cache")
 
         permanentCache?.get(request.sourceCode, CompileResponse::class.java)?.let {
             return CompletableFuture.completedFuture(it)
         }
 
-        return asyncCompilerService.runCompilation(request)
+        return asyncCompilerService.runCompilation(request, cancellationTokenSource)
     }
 }

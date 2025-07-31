@@ -2,6 +2,7 @@ package io.availe.kreplicadocs.services
 
 import io.availe.kreplicadocs.model.CompileRequest
 import io.availe.kreplicadocs.model.CompileResponse
+import org.gradle.tooling.CancellationTokenSource
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import java.util.concurrent.CompletableFuture
@@ -10,8 +11,20 @@ import java.util.concurrent.CompletableFuture
 class AsyncCompilerService(private val compilerService: CompilerService) {
 
     @Async("compilationTaskExecutor")
-    fun runCompilation(request: CompileRequest): CompletableFuture<CompileResponse> {
-        val result = compilerService.compile(request)
+    fun runCompilation(
+        request: CompileRequest,
+        cancellationTokenSource: CancellationTokenSource
+    ): CompletableFuture<CompileResponse> {
+        if (cancellationTokenSource.token().isCancellationRequested) {
+            return CompletableFuture.completedFuture(
+                CompileResponse(
+                    jobId = request.jobId,
+                    success = false,
+                    message = "Job was cancelled before starting."
+                )
+            )
+        }
+        val result = compilerService.compile(request, cancellationTokenSource)
         return CompletableFuture.completedFuture(result)
     }
 }

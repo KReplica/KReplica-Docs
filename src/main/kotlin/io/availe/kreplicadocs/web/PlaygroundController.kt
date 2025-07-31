@@ -10,6 +10,9 @@ import io.availe.kreplicadocs.model.CompileResponse
 import io.availe.kreplicadocs.services.CodeSnippetProvider
 import io.availe.kreplicadocs.services.SandboxService
 import io.availe.kreplicadocs.services.ViewModelFactory
+import org.gradle.tooling.CancellationTokenSource
+import org.gradle.tooling.GradleConnector
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.ModelMap
@@ -20,8 +23,15 @@ import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 
 data class CompileRequestForm(val source: String)
+
+data class JobContext(
+    val future: CompletableFuture<CompileResponse>,
+    val cancellationTokenSource: CancellationTokenSource,
+    val isCancelled: AtomicBoolean = AtomicBoolean(false)
+)
 
 @Controller
 class PlaygroundController(
@@ -29,9 +39,10 @@ class PlaygroundController(
     private val snippetProvider: CodeSnippetProvider,
     private val sandboxService: SandboxService,
     private val templateEngine: TemplateEngine,
+    private val compilationTaskExecutor: ThreadPoolTaskExecutor,
 ) {
 
-    private val activeJobs = ConcurrentHashMap<String, CompletableFuture<CompileResponse>>()
+    private val activeJobs = ConcurrentHashMap<String, JobContext>()
     private val emitters = ConcurrentHashMap<String, SseEmitter>()
     private val SSE_TIMEOUT = TimeUnit.MINUTES.toMillis(5)
 
@@ -60,8 +71,13 @@ class PlaygroundController(
     fun compile(@ModelAttribute compileRequest: CompileRequestForm, model: Model): String {
         val jobId = UUID.randomUUID().toString()
         val request = CompileRequest(jobId, compileRequest.source)
-        val responseFuture = sandboxService.compile(request)
-        activeJobs[jobId] = responseFuture
+        val cancellationTokenSource = GradleConnector.newCancellationTokenSource()
+
+        val jobsAhead = compilationTaskExecutor.activeCount + compilationTaskExecutor.queueSize
+
+        val responseFuture = sandboxService.compile(request, cancellationTokenSource)
+        val jobContext = JobContext(responseFuture, cancellationTokenSource)
+        activeJobs[jobId] = jobContext
 
         if (responseFuture.isDone && !responseFuture.isCompletedExceptionally()) {
             val response = responseFuture.getNow(null)
@@ -73,15 +89,16 @@ class PlaygroundController(
         }
 
         model.addAttribute("jobId", jobId)
+        model.addAttribute("jobsAhead", jobsAhead)
         return "fragments/playground-compiling"
     }
 
     @GetMapping("/playground/status/{jobId}")
     fun getCompilationStatus(@PathVariable jobId: String): SseEmitter {
         val emitter = SseEmitter(SSE_TIMEOUT)
-        val responseFuture = activeJobs[jobId]
+        val jobContext = activeJobs[jobId]
 
-        if (responseFuture == null) {
+        if (jobContext == null) {
             emitter.completeWithError(IllegalStateException("Job not found or already completed."))
             return emitter
         }
@@ -89,12 +106,16 @@ class PlaygroundController(
         emitters[jobId] = emitter
         val cleanup = Runnable {
             emitters.remove(jobId)
+            activeJobs[jobId]?.let {
+                it.isCancelled.set(true)
+                it.cancellationTokenSource.cancel()
+            }
             activeJobs.remove(jobId)
         }
         emitter.onCompletion(cleanup)
         emitter.onTimeout(cleanup)
 
-        responseFuture.whenComplete { response, throwable ->
+        jobContext.future.whenComplete { response, throwable ->
             val finalEmitter = emitters.remove(jobId)
             finalEmitter?.let {
                 try {

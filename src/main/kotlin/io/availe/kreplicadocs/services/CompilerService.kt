@@ -2,6 +2,7 @@ package io.availe.kreplicadocs.services
 
 import io.availe.kreplicadocs.model.CompileRequest
 import io.availe.kreplicadocs.model.CompileResponse
+import org.gradle.tooling.CancellationTokenSource
 import org.gradle.tooling.GradleConnector
 import org.springframework.stereotype.Service
 import java.io.ByteArrayOutputStream
@@ -12,7 +13,7 @@ import java.nio.file.Files
 @Service
 class CompilerService {
 
-    fun compile(request: CompileRequest): CompileResponse {
+    fun compile(request: CompileRequest, cancellationTokenSource: CancellationTokenSource): CompileResponse {
         val projectDir = Files.createTempDirectory("kreplica-job-${request.jobId}").toFile()
 
         try {
@@ -31,6 +32,7 @@ class CompilerService {
                             .setJvmArguments("-Dorg.gradle.daemon.idletimeout=2147483647")
                             .setStandardOutput(stdoutStream)
                             .setStandardError(stderrStream)
+                            .withCancellationToken(cancellationTokenSource.token())
                             .run()
                     }
 
