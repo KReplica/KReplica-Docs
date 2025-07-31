@@ -44,16 +44,19 @@
     }
 
     [data-theme="blue"] {
-        --primary-color: oklch(44% 0.12 262);
-        --secondary-color: oklch(58% 0.15 258);
-        --text-color: oklch(25% 0 0);
-        --text-light: oklch(45% 0.01 245);
-        --bg-color: oklch(97% 0.015 255);
+        --primary-color: oklch(48% 0.15 259);
+        --secondary-color: oklch(60% 0.18 260);
+        --nav-active-color: var(--secondary-color);
+        --text-color: oklch(25% 0.01 255);
+        --text-light: oklch(45% 0.02 250);
+        --bg-color: oklch(98.5% 0.005 255);
         --surface-color: oklch(100% 0 0);
-        --border-color: oklch(92% 0.015 255);
-        --retro-shadow-color: oklch(85% 0.01 250);
-        --inline-code-bg: oklch(93% 0.01 255);
-        --inline-code-text: var(--primary-color);
+        --border-color: oklch(94% 0.01 255);
+        --sidebar-active-bg: var(--secondary-color);
+        --sidebar-active-text: #ffffff;
+        --retro-shadow-color: oklch(88% 0.01 250);
+        --inline-code-bg: oklch(95% 0.015 255);
+        --inline-code-text: oklch(45% 0.13 262);
     }
 
     [data-theme="dark"] {
