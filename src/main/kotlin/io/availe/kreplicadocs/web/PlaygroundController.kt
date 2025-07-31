@@ -19,18 +19,20 @@ import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 import org.springframework.web.servlet.view.FragmentsRendering
+import java.io.IOException
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
-data class CompileRequestForm(val source: String)
+data class CompileRequestForm(val source: String, val tabSessionId: String)
 
 data class JobContext(
     val future: CompletableFuture<CompileResponse>,
     val cancellationTokenSource: CancellationTokenSource,
-    val isCancelled: AtomicBoolean = AtomicBoolean(false)
+    val isCancelled: AtomicBoolean = AtomicBoolean(false),
+    val tabSessionId: String
 )
 
 @Controller
@@ -43,6 +45,7 @@ class PlaygroundController(
 ) {
 
     private val activeJobs = ConcurrentHashMap<String, JobContext>()
+    private val activeTabJobs = ConcurrentHashMap<String, String>()
     private val emitters = ConcurrentHashMap<String, SseEmitter>()
     private val SSE_TIMEOUT = TimeUnit.MINUTES.toMillis(5)
 
@@ -69,6 +72,13 @@ class PlaygroundController(
 
     @PostMapping(WebApp.Endpoints.Playground.COMPILE)
     fun compile(@ModelAttribute compileRequest: CompileRequestForm, model: Model): String {
+        activeTabJobs.remove(compileRequest.tabSessionId)?.let { oldJobId ->
+            activeJobs[oldJobId]?.let { oldJobContext ->
+                oldJobContext.isCancelled.set(true)
+                oldJobContext.cancellationTokenSource.cancel()
+            }
+        }
+
         val jobId = UUID.randomUUID().toString()
         val request = CompileRequest(jobId, compileRequest.source)
         val cancellationTokenSource = GradleConnector.newCancellationTokenSource()
@@ -76,14 +86,16 @@ class PlaygroundController(
         val jobsAhead = compilationTaskExecutor.activeCount + compilationTaskExecutor.queueSize
 
         val responseFuture = sandboxService.compile(request, cancellationTokenSource)
-        val jobContext = JobContext(responseFuture, cancellationTokenSource)
+        val jobContext = JobContext(responseFuture, cancellationTokenSource, tabSessionId = compileRequest.tabSessionId)
         activeJobs[jobId] = jobContext
+        activeTabJobs[compileRequest.tabSessionId] = jobId
 
         if (responseFuture.isDone && !responseFuture.isCompletedExceptionally()) {
             val response = responseFuture.getNow(null)
             if (response != null) {
                 model.addAttribute("files", response.generatedFiles)
                 activeJobs.remove(jobId)
+                activeTabJobs.remove(compileRequest.tabSessionId)
                 return "fragments/playground-results"
             }
         }
@@ -109,6 +121,7 @@ class PlaygroundController(
             activeJobs[jobId]?.let {
                 it.isCancelled.set(true)
                 it.cancellationTokenSource.cancel()
+                activeTabJobs.remove(it.tabSessionId)
             }
             activeJobs.remove(jobId)
         }
@@ -116,34 +129,63 @@ class PlaygroundController(
         emitter.onTimeout(cleanup)
 
         jobContext.future.whenComplete { response, throwable ->
-            val finalEmitter = emitters.remove(jobId)
-            finalEmitter?.let {
-                try {
-                    val modelMap = ModelMap()
-                    val output = StringOutput()
-                    val template: String
+            emitters.remove(jobId)
+            activeJobs.remove(jobId)
+            activeTabJobs.remove(jobContext.tabSessionId)
 
-                    if (throwable != null) {
-                        modelMap.addAttribute("message", "An unexpected error occurred: ${throwable.message}")
-                        template = "fragments/playground-error"
-                    } else if (response.success) {
-                        modelMap.addAttribute("files", response.generatedFiles)
-                        template = "fragments/playground-results"
-                    } else {
-                        modelMap.addAttribute("message", response.message)
-                        template = "fragments/playground-error"
-                    }
+            updateWaitingClients()
 
-                    templateEngine.render(template, modelMap, output)
-                    it.send(SseEmitter.event().name("message").data(output.toString()))
-                    it.complete()
-                } catch (e: Exception) {
-                    it.completeWithError(e)
-                } finally {
-                    activeJobs.remove(jobId)
+            val finalEmitter = emitters[jobId] ?: emitter
+            try {
+                val modelMap = ModelMap()
+                val output = StringOutput()
+                val template: String
+
+                if (throwable != null) {
+                    modelMap.addAttribute("message", "An unexpected error occurred: ${throwable.message}")
+                    template = "fragments/playground-error"
+                } else if (response.success) {
+                    modelMap.addAttribute("files", response.generatedFiles)
+                    template = "fragments/playground-results"
+                } else {
+                    modelMap.addAttribute("message", response.message)
+                    template = "fragments/playground-error"
                 }
+
+                templateEngine.render(template, modelMap, output)
+                finalEmitter.send(SseEmitter.event().name("message").data(output.toString()))
+                finalEmitter.complete()
+            } catch (e: Exception) {
+                finalEmitter.completeWithError(e)
             }
         }
         return emitter
+    }
+
+    private fun updateWaitingClients() {
+        val currentQueueSize = compilationTaskExecutor.queueSize
+        val activeCount = compilationTaskExecutor.activeCount
+        var jobsAhead = activeCount + currentQueueSize - 1
+
+        emitters.keys.forEach { waitingJobId ->
+            emitters[waitingJobId]?.let { emitter ->
+                try {
+                    val modelMap = ModelMap().apply {
+                        addAttribute("jobId", waitingJobId)
+                        addAttribute("jobsAhead", jobsAhead)
+                    }
+                    val output = StringOutput()
+                    templateEngine.render("fragments/playground-compiling", modelMap, output)
+                    emitter.send(
+                        SseEmitter.event()
+                            .name("message")
+                            .data(output.toString().replace(">", " hx-swap-oob=\"true\">"))
+                    )
+                    jobsAhead++
+                } catch (e: IOException) {
+                    emitters.remove(waitingJobId)
+                }
+            }
+        }
     }
 }

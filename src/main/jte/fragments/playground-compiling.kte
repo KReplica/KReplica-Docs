@@ -1,7 +1,7 @@
 @param jobId: String
 @param jobsAhead: Int
 
-<div hx-ext="sse" sse-connect="/playground/status/${jobId}" sse-swap="message">
+<div hx-ext="sse" sse-connect="/playground/status/${jobId}" sse-swap="message" id="job-status-${jobId}">
     <div class="placeholder-text">
         @if(jobsAhead > 0)
             <p>You are number ${jobsAhead + 1} in the queue.</p>

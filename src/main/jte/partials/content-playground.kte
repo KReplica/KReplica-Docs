@@ -1,7 +1,7 @@
 @param vm: io.availe.kreplicadocs.model.view.PlaygroundViewModel
 
 <div class="playground-container"
-     x-data="{ activeTab: 'editor', isOutputReady: false }"
+     x-data="{ activeTab: 'editor', isOutputReady: false, tabSessionId: crypto.randomUUID(), isSubmitting: false }"
      @output-ready.window="isOutputReady = true; if (window.innerWidth < 992) activeTab = 'output'"
      @clear-output.window="isOutputReady = false; activeTab = 'editor'">
 
@@ -37,7 +37,9 @@
         </div>
 
         <div class="playground-actions-desktop">
-            <button type="submit" form="playground-form" data-action="run" class="button-run">Run</button>
+            <button type="submit" form="playground-form" data-action="run" class="button-run" :disabled="isSubmitting">
+                Run
+            </button>
             <div class="split-button-container" x-data="{ isOpen: false }">
                 <button type="button" data-action="reset-all" class="button-reset split-button">
                     <span class="split-button-label">Reset All</span>
@@ -63,7 +65,11 @@
 
         <form class="playground-io-container" id="playground-form"
               hx-post="/playground/compile"
-              hx-target="#playground-output">
+              hx-target="#playground-output"
+              hx-on::before-request="isSubmitting = true"
+              hx-on::after-request="isSubmitting = false">
+
+            <input type="hidden" name="tabSessionId" :value="tabSessionId">
 
             <div class="playground-input-column" x-show="activeTab === 'editor'" x-cloak>
                 <div class="playground-editor-area" data-template-slug="${vm.activeTemplateSlug}">
@@ -85,7 +91,9 @@
 
         <div class="playground-actions-mobile">
             <span class="actions-spacer"></span>
-            <button type="submit" form="playground-form" data-action="run" class="button-run">Run</button>
+            <button type="submit" form="playground-form" data-action="run" class="button-run" :disabled="isSubmitting">
+                Run
+            </button>
             <div class="split-button-container" x-data="{ isOpen: false }">
                 <button type="button" data-action="reset-all" class="button-reset split-button">
                     <span class="split-button-label">Reset All</span>
