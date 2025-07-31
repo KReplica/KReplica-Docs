@@ -1,4 +1,4 @@
-import {initThemeSwitcher} from './components/theme-switcher.js';
+import {themeSwitcher} from './components/theme-switcher.js';
 
 async function initializeApp() {
     if (document.querySelector('[data-js-id="guide-sidebar-links"]')) {
@@ -12,8 +12,11 @@ async function initializeApp() {
     }
 }
 
+document.addEventListener('alpine:init', () => {
+    Alpine.data('themeSwitcher', themeSwitcher);
+});
+
 document.addEventListener('DOMContentLoaded', () => {
-    initThemeSwitcher();
     void initializeApp();
 });
 

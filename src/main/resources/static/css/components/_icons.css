@@ -21,10 +21,6 @@
         fill: var(--primary-color);
     }
 
-    .theme-switcher button.active svg {
-        fill: var(--on-primary);
-    }
-
     .fab-parent-item.active .fab-toggle-icon {
         fill: var(--on-secondary);
     }
