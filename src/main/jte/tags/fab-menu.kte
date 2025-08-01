@@ -26,14 +26,7 @@
                         <ul x-show="openSection === '${section.id}'"
                             x-collapse
                             class="fab-submenu">
-                            <li>
-                                <a href="#${section.id}">Overview</a>
-                            </li>
-                            @for (subsection in section.subsections)
-                                <li>
-                                    <a href="#${subsection.id}">${subsection.title}</a>
-                                </li>
-                            @endfor
+                            @template.fragments.guide-subsection-items(section = section, includeOverview = true)
                         </ul>
                     @endif
                 </li>
