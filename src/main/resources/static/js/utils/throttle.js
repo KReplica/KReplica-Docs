@@ -1,10 +1,10 @@
 export function rafThrottle(fn) {
     let ticking = false;
-    return function () {
+    return function (...args) {
         if (ticking) return;
         ticking = true;
         requestAnimationFrame(() => {
-            fn.apply(this, arguments);
+            fn.apply(this, args);
             ticking = false;
         });
     };

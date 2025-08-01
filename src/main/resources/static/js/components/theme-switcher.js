@@ -1,17 +1,27 @@
+const THEME_TO_MONACO = {
+    light: 'vs-dark',
+    blue: 'vs',
+    dark: 'vs-dark'
+};
+
 export function themeSwitcher() {
     return {
         themes: ['light', 'blue', 'dark'],
         theme: 'light',
         nextTheme: 'blue',
-
         get monacoTheme() {
-            return this.theme === 'dark' ? 'vs-dark' : 'vs';
+            return THEME_TO_MONACO[this.theme] || 'vs-dark';
         },
-
         init() {
             this.theme = localStorage.getItem('theme') || 'light';
-            this.applyTheme(this.theme);
-
+            document.documentElement.setAttribute('data-theme', this.theme);
+            window.dispatchEvent(new CustomEvent('theme-changed', {
+                detail: {
+                    theme: this.theme,
+                    monacoTheme: this.monacoTheme
+                }
+            }));
+            this.updateNextTheme();
             this.$watch('theme', (newTheme) => {
                 localStorage.setItem('theme', newTheme);
                 document.documentElement.setAttribute('data-theme', newTheme);
@@ -24,21 +34,16 @@ export function themeSwitcher() {
                 this.updateNextTheme();
             });
         },
-
         applyTheme(theme) {
             this.theme = theme;
         },
-
         cycleTheme() {
-            const currentIndex = this.themes.indexOf(this.theme);
-            const nextIndex = (currentIndex + 1) % this.themes.length;
-            this.applyTheme(this.themes[nextIndex]);
+            const i = this.themes.indexOf(this.theme);
+            this.applyTheme(this.themes[(i + 1) % this.themes.length]);
         },
-
         updateNextTheme() {
-            const currentIndex = this.themes.indexOf(this.theme);
-            const nextIndex = (currentIndex + 1) % this.themes.length;
-            this.nextTheme = this.themes[nextIndex];
+            const i = this.themes.indexOf(this.theme);
+            this.nextTheme = this.themes[(i + 1) % this.themes.length];
         }
     };
 }

@@ -11,6 +11,12 @@ const ACTIONS = {
     CLEAR_OUTPUT: 'clear-output'
 };
 
+const THEME_TO_MONACO = {
+    light: 'vs-dark',
+    blue: 'vs',
+    dark: 'vs-dark'
+};
+
 function isMobile() {
     return window.innerWidth < MOBILE_BREAKPOINT_PX;
 }
@@ -23,15 +29,12 @@ function resizeEditorToContent() {
     if (!kreplicaEditor) return;
     const editorNode = document.getElementById('kreplica-editor');
     if (!editorNode) return;
-
     editorNode.style.height = '';
-
     if (isMobile()) {
         editorNode.style.height = '100%';
         kreplicaEditor.layout();
         return;
     }
-
     const height = kreplicaEditor.getContentHeight();
     editorNode.style.height = height + 'px';
     const width = editorNode.clientWidth || editorNode.parentElement.clientWidth || 0;
@@ -39,13 +42,9 @@ function resizeEditorToContent() {
 }
 
 function initOutputObserver() {
-    if (outputObserver) {
-        outputObserver.disconnect();
-    }
-
+    if (outputObserver) outputObserver.disconnect();
     const outputNode = document.getElementById('playground-output');
     if (!outputNode) return;
-
     const observerCallback = (mutationsList) => {
         for (const mutation of mutationsList) {
             if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
@@ -56,10 +55,8 @@ function initOutputObserver() {
             }
         }
     };
-
     outputObserver = new MutationObserver(observerCallback);
     outputObserver.observe(outputNode, {childList: true, subtree: true});
-
     cleanupFns.push(() => {
         if (outputObserver) {
             outputObserver.disconnect();
@@ -69,14 +66,13 @@ function initOutputObserver() {
 }
 
 function initKReplicaPlayground() {
-    if (kreplicaEditor) {
-        return;
-    }
-
+    if (kreplicaEditor) return;
+    const editorNode = document.getElementById('kreplica-editor');
+    if (!editorNode) return;
     require.config({paths: {vs: 'https://unpkg.com/monaco-editor@0.52.2/min/vs'}});
     require(['vs/editor/editor.main'], function () {
         fetch('/api/completions')
-            .then(response => response.json())
+            .then(r => r.json())
             .then(completionsData => {
                 const KREPLICA_COMPLETIONS = completionsData.map(item => ({
                     label: item.label,
@@ -84,13 +80,10 @@ function initKReplicaPlayground() {
                     insertText: item.insertText,
                     insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
                 }));
-
                 const hiddenTextareaEl = getHiddenTextarea();
                 const initialCode = hiddenTextareaEl ? hiddenTextareaEl.value : '';
-                const editorNode = document.getElementById('kreplica-editor');
                 const currentSiteTheme = document.documentElement.getAttribute('data-theme') || 'light';
-                const initialMonacoTheme = currentSiteTheme === 'dark' ? 'vs-dark' : 'vs';
-
+                const initialMonacoTheme = THEME_TO_MONACO[currentSiteTheme] || 'vs-dark';
                 kreplicaEditor = monaco.editor.create(editorNode, {
                     value: initialCode,
                     language: 'kotlin',
@@ -102,46 +95,32 @@ function initKReplicaPlayground() {
                     scrollbar: {vertical: isMobile() ? 'auto' : 'hidden'},
                     lineHeight: 20
                 });
-
                 monaco.languages.registerCompletionItemProvider('kotlin', {
                     triggerCharacters: ['@', '.'],
                     provideCompletionItems() {
                         return {suggestions: KREPLICA_COMPLETIONS};
                     }
                 });
-
                 kreplicaEditor.onDidChangeModelContent(() => {
                     const currentTextarea = getHiddenTextarea();
-                    if (currentTextarea) {
-                        currentTextarea.value = kreplicaEditor.getValue();
-                    }
+                    if (currentTextarea) currentTextarea.value = kreplicaEditor.getValue();
                 });
-
-                kreplicaEditor.onDidContentSizeChange(() => {
-                    resizeEditorToContent();
-                });
-
+                kreplicaEditor.onDidContentSizeChange(resizeEditorToContent);
                 resizeEditorToContent();
-
-                resizeObserver = new ResizeObserver(() => {
-                    resizeEditorToContent();
-                });
+                resizeObserver = new ResizeObserver(resizeEditorToContent);
                 const observeTarget = editorNode.parentElement || editorNode;
                 resizeObserver.observe(observeTarget);
                 cleanupFns.push(() => {
                     if (resizeObserver) {
                         try {
                             resizeObserver.disconnect();
-                        } catch (_) {
+                        } catch {
                         }
                         resizeObserver = null;
                     }
                 });
-
                 const onVisibility = () => {
-                    if (document.visibilityState === 'visible') {
-                        resizeEditorToContent();
-                    }
+                    if (document.visibilityState === 'visible') resizeEditorToContent();
                 };
                 document.addEventListener('visibilitychange', onVisibility);
                 cleanupFns.push(() => document.removeEventListener('visibilitychange', onVisibility));
@@ -151,9 +130,7 @@ function initKReplicaPlayground() {
 
 function clearPlaygroundOutput() {
     const output = document.getElementById('playground-output');
-    if (output) {
-        output.innerHTML = '<div class="placeholder-text">Click "Run" to see the generated code.</div>';
-    }
+    if (output) output.innerHTML = '<div class="placeholder-text">Click "Run" to see the generated code.</div>';
     window.dispatchEvent(new Event('clear-output'));
 }
 
@@ -171,33 +148,28 @@ function resetPlayground() {
 function setupEventListeners() {
     const playgroundContainer = document.querySelector('.playground-container');
     if (!playgroundContainer) return;
-
     const onClick = (e) => {
         const actionTarget = e.target.closest('[data-action]');
         if (!actionTarget) return;
-
         const action = actionTarget.dataset.action;
-
         switch (action) {
             case ACTIONS.RUN:
                 break;
             case ACTIONS.RESET_ALL:
-                if (!e.target.closest('.split-button-arrow')) {
-                    resetPlayground();
-                }
+                if (!e.target.closest('.split-button-arrow')) resetPlayground();
                 break;
             case ACTIONS.CLEAR_OUTPUT:
                 clearPlaygroundOutput();
                 break;
         }
     };
-
     playgroundContainer.addEventListener('click', onClick);
     cleanupFns.push(() => playgroundContainer.removeEventListener('click', onClick));
-
     const themeChangeHandler = (e) => {
-        if (kreplicaEditor && e.detail.monacoTheme) {
-            monaco.editor.setTheme(e.detail.monacoTheme);
+        const monacoTheme = e?.detail?.monacoTheme;
+        if (kreplicaEditor && monacoTheme) {
+            monaco.editor.setTheme(monacoTheme);
+            kreplicaEditor.layout();
         }
     };
     window.addEventListener('theme-changed', themeChangeHandler);
@@ -218,31 +190,24 @@ export function disposeEditor() {
     cleanupFns.forEach(fn => {
         try {
             fn();
-        } catch (_) {
+        } catch {
         }
     });
     cleanupFns = [];
     if (kreplicaEditor) {
         const model = kreplicaEditor.getModel();
-        if (model) {
-            model.dispose();
-        }
+        if (model) model.dispose();
         kreplicaEditor.dispose();
         kreplicaEditor = null;
     }
 }
 
 export function setEditorValue(value) {
-    if (kreplicaEditor) {
-        kreplicaEditor.setValue(value);
-        const currentTextarea = getHiddenTextarea();
-        if (currentTextarea) {
-            currentTextarea.value = value;
-        }
-        requestAnimationFrame(() => {
-            resizeEditorToContent();
-        });
-    }
+    if (!kreplicaEditor) return;
+    kreplicaEditor.setValue(value);
+    const currentTextarea = getHiddenTextarea();
+    if (currentTextarea) currentTextarea.value = value;
+    requestAnimationFrame(resizeEditorToContent);
 }
 
 export function setEditorModelFromSource(value) {
@@ -250,31 +215,19 @@ export function setEditorModelFromSource(value) {
     const oldModel = kreplicaEditor.getModel();
     const newModel = monaco.editor.createModel(value, 'kotlin');
     kreplicaEditor.setModel(newModel);
-    if (oldModel && oldModel !== newModel) {
-        oldModel.dispose();
-    }
+    if (oldModel && oldModel !== newModel) oldModel.dispose();
     const currentTextarea = getHiddenTextarea();
-    if (currentTextarea) {
-        currentTextarea.value = value;
-    }
-    requestAnimationFrame(() => {
-        resizeEditorToContent();
-    });
+    if (currentTextarea) currentTextarea.value = value;
+    requestAnimationFrame(resizeEditorToContent);
 }
 
 export function updateEditorAfterSwap() {
     const container = document.getElementById('editor-source-container');
     if (!container || !kreplicaEditor) return;
-
     const newSource = container.querySelector('textarea[name="source"]')?.value;
-    if (typeof newSource === 'string') {
-        setEditorModelFromSource(newSource);
-    }
-
+    if (typeof newSource === 'string') setEditorModelFromSource(newSource);
     const alpineComponent = document.querySelector('.playground-container')?.__x;
-    if (alpineComponent) {
-        alpineComponent.data.isOutputReady = false;
-    }
+    if (alpineComponent) alpineComponent.data.isOutputReady = false;
     clearPlaygroundOutput();
 }
 
