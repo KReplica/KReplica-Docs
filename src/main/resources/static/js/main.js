@@ -46,7 +46,7 @@ document.body.addEventListener('htmx:afterSwap', (e) => {
                 const newSource = e.detail.target.querySelector('textarea[name="source"]').value;
                 const alpineComponent = document.querySelector('.playground-container').__x;
                 if (alpineComponent) {
-                    alpineComponent.data.lastSubmittedSource = newSource;
+                    alpineComponent.data.isOutputReady = false;
                 }
                 if (playground.setEditorModelFromSource) {
                     playground.setEditorModelFromSource(newSource);
