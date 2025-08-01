@@ -165,7 +165,7 @@ class PlaygroundController(
     private fun updateWaitingClients() {
         val currentQueueSize = compilationTaskExecutor.queueSize
         val activeCount = compilationTaskExecutor.activeCount
-        var jobsAhead = activeCount + currentQueueSize - 1
+        val jobsAhead = activeCount + currentQueueSize - 1
 
         emitters.keys.forEach { waitingJobId ->
             emitters[waitingJobId]?.let { emitter ->
@@ -175,13 +175,12 @@ class PlaygroundController(
                         addAttribute("jobsAhead", jobsAhead)
                     }
                     val output = StringOutput()
-                    templateEngine.render("fragments/playground-compiling", modelMap, output)
+                    templateEngine.render(FragmentTemplate.PLAYGROUND_COMPILING_OOB.path, modelMap, output)
                     emitter.send(
                         SseEmitter.event()
                             .name("message")
-                            .data(output.toString().replace(">", " hx-swap-oob=\"true\">"))
+                            .data(output.toString())
                     )
-                    jobsAhead++
                 } catch (e: IOException) {
                     emitters.remove(waitingJobId)
                 }

@@ -1,4 +1,16 @@
 import {themeSwitcher} from './components/theme-switcher.js';
+import * as playground from './pages/playground.js';
+
+window.KREPLICA_PLAYGROUND = playground;
+
+window.generateUniqueId = function () {
+    if (crypto.randomUUID) {
+        return crypto.randomUUID();
+    }
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+};
 
 async function initializeApp() {
     if (document.querySelector('[data-js-id="guide-sidebar-links"]')) {
@@ -7,7 +19,6 @@ async function initializeApp() {
     }
 
     if (document.getElementById('kreplica-editor')) {
-        const playground = await import('./pages/playground.js');
         playground.init();
     }
 }
@@ -33,6 +44,10 @@ document.body.addEventListener('htmx:afterSwap', (e) => {
             const editor = playground.getEditorInstance();
             if (editor) {
                 const newSource = e.detail.target.querySelector('textarea[name="source"]').value;
+                const alpineComponent = document.querySelector('.playground-container').__x;
+                if (alpineComponent) {
+                    alpineComponent.data.lastSubmittedSource = newSource;
+                }
                 if (playground.setEditorModelFromSource) {
                     playground.setEditorModelFromSource(newSource);
                 } else {

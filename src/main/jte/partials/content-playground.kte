@@ -1,7 +1,7 @@
 @param vm: io.availe.kreplicadocs.model.view.PlaygroundViewModel
 
 <div class="playground-container"
-     x-data="{ activeTab: 'editor', isOutputReady: false, tabSessionId: crypto.randomUUID(), isSubmitting: false }"
+     x-data="{ activeTab: 'editor', isOutputReady: false, tabSessionId: generateUniqueId(), isSubmitting: false, lastSubmittedSource: @json(vm.initialSourceCode) }"
      @output-ready.window="isOutputReady = true; if (window.innerWidth < 992) activeTab = 'output'"
      @clear-output.window="isOutputReady = false; activeTab = 'editor'">
 
@@ -66,8 +66,26 @@
         <form class="playground-io-container" id="playground-form"
               hx-post="/playground/compile"
               hx-target="#playground-output"
-              hx-on::before-request="isSubmitting = true"
-              hx-on::after-request="isSubmitting = false">
+              hx-on::before-request="
+                const editor = window.KREPLICA_PLAYGROUND.getEditorInstance();
+                if (editor) {
+                    const currentSource = editor.getValue();
+                    if (currentSource === lastSubmittedSource) {
+                        event.preventDefault();
+                        return;
+                    }
+                }
+                isSubmitting = true;
+              "
+              hx-on::after-request="
+                isSubmitting = false;
+                if (event.detail.requestConfig.path === '/playground/compile' && event.detail.successful) {
+                    const editor = window.KREPLICA_PLAYGROUND.getEditorInstance();
+                    if (editor) {
+                        lastSubmittedSource = editor.getValue();
+                    }
+                }
+              ">
 
             <input type="hidden" name="tabSessionId" :value="tabSessionId">
 
