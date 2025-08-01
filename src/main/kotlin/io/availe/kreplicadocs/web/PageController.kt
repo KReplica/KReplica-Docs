@@ -17,28 +17,24 @@ class PageController(private val viewModelFactory: ViewModelFactory) {
     @GetMapping(WebApp.Endpoints.Pages.INDEX)
     fun index(model: Model, @RequestHeader(name = "HX-Request", required = false) hxRequest: String?): Any {
         model.addAttribute("vm", viewModelFactory.createIndexViewModel())
-        return if (hxRequest != null) {
-            FragmentsRendering
-                .with(PartialTemplate.CONTENT_INDEX.path)
-                .fragment(FragmentTemplate.NAV_UPDATE_OOB.path)
-                .fragment(FragmentTemplate.FAB_UPDATE_OOB.path)
-                .build()
-        } else {
-            PageTemplate.INDEX.path
-        }
+        return render(hxRequest, PageTemplate.INDEX, PartialTemplate.CONTENT_INDEX)
     }
 
     @GetMapping(WebApp.Endpoints.Pages.GUIDE)
     fun guide(model: Model, @RequestHeader(name = "HX-Request", required = false) hxRequest: String?): Any {
         model.addAttribute("vm", viewModelFactory.createGuideViewModel())
+        return render(hxRequest, PageTemplate.GUIDE, PartialTemplate.CONTENT_GUIDE)
+    }
+
+    private fun render(hxRequest: String?, page: PageTemplate, partial: PartialTemplate): Any {
         return if (hxRequest != null) {
             FragmentsRendering
-                .with(PartialTemplate.CONTENT_GUIDE.path)
+                .with(partial.path)
                 .fragment(FragmentTemplate.NAV_UPDATE_OOB.path)
                 .fragment(FragmentTemplate.FAB_UPDATE_OOB.path)
                 .build()
         } else {
-            PageTemplate.GUIDE.path
+            page.path
         }
     }
 }

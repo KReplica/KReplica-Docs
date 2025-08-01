@@ -1,5 +1,26 @@
 package io.availe.kreplicadocs.model
 
+import io.availe.kreplicadocs.common.PageId
+
+data class NavLink(
+    val href: String,
+    val pageId: PageId,
+    val label: String
+)
+
+data class CompileRequest(
+    val jobId: String,
+    val sourceCode: String
+)
+
+data class CompileResponse(
+    val jobId: String,
+    val sourceCode: String,
+    val success: Boolean,
+    val generatedFiles: Map<String, String>? = null,
+    val message: String
+)
+
 @JvmInline
 value class ExampleSlug(val value: String)
 

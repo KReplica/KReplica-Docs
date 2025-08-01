@@ -5,6 +5,7 @@ import gg.jte.output.StringOutput
 import io.availe.kreplicadocs.common.FragmentTemplate
 import io.availe.kreplicadocs.common.PartialTemplate
 import io.availe.kreplicadocs.common.WebApp
+import io.availe.kreplicadocs.config.CacheNames
 import io.availe.kreplicadocs.model.CompileRequest
 import io.availe.kreplicadocs.model.CompileResponse
 import io.availe.kreplicadocs.services.CodeSnippetProvider
@@ -13,6 +14,7 @@ import io.availe.kreplicadocs.services.ViewModelFactory
 import jakarta.annotation.PostConstruct
 import org.gradle.tooling.CancellationTokenSource
 import org.gradle.tooling.GradleConnector
+import org.slf4j.LoggerFactory
 import org.springframework.cache.Cache
 import org.springframework.cache.CacheManager
 import org.springframework.stereotype.Controller
@@ -46,6 +48,7 @@ class PlaygroundController(
     private val cacheManager: CacheManager
 ) {
 
+    private val log = LoggerFactory.getLogger(PlaygroundController::class.java)
     private val activeJobs = ConcurrentHashMap<String, JobContext>()
     private val activeTabJobs = ConcurrentHashMap<String, ActiveJobState>()
     private lateinit var completedJobsCache: Cache
@@ -54,10 +57,10 @@ class PlaygroundController(
 
     @PostConstruct
     fun init() {
-        completedJobsCache = cacheManager.getCache("completed-jobs-cache")
-            ?: throw IllegalStateException("Cache 'completed-jobs-cache' not found.")
-        permanentCache = cacheManager.getCache("playground-templates-cache")
-            ?: throw IllegalStateException("Cache 'playground-templates-cache' not found.")
+        completedJobsCache = cacheManager.getCache(CacheNames.COMPLETED_JOBS)
+            ?: throw IllegalStateException("Cache '${CacheNames.COMPLETED_JOBS}' not found.")
+        permanentCache = cacheManager.getCache(CacheNames.PERMANENT_TEMPLATES)
+            ?: throw IllegalStateException("Cache '${CacheNames.PERMANENT_TEMPLATES}' not found.")
     }
 
     @GetMapping("/playground")
@@ -83,13 +86,13 @@ class PlaygroundController(
 
     @PostMapping(WebApp.Endpoints.Playground.COMPILE)
     fun compile(@ModelAttribute compileRequestForm: CompileRequestForm, model: Model): String {
-        println("[COMPILE] Received request for tab: ${compileRequestForm.tabSessionId}")
+        log.debug("Received compile request for tab: {}", compileRequestForm.tabSessionId)
 
         val sourceCode = compileRequestForm.source
         val normalizedSourceCode = sourceCode.trim().replace("\r\n", "\n")
 
         permanentCache.get(normalizedSourceCode, CompileResponse::class.java)?.let {
-            println("[COMPILE] Permanent cache HIT. Returning results directly.")
+            log.debug("Permanent cache HIT. Returning results directly.")
             model.addAttribute("files", it.generatedFiles)
             return "fragments/playground-results"
         }
@@ -97,26 +100,30 @@ class PlaygroundController(
         synchronized(activeTabJobs) {
             val existingJobState = activeTabJobs[compileRequestForm.tabSessionId]
             if (existingJobState != null && existingJobState.sourceCode == sourceCode) {
-                println("[COMPILE] Duplicate request for tab ${compileRequestForm.tabSessionId}. Reconnecting to existing jobId ${existingJobState.jobId}")
+                log.debug(
+                    "Duplicate request for tab {}. Reconnecting to existing jobId {}",
+                    compileRequestForm.tabSessionId,
+                    existingJobState.jobId
+                )
                 model.addAttribute("jobId", existingJobState.jobId)
                 return "fragments/playground-compiling"
             }
 
             completedJobsCache.get(normalizedSourceCode, CompileResponse::class.java)?.let {
-                println("[COMPILE] Completed jobs cache HIT. Returning results directly.")
+                log.debug("Completed jobs cache HIT. Returning results directly.")
                 model.addAttribute("files", it.generatedFiles)
                 return "fragments/playground-results"
             }
 
             existingJobState?.let {
-                println("[COMPILE] Tab ${compileRequestForm.tabSessionId} has existing job ${it.jobId}. Cancelling it.")
+                log.debug("Tab {} has existing job {}. Cancelling it.", compileRequestForm.tabSessionId, it.jobId)
                 activeJobs[it.jobId]?.cancellationTokenSource?.cancel()
             }
 
             val jobId = UUID.randomUUID().toString()
             val newJobState = ActiveJobState(jobId, sourceCode)
             activeTabJobs[compileRequestForm.tabSessionId] = newJobState
-            println("[COMPILE] Created new job $jobId for tab ${compileRequestForm.tabSessionId}.")
+            log.debug("Created new job {} for tab {}.", jobId, compileRequestForm.tabSessionId)
 
             val request = CompileRequest(jobId, sourceCode)
             val cancellationTokenSource = GradleConnector.newCancellationTokenSource()
@@ -125,7 +132,7 @@ class PlaygroundController(
                 JobContext(responseFuture, cancellationTokenSource, compileRequestForm.tabSessionId, newJobState)
 
             activeJobs[jobId] = jobContext
-            println("[COMPILE] Job $jobId is async. Returning 'compiling' fragment.")
+            log.debug("Job {} is async. Returning 'compiling' fragment.", jobId)
             model.addAttribute("jobId", jobId)
             return "fragments/playground-compiling"
         }
@@ -133,79 +140,91 @@ class PlaygroundController(
 
     @GetMapping("/playground/status/{jobId}")
     fun getCompilationStatus(@PathVariable jobId: String): SseEmitter {
-        println("[SSE] Client trying to connect for jobId: $jobId")
+        log.debug("SSE client trying to connect for jobId: {}", jobId)
         val emitter = SseEmitter(sseTimeout)
 
         completedJobsCache.get(jobId, CompileResponse::class.java)?.let { completedResponse ->
-            println("[SSE] Job $jobId found in COMPLETED cache. Sending result.")
-            try {
-                val html = renderResult(completedResponse)
-                emitter.send(SseEmitter.event().name("compile-result").data(html))
-                emitter.complete()
-            } catch (e: Exception) {
-                println("[SSE-ERROR] Failed to send completed result for job $jobId: ${e.message}")
-                emitter.completeWithError(e)
-            }
+            log.debug("Job {} found in COMPLETED cache. Sending result.", jobId)
+            sendSseResult(emitter, completedResponse)
             return emitter
         }
 
         val jobContext = activeJobs[jobId]
         if (jobContext != null) {
-            println("[SSE] Job $jobId found in ACTIVE map. Attaching listener.")
-
-            val onTermination = {
-                if (!jobContext.jobHasCompleted.get()) {
-                    println("[SSE-TERMINATION] Emitter for job $jobId completed or timed out BEFORE job finished. Cancelling Gradle task.")
-                    jobContext.cancellationTokenSource.cancel()
-                } else {
-                    println("[SSE-TERMINATION] Emitter for job $jobId completed or timed out AFTER job finished. No action needed.")
-                }
-            }
-            emitter.onCompletion(onTermination)
-            emitter.onTimeout(onTermination)
-
-            jobContext.future.whenComplete { response, throwable ->
-                jobContext.jobHasCompleted.set(true)
-                println("[FUTURE] Future completed for job $jobId. Success: ${response != null}, Error: ${throwable != null}")
-                try {
-                    if (response != null && response.success) {
-                        println("[FUTURE] Caching successful result for job $jobId.")
-                        val normalizedSourceCode = response.sourceCode.trim().replace("\r\n", "\n")
-                        completedJobsCache.put(jobId, response)
-                        completedJobsCache.put(normalizedSourceCode, response)
-                    }
-
-                    println("[FUTURE] Removing job $jobId from activeJobs.")
-                    activeJobs.remove(jobId)
-
-                    synchronized(activeTabJobs) {
-                        val removed = activeTabJobs.remove(jobContext.tabSessionId, jobContext.activeJobState)
-                        println("[FUTURE] Conditionally removing job state for tab ${jobContext.tabSessionId}. Removed: $removed")
-                    }
-
-                    val html = renderResult(response)
-                    println("[FUTURE] Sending final SSE event for job $jobId.")
-                    emitter.send(SseEmitter.event().name("compile-result").data(html))
-                    println("[FUTURE] SSE events sent for job $jobId.")
-                    emitter.complete()
-                } catch (e: Exception) {
-                    println("[FUTURE-ERROR] Exception in whenComplete for job $jobId: ${e.message}")
-                    emitter.completeWithError(e)
-                }
-            }
+            log.debug("Job {} found in ACTIVE map. Attaching listener.", jobId)
+            setupSseLifecycle(emitter, jobContext)
+            setupJobCompletion(emitter, jobContext)
         } else {
-            println("[SSE] Job $jobId not found in active or completed. Assuming expired. Completing connection.")
+            log.warn("Job {} not found in active or completed. Assuming expired. Completing connection.", jobId)
             emitter.complete()
         }
 
         return emitter
     }
 
+    private fun setupSseLifecycle(emitter: SseEmitter, jobContext: JobContext) {
+        val onTermination = {
+            if (!jobContext.jobHasCompleted.get()) {
+                log.warn(
+                    "Emitter for job {} completed or timed out BEFORE job finished. Cancelling Gradle task.",
+                    jobContext.activeJobState.jobId
+                )
+                jobContext.cancellationTokenSource.cancel()
+            } else {
+                log.debug(
+                    "Emitter for job {} completed or timed out AFTER job finished. No action needed.",
+                    jobContext.activeJobState.jobId
+                )
+            }
+        }
+        emitter.onCompletion(onTermination)
+        emitter.onTimeout(onTermination)
+    }
+
+    private fun setupJobCompletion(emitter: SseEmitter, jobContext: JobContext) {
+        jobContext.future.whenComplete { response, throwable ->
+            jobContext.jobHasCompleted.set(true)
+            log.debug(
+                "Future completed for job {}. Success: {}, Error: {}",
+                jobContext.activeJobState.jobId,
+                response != null,
+                throwable != null
+            )
+            handleJobResult(response)
+            sendSseResult(emitter, response)
+            cleanupJobState(jobContext)
+        }
+    }
+
+    private fun handleJobResult(response: CompileResponse?) {
+        if (response != null && response.success) {
+            val normalizedSourceCode = response.sourceCode.trim().replace("\r\n", "\n")
+            completedJobsCache.put(response.jobId, response)
+            completedJobsCache.put(normalizedSourceCode, response)
+        }
+    }
+
+    private fun cleanupJobState(jobContext: JobContext) {
+        activeJobs.remove(jobContext.activeJobState.jobId)
+        synchronized(activeTabJobs) {
+            activeTabJobs.remove(jobContext.tabSessionId, jobContext.activeJobState)
+        }
+    }
+
+    private fun sendSseResult(emitter: SseEmitter, response: CompileResponse?) {
+        try {
+            val html = renderResult(response)
+            emitter.send(SseEmitter.event().name("compile-result").data(html))
+            emitter.complete()
+        } catch (e: Exception) {
+            log.error("Failed to send SSE result for job {}: {}", response?.jobId, e.message)
+            emitter.completeWithError(e)
+        }
+    }
+
     private fun renderResult(response: CompileResponse?): String {
-        println("[RENDER] Rendering result for job ${response?.jobId}")
         val modelMap = ModelMap()
         val output = StringOutput()
-
         try {
             when {
                 response?.success == true -> {
@@ -223,11 +242,9 @@ class PlaygroundController(
                     templateEngine.render("fragments/playground-error", modelMap, output)
                 }
             }
-            val finalHtml = output.toString()
-            println("[RENDER] Finished rendering for job ${response?.jobId}")
-            return finalHtml
+            return output.toString()
         } catch (e: Exception) {
-            println("[RENDER-ERROR] Error during template rendering for job ${response?.jobId}: ${e.message}")
+            log.error("Error during template rendering for job {}: {}", response?.jobId, e.message, e)
             throw e
         }
     }

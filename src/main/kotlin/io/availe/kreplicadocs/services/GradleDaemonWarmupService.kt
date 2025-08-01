@@ -1,5 +1,6 @@
 package io.availe.kreplicadocs.services
 
+import io.availe.kreplicadocs.config.CacheNames
 import io.availe.kreplicadocs.model.CompileRequest
 import org.gradle.tooling.GradleConnector
 import org.slf4j.LoggerFactory
@@ -23,7 +24,7 @@ class GradleDaemonWarmupService(
     }
 
     fun primeCacheAndWarmupDaemon() {
-        val permanentCache = cacheManager.getCache("playground-templates-cache") ?: return
+        val permanentCache = cacheManager.getCache(CacheNames.PERMANENT_TEMPLATES) ?: return
         val templates = codeSnippetProvider.getPlaygroundTemplates()
 
         templates.forEach { template ->
@@ -38,7 +39,7 @@ class GradleDaemonWarmupService(
                 if (response.success) {
                     val normalizedSourceCode = sourceCode.trim().replace("\r\n", "\n")
                     permanentCache.put(normalizedSourceCode, response)
-                    println("[WARMUP] Successfully compiled and cached starter template: ${template.slug}")
+                    log.info("Successfully compiled and cached starter template: {}", template.slug)
                 }
             } catch (e: Exception) {
                 log.error("Exception during warmup for template '{}'", template.name, e)

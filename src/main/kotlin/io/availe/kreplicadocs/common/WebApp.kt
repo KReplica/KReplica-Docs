@@ -1,5 +1,11 @@
 package io.availe.kreplicadocs.common
 
+enum class PageId {
+    INDEX,
+    GUIDE,
+    PLAYGROUND
+}
+
 object WebApp {
     object Endpoints {
         object Pages {

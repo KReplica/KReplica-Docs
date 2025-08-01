@@ -1,5 +1,6 @@
 package io.availe.kreplicadocs.services
 
+import io.availe.kreplicadocs.common.PageId
 import io.availe.kreplicadocs.config.AppProperties
 import io.availe.kreplicadocs.model.view.GuideViewModel
 import io.availe.kreplicadocs.model.view.IndexViewModel
@@ -18,7 +19,7 @@ class ViewModelFactory(
         return IndexViewModel(
             navLinks = navigationProvider.getNavLinks(),
             properties = appProperties,
-            currentPage = "index",
+            currentPage = PageId.INDEX,
             snippets = snippetProvider.getSnippets()
         )
     }
@@ -27,7 +28,7 @@ class ViewModelFactory(
         return GuideViewModel(
             navLinks = navigationProvider.getNavLinks(),
             properties = appProperties,
-            currentPage = "guide",
+            currentPage = PageId.GUIDE,
             snippets = snippetProvider.getSnippets(),
             guideNav = navigationProvider.getGuideNav()
         )
@@ -50,7 +51,7 @@ class ViewModelFactory(
         return PlaygroundViewModel(
             navLinks = navigationProvider.getNavLinks(),
             properties = appProperties,
-            currentPage = "playground",
+            currentPage = PageId.PLAYGROUND,
             availableTemplates = templateOptions,
             initialSourceCode = initialSource,
             activeTemplateSlug = activeTemplate.slug

@@ -3,9 +3,11 @@ package io.availe.kreplicadocs.config
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 @Configuration
-class AsyncConfig {
+class ConcurrencyConfig {
 
     @Bean(name = ["compilationTaskExecutor"])
     fun compilationTaskExecutor(): ThreadPoolTaskExecutor {
@@ -17,4 +19,8 @@ class AsyncConfig {
         executor.initialize()
         return executor
     }
+
+    @Bean(destroyMethod = "close")
+    fun virtualThreadExecutor(): ExecutorService =
+        Executors.newVirtualThreadPerTaskExecutor()
 }

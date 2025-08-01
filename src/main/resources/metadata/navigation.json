@@ -2,17 +2,17 @@
   "mainNav": [
     {
       "href": "/",
-      "pageId": "index",
+      "pageId": "INDEX",
       "label": "Home"
     },
     {
       "href": "/playground",
-      "pageId": "playground",
+      "pageId": "PLAYGROUND",
       "label": "Playground"
     },
     {
       "href": "/guide",
-      "pageId": "guide",
+      "pageId": "GUIDE",
       "label": "Guide"
     }
   ],

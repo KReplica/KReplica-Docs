@@ -5,6 +5,12 @@ let outputObserver = null;
 
 const MOBILE_BREAKPOINT_PX = 992;
 
+const ACTIONS = {
+    RUN: 'run',
+    RESET_ALL: 'reset-all',
+    CLEAR_OUTPUT: 'clear-output'
+};
+
 function getMonacoTheme(siteTheme) {
     if (siteTheme === 'blue') {
         return 'vs';
@@ -179,14 +185,14 @@ function setupEventListeners() {
         const action = actionTarget.dataset.action;
 
         switch (action) {
-            case 'run':
+            case ACTIONS.RUN:
                 break;
-            case 'reset-all':
+            case ACTIONS.RESET_ALL:
                 if (!e.target.closest('.split-button-arrow')) {
                     resetPlayground();
                 }
                 break;
-            case 'clear-output':
+            case ACTIONS.CLEAR_OUTPUT:
                 clearPlaygroundOutput();
                 break;
         }

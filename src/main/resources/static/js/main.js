@@ -1,13 +1,12 @@
 import {themeSwitcher} from './components/theme-switcher.js';
 import * as playground from './pages/playground.js';
 
-window.KREPLICA_PLAYGROUND = playground;
-
-function log(message, ...args) {
-    console.log(`[KREPLICA-DEBUG] ${new Date().toLocaleTimeString()} - ${message}`, ...args);
-}
+const DEBUG = false;
+const log = (...args) => DEBUG && console.log(`[KREPLICA-DEBUG] ${new Date().toLocaleTimeString()}`, ...args);
 
 log("main.js script loaded.");
+
+window.KREPLICA_PLAYGROUND = playground;
 
 window.generateUniqueId = function () {
     if (crypto.randomUUID) {
