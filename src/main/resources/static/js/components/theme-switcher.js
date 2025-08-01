@@ -4,6 +4,10 @@ export function themeSwitcher() {
         theme: 'light',
         nextTheme: 'blue',
 
+        get monacoTheme() {
+            return this.theme === 'dark' ? 'vs-dark' : 'vs';
+        },
+
         init() {
             this.theme = localStorage.getItem('theme') || 'light';
             this.applyTheme(this.theme);
@@ -11,7 +15,12 @@ export function themeSwitcher() {
             this.$watch('theme', (newTheme) => {
                 localStorage.setItem('theme', newTheme);
                 document.documentElement.setAttribute('data-theme', newTheme);
-                window.dispatchEvent(new CustomEvent('theme-changed', {detail: {theme: newTheme}}));
+                window.dispatchEvent(new CustomEvent('theme-changed', {
+                    detail: {
+                        theme: newTheme,
+                        monacoTheme: this.monacoTheme
+                    }
+                }));
                 this.updateNextTheme();
             });
         },

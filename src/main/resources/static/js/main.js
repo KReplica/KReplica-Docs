@@ -78,28 +78,6 @@ document.body.addEventListener('htmx:afterSwap', (e) => {
     log('EVENT -> htmx:afterSwap', {target: elt, path: e.detail.pathInfo?.path});
     afterSwapTasks(elt, 'htmx:afterSwap');
 
-    if (elt.id === 'editor-source-container') {
-        log('Swap was for editor-source-container, handling editor update.');
-        import('./pages/playground.js').then(playground => {
-            const editor = playground.getEditorInstance();
-            if (editor) {
-                const newSource = elt.querySelector('textarea[name="source"]').value;
-                const alpineComponent = document.querySelector('.playground-container').__x;
-                if (alpineComponent) {
-                    alpineComponent.data.isOutputReady = false;
-                }
-                if (playground.setEditorModelFromSource) {
-                    playground.setEditorModelFromSource(newSource);
-                } else {
-                    playground.setEditorValue(newSource);
-                }
-            }
-            if (playground.clearPlaygroundOutput) {
-                playground.clearPlaygroundOutput();
-            }
-        });
-    }
-
     if (elt.id === 'playground-output') {
         log('Swap was for playground-output.');
         window.dispatchEvent(new CustomEvent('output-ready'));

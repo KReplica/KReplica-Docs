@@ -11,13 +11,6 @@ const ACTIONS = {
     CLEAR_OUTPUT: 'clear-output'
 };
 
-function getMonacoTheme(siteTheme) {
-    if (siteTheme === 'blue') {
-        return 'vs';
-    }
-    return 'vs-dark';
-}
-
 function isMobile() {
     return window.innerWidth < MOBILE_BREAKPOINT_PX;
 }
@@ -96,12 +89,13 @@ function initKReplicaPlayground() {
                 const initialCode = hiddenTextareaEl ? hiddenTextareaEl.value : '';
                 const editorNode = document.getElementById('kreplica-editor');
                 const currentSiteTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                const initialMonacoTheme = currentSiteTheme === 'dark' ? 'vs-dark' : 'vs';
 
                 kreplicaEditor = monaco.editor.create(editorNode, {
                     value: initialCode,
                     language: 'kotlin',
                     automaticLayout: false,
-                    theme: getMonacoTheme(currentSiteTheme),
+                    theme: initialMonacoTheme,
                     minimap: {enabled: false},
                     folding: true,
                     scrollBeyondLastLine: false,
@@ -202,8 +196,8 @@ function setupEventListeners() {
     cleanupFns.push(() => playgroundContainer.removeEventListener('click', onClick));
 
     const themeChangeHandler = (e) => {
-        if (kreplicaEditor) {
-            monaco.editor.setTheme(getMonacoTheme(e.detail.theme));
+        if (kreplicaEditor && e.detail.monacoTheme) {
+            monaco.editor.setTheme(e.detail.monacoTheme);
         }
     };
     window.addEventListener('theme-changed', themeChangeHandler);
@@ -266,6 +260,22 @@ export function setEditorModelFromSource(value) {
     requestAnimationFrame(() => {
         resizeEditorToContent();
     });
+}
+
+export function updateEditorAfterSwap() {
+    const container = document.getElementById('editor-source-container');
+    if (!container || !kreplicaEditor) return;
+
+    const newSource = container.querySelector('textarea[name="source"]')?.value;
+    if (typeof newSource === 'string') {
+        setEditorModelFromSource(newSource);
+    }
+
+    const alpineComponent = document.querySelector('.playground-container')?.__x;
+    if (alpineComponent) {
+        alpineComponent.data.isOutputReady = false;
+    }
+    clearPlaygroundOutput();
 }
 
 export {clearPlaygroundOutput};

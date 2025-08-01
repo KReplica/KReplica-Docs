@@ -18,7 +18,8 @@
             hxTarget = "#editor-source-container",
             hxPushUrl = "false",
             hxIndicator = ".htmx-indicator",
-            hxSwap = "innerHTML"
+            hxSwap = "innerHTML",
+            hxOnAfterSwap = "KREPLICA_PLAYGROUND.updateEditorAfterSwap()"
             )
         </div>
 
