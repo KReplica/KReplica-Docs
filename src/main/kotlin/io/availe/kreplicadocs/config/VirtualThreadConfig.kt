@@ -1,4 +1,4 @@
-package io.alterkreplica.docs.config
+package io.availe.kreplicadocs.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

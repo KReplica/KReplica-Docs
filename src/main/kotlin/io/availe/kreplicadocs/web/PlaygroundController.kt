@@ -28,9 +28,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 data class CompileRequestForm(val source: String, val tabSessionId: String)
-
 data class ActiveJobState(val jobId: String, val sourceCode: String)
-
 data class JobContext(
     val future: CompletableFuture<CompileResponse>,
     val cancellationTokenSource: CancellationTokenSource,
@@ -45,14 +43,14 @@ class PlaygroundController(
     private val snippetProvider: CodeSnippetProvider,
     private val sandboxService: SandboxService,
     private val templateEngine: TemplateEngine,
-    private val cacheManager: CacheManager,
+    private val cacheManager: CacheManager
 ) {
 
     private val activeJobs = ConcurrentHashMap<String, JobContext>()
     private val activeTabJobs = ConcurrentHashMap<String, ActiveJobState>()
     private lateinit var completedJobsCache: Cache
     private lateinit var permanentCache: Cache
-    private val SSE_TIMEOUT = TimeUnit.MINUTES.toMillis(5)
+    private val sseTimeout = TimeUnit.MINUTES.toMillis(5)
 
     @PostConstruct
     fun init() {
@@ -133,18 +131,26 @@ class PlaygroundController(
         }
     }
 
-
     @GetMapping("/playground/status/{jobId}")
     fun getCompilationStatus(@PathVariable jobId: String): SseEmitter {
         println("[SSE] Client trying to connect for jobId: $jobId")
-        val emitter = SseEmitter(SSE_TIMEOUT)
+        val emitter = SseEmitter(sseTimeout)
+        val sentinelStart =
+            """<template hx-swap-oob="true" data-type="sentinel" data-phase="start" data-job-id="$jobId"></template>"""
+        val sentinelDone =
+            """<template hx-swap-oob="true" data-type="sentinel" data-phase="done" data-job-id="$jobId"></template>"""
 
-        val completedResponse = completedJobsCache.get(jobId, CompileResponse::class.java)
-        if (completedResponse != null) {
+        try {
+            emitter.send(SseEmitter.event().name("message").data(sentinelStart))
+        } catch (_: Exception) {
+        }
+
+        completedJobsCache.get(jobId, CompileResponse::class.java)?.let { completedResponse ->
             println("[SSE] Job $jobId found in COMPLETED cache. Sending result.")
             try {
                 val html = renderResult(completedResponse)
                 emitter.send(SseEmitter.event().name("message").data(html))
+                emitter.send(SseEmitter.event().name("message").data(sentinelDone))
                 emitter.send(SseEmitter.event().name("close"))
                 emitter.complete()
             } catch (e: Exception) {
@@ -191,10 +197,9 @@ class PlaygroundController(
                     val html = renderResult(response)
                     println("[FUTURE] Sending final SSE event for job $jobId.")
                     emitter.send(SseEmitter.event().name("message").data(html))
-                    println("[FUTURE] SSE event sent for job $jobId.")
-                    println("[FUTURE] Sending CLOSE event for job $jobId.")
+                    emitter.send(SseEmitter.event().name("message").data(sentinelDone))
                     emitter.send(SseEmitter.event().name("close"))
-                    println("[FUTURE] Completing emitter for job $jobId.")
+                    println("[FUTURE] SSE events sent for job $jobId.")
                     emitter.complete()
                 } catch (e: Exception) {
                     println("[FUTURE-ERROR] Exception in whenComplete for job $jobId: ${e.message}")
@@ -232,7 +237,7 @@ class PlaygroundController(
                 }
             }
             val finalHtml =
-                """<div hx-swap-oob="innerHTML:#playground-output">${output.toString()}</div><div hx-swap-oob="delete" id="job-status-${response?.jobId}"></div>"""
+                """<div hx-swap-oob="innerHTML:#playground-output">${output}</div><div hx-swap-oob="delete" id="job-status-${response?.jobId}"></div>"""
             println("[RENDER] Finished rendering for job ${response?.jobId}")
             return finalHtml
         } catch (e: Exception) {
