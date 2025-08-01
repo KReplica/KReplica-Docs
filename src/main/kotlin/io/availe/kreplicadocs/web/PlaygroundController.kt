@@ -140,7 +140,7 @@ class PlaygroundController(
             println("[SSE] Job $jobId found in COMPLETED cache. Sending result.")
             try {
                 val html = renderResult(completedResponse)
-                emitter.send(SseEmitter.event().name("message").data(html))
+                emitter.send(SseEmitter.event().name("compile-result").data(html))
                 emitter.complete()
             } catch (e: Exception) {
                 println("[SSE-ERROR] Failed to send completed result for job $jobId: ${e.message}")
@@ -185,7 +185,7 @@ class PlaygroundController(
 
                     val html = renderResult(response)
                     println("[FUTURE] Sending final SSE event for job $jobId.")
-                    emitter.send(SseEmitter.event().name("message").data(html))
+                    emitter.send(SseEmitter.event().name("compile-result").data(html))
                     println("[FUTURE] SSE events sent for job $jobId.")
                     emitter.complete()
                 } catch (e: Exception) {
@@ -223,7 +223,7 @@ class PlaygroundController(
                     templateEngine.render("fragments/playground-error", modelMap, output)
                 }
             }
-            val finalHtml = """<div hx-swap-oob="innerHTML:#playground-output">${output}</div>"""
+            val finalHtml = output.toString()
             println("[RENDER] Finished rendering for job ${response?.jobId}")
             return finalHtml
         } catch (e: Exception) {

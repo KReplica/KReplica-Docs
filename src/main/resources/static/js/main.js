@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
     void initializeApp();
 });
 
-
 document.body.addEventListener('htmx:sseOpen', function (evt) {
     log('EVENT -> htmx:sseOpen', {element: evt.detail.elt});
 });
@@ -59,7 +58,6 @@ document.body.addEventListener('htmx:sseClose', function (evt) {
     log('EVENT -> htmx:sseClose', {element: evt.detail.elt});
 });
 
-
 function afterSwapTasks(elt, swapType) {
     log(`afterSwapTasks called for ${swapType}`, {element: elt});
     Prism.highlightAllUnder(elt);
@@ -68,7 +66,7 @@ function afterSwapTasks(elt, swapType) {
 
 document.body.addEventListener('htmx:afterSwap', (e) => {
     const elt = e.detail.elt;
-    log('EVENT -> htmx:afterSwap', {target: elt, path: e.detail.pathInfo.path});
+    log('EVENT -> htmx:afterSwap', {target: elt, path: e.detail.pathInfo?.path});
     afterSwapTasks(elt, 'htmx:afterSwap');
 
     if (elt.id === 'editor-source-container') {
@@ -92,6 +90,11 @@ document.body.addEventListener('htmx:afterSwap', (e) => {
             }
         });
     }
+
+    if (elt.id === 'playground-output') {
+        log('Swap was for playground-output.');
+        window.dispatchEvent(new CustomEvent('output-ready'));
+    }
 });
 
 document.body.addEventListener('htmx:oobAfterSwap', (e) => {
@@ -100,16 +103,8 @@ document.body.addEventListener('htmx:oobAfterSwap', (e) => {
     afterSwapTasks(elt, 'htmx:oobAfterSwap');
 
     if (elt.id === 'playground-output') {
-        log('OOB Swap was for playground-output, handling SSE cleanup.');
+        log('OOB Swap was for playground-output.');
         window.dispatchEvent(new CustomEvent('output-ready'));
-        const sseElement = document.querySelector('[sse-connect]');
-        if (sseElement) {
-            log('Found SSE element, triggering htmx:sseClose and removing element.', sseElement);
-            htmx.trigger(sseElement, 'htmx:sseClose');
-            sseElement.remove();
-        } else {
-            log('OOB Swap for playground-output, but NO [sse-connect] element was found on the page.');
-        }
     }
 });
 
