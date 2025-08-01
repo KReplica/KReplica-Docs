@@ -56,7 +56,7 @@
                         </svg>
                     </span>
                 </button>
-                <div x-show="isOpen" @click.outside="isOpen = false" class="dropdown-menu" x-cloak>
+                <div class="dropdown-menu" x-show="isOpen" x-transition @click.outside="isOpen = false" x-cloak>
                     <button type="button" data-action="reset-all" class="dropdown-item"
                             @click="isOpen = false">
                         Reset All
@@ -114,7 +114,7 @@
                         </svg>
                     </span>
                 </button>
-                <div x-show="isOpen" @click.outside="isOpen = false" class="dropdown-menu" x-cloak>
+                <div class="dropdown-menu" x-show="isOpen" x-transition @click.outside="isOpen = false" x-cloak>
                     <button type="button" data-action="reset-all" class="dropdown-item"
                             @click="isOpen = false">
                         Reset All

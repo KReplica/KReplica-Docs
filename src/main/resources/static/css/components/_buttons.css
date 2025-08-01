@@ -14,16 +14,18 @@
         position: relative;
         user-select: none;
         border: none;
+    }
 
-        &:hover {
-            transform: translate(-0.125rem, -0.125rem);
-            box-shadow: 0.3125rem 0.3125rem 0 0 var(--retro-shadow-color);
-        }
+    .button-run:hover,
+    .button-reset:hover {
+        transform: translate(-0.125rem, -0.125rem);
+        box-shadow: 0.3125rem 0.3125rem 0 0 var(--retro-shadow-color);
+    }
 
-        &:active {
-            transform: translate(0.0625rem, 0.0625rem);
-            box-shadow: 0.125rem 0.125rem 0 0 var(--retro-shadow-color);
-        }
+    .button-run:active,
+    .button-reset:active {
+        transform: translate(0.0625rem, 0.0625rem);
+        box-shadow: 0.125rem 0.125rem 0 0 var(--retro-shadow-color);
     }
 
     .button-run {
@@ -71,13 +73,13 @@
         justify-content: center;
         block-size: 100%;
         border-inline-start: 1px solid rgba(0, 0, 0, 0.15);
+    }
 
-        svg {
-            inline-size: 0.875rem;
-            block-size: 0.875rem;
-            transition: transform 0.2s ease-in-out;
-            fill: #ffffff;
-        }
+    .split-button-arrow svg {
+        inline-size: 0.875rem;
+        block-size: 0.875rem;
+        transition: transform 0.2s ease-in-out;
+        fill: #ffffff;
     }
 
     .rotate-180 {
@@ -99,17 +101,6 @@
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
-        visibility: hidden;
-        opacity: 0;
-        transform: translateY(0.5rem);
-        transition: opacity 0.2s, transform 0.2s, visibility 0s 0.2s;
-    }
-
-    .split-button-container.is-open .dropdown-menu {
-        visibility: visible;
-        opacity: 1;
-        transform: translateY(0);
-        transition: opacity 0.2s, transform 0.2s, visibility 0s 0s;
     }
 
     .dropdown-item {
@@ -122,10 +113,10 @@
         font-size: 0.95rem;
         border-radius: 0.25rem;
         color: var(--primary-color);
+    }
 
-        &:hover {
-            background-color: var(--bg-color);
-            color: var(--secondary-color);
-        }
+    .dropdown-item:hover {
+        background-color: var(--bg-color);
+        color: var(--secondary-color);
     }
 }
