@@ -23,6 +23,7 @@ import java.io.IOException
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -31,8 +32,8 @@ data class CompileRequestForm(val source: String, val tabSessionId: String)
 data class JobContext(
     val future: CompletableFuture<CompileResponse>,
     val cancellationTokenSource: CancellationTokenSource,
-    val isCancelled: AtomicBoolean = AtomicBoolean(false),
-    val tabSessionId: String
+    val tabSessionId: String,
+    val listenerAttached: AtomicBoolean = AtomicBoolean(false)
 )
 
 @Controller
@@ -47,6 +48,7 @@ class PlaygroundController(
     private val activeJobs = ConcurrentHashMap<String, JobContext>()
     private val activeTabJobs = ConcurrentHashMap<String, String>()
     private val emitters = ConcurrentHashMap<String, SseEmitter>()
+    private val compilationJobQueue = ConcurrentLinkedQueue<String>()
     private val SSE_TIMEOUT = TimeUnit.MINUTES.toMillis(5)
 
     @GetMapping("/playground")
@@ -74,7 +76,6 @@ class PlaygroundController(
     fun compile(@ModelAttribute compileRequest: CompileRequestForm, model: Model): String {
         activeTabJobs.remove(compileRequest.tabSessionId)?.let { oldJobId ->
             activeJobs[oldJobId]?.let { oldJobContext ->
-                oldJobContext.isCancelled.set(true)
                 oldJobContext.cancellationTokenSource.cancel()
             }
         }
@@ -83,12 +84,13 @@ class PlaygroundController(
         val request = CompileRequest(jobId, compileRequest.source)
         val cancellationTokenSource = GradleConnector.newCancellationTokenSource()
 
-        val jobsAhead = compilationTaskExecutor.activeCount + compilationTaskExecutor.queueSize
+        val jobsAhead = compilationJobQueue.size
 
         val responseFuture = sandboxService.compile(request, cancellationTokenSource)
-        val jobContext = JobContext(responseFuture, cancellationTokenSource, tabSessionId = compileRequest.tabSessionId)
+        val jobContext = JobContext(responseFuture, cancellationTokenSource, compileRequest.tabSessionId)
         activeJobs[jobId] = jobContext
         activeTabJobs[compileRequest.tabSessionId] = jobId
+        compilationJobQueue.add(jobId)
 
         if (responseFuture.isDone && !responseFuture.isCompletedExceptionally()) {
             val response = responseFuture.getNow(null)
@@ -96,6 +98,7 @@ class PlaygroundController(
                 model.addAttribute("files", response.generatedFiles)
                 activeJobs.remove(jobId)
                 activeTabJobs.remove(compileRequest.tabSessionId)
+                compilationJobQueue.remove(jobId)
                 return "fragments/playground-results"
             }
         }
@@ -118,71 +121,74 @@ class PlaygroundController(
         emitters[jobId] = emitter
         val cleanup = Runnable {
             emitters.remove(jobId)
-            activeJobs[jobId]?.let {
-                it.isCancelled.set(true)
-                it.cancellationTokenSource.cancel()
-                activeTabJobs.remove(it.tabSessionId)
+            activeJobs.remove(jobId)?.let { oldJobContext ->
+                oldJobContext.cancellationTokenSource.cancel()
+                activeTabJobs.remove(oldJobContext.tabSessionId)
+                compilationJobQueue.remove(jobId)
             }
-            activeJobs.remove(jobId)
         }
         emitter.onCompletion(cleanup)
         emitter.onTimeout(cleanup)
 
-        jobContext.future.whenComplete { response, throwable ->
-            emitters.remove(jobId)
-            activeJobs.remove(jobId)
-            activeTabJobs.remove(jobContext.tabSessionId)
+        if (jobContext.listenerAttached.compareAndSet(false, true)) {
+            jobContext.future.whenComplete { response, throwable ->
+                val finishedEmitter = emitters.remove(jobId)
+                finishedEmitter?.let {
+                    try {
+                        val modelMap = ModelMap()
+                        val output = StringOutput()
+                        val template: String
 
-            updateWaitingClients()
+                        if (throwable != null) {
+                            modelMap.addAttribute("message", "An unexpected error occurred: ${throwable.message}")
+                            template = "fragments/playground-error"
+                        } else if (response.success) {
+                            modelMap.addAttribute("files", response.generatedFiles)
+                            template = "fragments/playground-results"
+                        } else {
+                            modelMap.addAttribute("message", response.message)
+                            template = "fragments/playground-error"
+                        }
 
-            val finalEmitter = emitters[jobId] ?: emitter
-            try {
-                val modelMap = ModelMap()
-                val output = StringOutput()
-                val template: String
-
-                if (throwable != null) {
-                    modelMap.addAttribute("message", "An unexpected error occurred: ${throwable.message}")
-                    template = "fragments/playground-error"
-                } else if (response.success) {
-                    modelMap.addAttribute("files", response.generatedFiles)
-                    template = "fragments/playground-results"
-                } else {
-                    modelMap.addAttribute("message", response.message)
-                    template = "fragments/playground-error"
+                        templateEngine.render(template, modelMap, output)
+                        it.send(SseEmitter.event().name("message").data(output.toString()))
+                    } catch (e: Exception) {
+                        it.completeWithError(e)
+                    } finally {
+                        it.complete()
+                    }
                 }
 
-                templateEngine.render(template, modelMap, output)
-                finalEmitter.send(SseEmitter.event().name("message").data(output.toString()))
-                finalEmitter.complete()
-            } catch (e: Exception) {
-                finalEmitter.completeWithError(e)
+                activeJobs.remove(jobId)
+                activeTabJobs.remove(jobContext.tabSessionId)
+                compilationJobQueue.remove(jobId)
+                updateWaitingClients()
             }
         }
         return emitter
     }
 
     private fun updateWaitingClients() {
-        val currentQueueSize = compilationTaskExecutor.queueSize
-        val activeCount = compilationTaskExecutor.activeCount
-        val jobsAhead = activeCount + currentQueueSize - 1
+        if (emitters.isEmpty()) {
+            return
+        }
 
-        emitters.keys.forEach { waitingJobId ->
-            emitters[waitingJobId]?.let { emitter ->
+        compilationJobQueue.forEachIndexed { index, jobId ->
+            emitters[jobId]?.let { emitter ->
                 try {
-                    val modelMap = ModelMap().apply {
-                        addAttribute("jobId", waitingJobId)
-                        addAttribute("jobsAhead", jobsAhead)
+                    val htmlContent = if (index > 0) {
+                        "<p>You are number ${index + 1} in the queue.</p>"
+                    } else {
+                        "<p>Compiling... your request is being processed.</p>"
                     }
-                    val output = StringOutput()
-                    templateEngine.render(FragmentTemplate.PLAYGROUND_COMPILING_OOB.path, modelMap, output)
+
                     emitter.send(
                         SseEmitter.event()
-                            .name("message")
-                            .data(output.toString())
+                            .name("queue-update-html")
+                            .data(htmlContent)
                     )
                 } catch (e: IOException) {
-                    emitters.remove(waitingJobId)
+                    emitter.complete()
                 }
             }
         }
