@@ -15,10 +15,13 @@ class AsyncCompilerService(private val compilerService: CompilerService) {
         request: CompileRequest,
         cancellationTokenSource: CancellationTokenSource
     ): CompletableFuture<CompileResponse> {
+        println("[ASYNC] Running compilation for job: ${request.jobId} on thread ${Thread.currentThread().name}")
         if (cancellationTokenSource.token().isCancellationRequested) {
+            println("[ASYNC] Job ${request.jobId} was cancelled before starting compilation.")
             return CompletableFuture.failedFuture(org.gradle.tooling.BuildCancelledException("Job was cancelled before starting."))
         }
         val result = compilerService.compile(request, cancellationTokenSource)
+        println("[ASYNC] Compilation finished for job: ${request.jobId}. Success: ${result.success}")
         return CompletableFuture.completedFuture(result)
     }
 }

@@ -7,6 +7,7 @@ data class CompileRequest(
 
 data class CompileResponse(
     val jobId: String,
+    val sourceCode: String,
     val success: Boolean,
     val generatedFiles: Map<String, String>? = null,
     val message: String

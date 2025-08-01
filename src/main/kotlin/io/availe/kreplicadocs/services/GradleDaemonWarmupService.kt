@@ -36,7 +36,9 @@ class GradleDaemonWarmupService(
                 val cancellationTokenSource = GradleConnector.newCancellationTokenSource()
                 val response = compilerService.compile(request, cancellationTokenSource)
                 if (response.success) {
-                    permanentCache.put(sourceCode, response)
+                    val normalizedSourceCode = sourceCode.trim().replace("\r\n", "\n")
+                    permanentCache.put(normalizedSourceCode, response)
+                    println("[WARMUP] Successfully compiled and cached starter template: ${template.slug}")
                 }
             } catch (e: Exception) {
                 log.error("Exception during warmup for template '{}'", template.name, e)

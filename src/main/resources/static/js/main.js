@@ -31,19 +31,28 @@ document.addEventListener('DOMContentLoaded', () => {
     void initializeApp();
 });
 
-document.body.addEventListener('htmx:afterSwap', (e) => {
-    Prism.highlightAllUnder(e.detail.elt);
+document.body.addEventListener('htmx:sseMessage', function (evt) {
+    if (evt.detail.type === 'close') {
+        const sseElement = evt.detail.elt;
+        if (sseElement) {
+            htmx.trigger(sseElement, 'htmx:sseClose');
+        }
+    }
+});
+
+function handleSwap(elt) {
+    Prism.highlightAllUnder(elt);
     void initializeApp();
 
-    if (e.detail.target.id === 'playground-output') {
+    if (elt.id === 'playground-output') {
         window.dispatchEvent(new CustomEvent('output-ready'));
     }
 
-    if (e.detail.target.id === 'editor-source-container') {
+    if (elt.id === 'editor-source-container') {
         import('./pages/playground.js').then(playground => {
             const editor = playground.getEditorInstance();
             if (editor) {
-                const newSource = e.detail.target.querySelector('textarea[name="source"]').value;
+                const newSource = elt.querySelector('textarea[name="source"]').value;
                 const alpineComponent = document.querySelector('.playground-container').__x;
                 if (alpineComponent) {
                     alpineComponent.data.isOutputReady = false;
@@ -59,6 +68,14 @@ document.body.addEventListener('htmx:afterSwap', (e) => {
             }
         });
     }
+}
+
+document.body.addEventListener('htmx:afterSwap', (e) => {
+    handleSwap(e.detail.elt);
+});
+
+document.body.addEventListener('htmx:oobAfterSwap', (e) => {
+    handleSwap(e.detail.elt);
 });
 
 document.body.addEventListener('htmx:afterSettle', async () => {
