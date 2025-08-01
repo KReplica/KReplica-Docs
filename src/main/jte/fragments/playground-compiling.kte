@@ -13,10 +13,12 @@
         (function () {
             const statusDiv = document.getElementById('job-status-${jobId}');
             if (statusDiv) {
-                statusDiv.addEventListener('sse:queue-update-html', function (event) {
-                    const textDiv = document.getElementById('status-text-${jobId}');
-                    if (textDiv && event.detail.data) {
-                        textDiv.innerHTML = event.detail.data;
+                statusDiv.addEventListener('htmx:sseMessage', function (event) {
+                    if (event.detail.eventName === 'queue-update-html') {
+                        const textDiv = document.getElementById('status-text-${jobId}');
+                        if (textDiv && event.detail.data) {
+                            textDiv.innerHTML = event.detail.data;
+                        }
                     }
                 });
             }

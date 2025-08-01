@@ -3,7 +3,32 @@
 <script type="text/template" id="initial-source-code-template">${vm.initialSourceCode}</script>
 
 <div class="playground-container"
-     x-data="{ activeTab: 'editor', isOutputReady: false, tabSessionId: generateUniqueId(), isSubmitting: false }"
+     x-data="{
+        activeTab: 'editor',
+        isOutputReady: false,
+        tabSessionId: generateUniqueId(),
+        isSubmitting: false,
+        lastSubmittedSource: '',
+        init() {
+            this.lastSubmittedSource = document.getElementById('initial-source-code-template').textContent;
+        },
+        handleRun(event) {
+            const editor = window.KREPLICA_PLAYGROUND.getEditorInstance();
+            if (!editor) return;
+
+            const currentSource = editor.getValue();
+            if (currentSource !== this.lastSubmittedSource) {
+                return;
+            }
+
+            if (this.isOutputReady) {
+                event.preventDefault();
+                if (window.innerWidth < 992) {
+                    this.activeTab = 'output';
+                }
+            }
+        }
+     }"
      @output-ready.window="isOutputReady = true; if (window.innerWidth < 992) activeTab = 'output'"
      @clear-output.window="isOutputReady = false; activeTab = 'editor'">
 
@@ -44,7 +69,7 @@
                     data-action="run"
                     class="button-run"
                     :disabled="isSubmitting"
-                    @click="if (isOutputReady) { event.preventDefault(); }">
+                    @click="handleRun($event)">
                 Run
             </button>
             <div class="split-button-container" x-data="{ isOpen: false }">
@@ -74,7 +99,15 @@
               hx-post="/playground/compile"
               hx-target="#playground-output"
               hx-on::before-request="isSubmitting = true"
-              hx-on::after-request="isSubmitting = false">
+              hx-on::after-request="
+                isSubmitting = false;
+                if (event.detail.successful && event.detail.requestConfig.path === '/playground/compile') {
+                    const editor = window.KREPLICA_PLAYGROUND.getEditorInstance();
+                    if (editor) {
+                        lastSubmittedSource = editor.getValue();
+                    }
+                }
+              ">
 
             <input type="hidden" name="tabSessionId" :value="tabSessionId">
 
@@ -103,7 +136,7 @@
                     data-action="run"
                     class="button-run"
                     :disabled="isSubmitting"
-                    @click="if (isOutputReady) { event.preventDefault(); if (window.innerWidth < 992) { activeTab = 'output' } }">
+                    @click="handleRun($event)">
                 Run
             </button>
             <div class="split-button-container" x-data="{ isOpen: false }">
