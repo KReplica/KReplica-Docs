@@ -74,31 +74,26 @@ class PlaygroundController(
 
     @PostMapping(WebApp.Endpoints.Playground.COMPILE)
     fun compile(@ModelAttribute compileRequest: CompileRequestForm, model: Model): String {
-        activeTabJobs.remove(compileRequest.tabSessionId)?.let { oldJobId ->
-            activeJobs[oldJobId]?.let { oldJobContext ->
-                oldJobContext.cancellationTokenSource.cancel()
-            }
+        val jobId = UUID.randomUUID().toString()
+        val oldJobId = activeTabJobs.put(compileRequest.tabSessionId, jobId)
+        oldJobId?.let {
+            activeJobs[it]?.cancellationTokenSource?.cancel()
         }
 
-        val jobId = UUID.randomUUID().toString()
         val request = CompileRequest(jobId, compileRequest.source)
         val cancellationTokenSource = GradleConnector.newCancellationTokenSource()
-
         val jobsAhead = compilationJobQueue.size
-
         val responseFuture = sandboxService.compile(request, cancellationTokenSource)
         val jobContext = JobContext(responseFuture, cancellationTokenSource, compileRequest.tabSessionId)
+
         activeJobs[jobId] = jobContext
-        activeTabJobs[compileRequest.tabSessionId] = jobId
         compilationJobQueue.add(jobId)
 
         if (responseFuture.isDone && !responseFuture.isCompletedExceptionally()) {
             val response = responseFuture.getNow(null)
             if (response != null) {
                 model.addAttribute("files", response.generatedFiles)
-                activeJobs.remove(jobId)
-                activeTabJobs.remove(compileRequest.tabSessionId)
-                compilationJobQueue.remove(jobId)
+                cleanupJob(jobId)
                 return "fragments/playground-results"
             }
         }
@@ -121,19 +116,15 @@ class PlaygroundController(
         emitters[jobId] = emitter
         val cleanup = Runnable {
             emitters.remove(jobId)
-            activeJobs.remove(jobId)?.let { oldJobContext ->
-                oldJobContext.cancellationTokenSource.cancel()
-                activeTabJobs.remove(oldJobContext.tabSessionId)
-                compilationJobQueue.remove(jobId)
-            }
+            activeJobs[jobId]?.cancellationTokenSource?.cancel()
+            cleanupJob(jobId)
         }
         emitter.onCompletion(cleanup)
         emitter.onTimeout(cleanup)
 
         if (jobContext.listenerAttached.compareAndSet(false, true)) {
             jobContext.future.whenComplete { response, throwable ->
-                val finishedEmitter = emitters.remove(jobId)
-                finishedEmitter?.let {
+                emitters.remove(jobId)?.let {
                     try {
                         val modelMap = ModelMap()
                         val output = StringOutput()
@@ -158,14 +149,18 @@ class PlaygroundController(
                         it.complete()
                     }
                 }
-
-                activeJobs.remove(jobId)
-                activeTabJobs.remove(jobContext.tabSessionId)
-                compilationJobQueue.remove(jobId)
+                cleanupJob(jobId)
                 updateWaitingClients()
             }
         }
         return emitter
+    }
+
+    private fun cleanupJob(jobId: String) {
+        compilationJobQueue.remove(jobId)
+        activeJobs.remove(jobId)?.let {
+            activeTabJobs.remove(it.tabSessionId, jobId)
+        }
     }
 
     private fun updateWaitingClients() {
