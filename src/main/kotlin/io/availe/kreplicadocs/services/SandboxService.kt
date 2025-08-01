@@ -13,16 +13,18 @@ class SandboxService(
     private val cacheManager: CacheManager
 ) {
 
+    fun isResultInPermanentCache(sourceCode: String): CompileResponse? {
+        return cacheManager.getCache("playground-templates-cache")?.get(sourceCode, CompileResponse::class.java)
+    }
+
     fun compile(
         request: CompileRequest,
         cancellationTokenSource: CancellationTokenSource
     ): CompletableFuture<CompileResponse> {
-        val permanentCache = cacheManager.getCache("playground-templates-cache")
-
-        permanentCache?.get(request.sourceCode, CompileResponse::class.java)?.let {
-            return CompletableFuture.completedFuture(it)
+        val cachedResponse = isResultInPermanentCache(request.sourceCode)
+        if (cachedResponse != null) {
+            return CompletableFuture.completedFuture(cachedResponse)
         }
-
         return asyncCompilerService.runCompilation(request, cancellationTokenSource)
     }
 }

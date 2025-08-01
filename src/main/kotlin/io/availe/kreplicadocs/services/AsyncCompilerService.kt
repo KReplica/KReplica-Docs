@@ -16,13 +16,7 @@ class AsyncCompilerService(private val compilerService: CompilerService) {
         cancellationTokenSource: CancellationTokenSource
     ): CompletableFuture<CompileResponse> {
         if (cancellationTokenSource.token().isCancellationRequested) {
-            return CompletableFuture.completedFuture(
-                CompileResponse(
-                    jobId = request.jobId,
-                    success = false,
-                    message = "Job was cancelled before starting."
-                )
-            )
+            return CompletableFuture.failedFuture(org.gradle.tooling.BuildCancelledException("Job was cancelled before starting."))
         }
         val result = compilerService.compile(request, cancellationTokenSource)
         return CompletableFuture.completedFuture(result)

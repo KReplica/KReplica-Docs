@@ -1,27 +1,7 @@
 @param jobId: String
-@param jobsAhead: Int
 
-<div hx-ext="sse" sse-connect="/playground/status/${jobId}" sse-swap="message" id="job-status-${jobId}">
+<div hx-ext="sse" sse-connect="/playground/status/${jobId}" id="job-status-${jobId}">
     <div class="placeholder-text" id="status-text-${jobId}">
-        @if(jobsAhead > 0)
-            <p>You are number ${jobsAhead + 1} in the queue.</p>
-        @else
-            <p>Compiling... your request is being processed.</p>
-        @endif
+        <p>Compiling... your request is being processed.</p>
     </div>
-    <script>
-        (function () {
-            const statusDiv = document.getElementById('job-status-${jobId}');
-            if (statusDiv) {
-                statusDiv.addEventListener('htmx:sseMessage', function (event) {
-                    if (event.detail.eventName === 'queue-update-html') {
-                        const textDiv = document.getElementById('status-text-${jobId}');
-                        if (textDiv && event.detail.data) {
-                            textDiv.innerHTML = event.detail.data;
-                        }
-                    }
-                });
-            }
-        })();
-    </script>
 </div>
