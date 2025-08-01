@@ -135,23 +135,12 @@ class PlaygroundController(
     fun getCompilationStatus(@PathVariable jobId: String): SseEmitter {
         println("[SSE] Client trying to connect for jobId: $jobId")
         val emitter = SseEmitter(sseTimeout)
-        val sentinelStart =
-            """<template hx-swap-oob="true" data-type="sentinel" data-phase="start" data-job-id="$jobId"></template>"""
-        val sentinelDone =
-            """<template hx-swap-oob="true" data-type="sentinel" data-phase="done" data-job-id="$jobId"></template>"""
-
-        try {
-            emitter.send(SseEmitter.event().name("message").data(sentinelStart))
-        } catch (_: Exception) {
-        }
 
         completedJobsCache.get(jobId, CompileResponse::class.java)?.let { completedResponse ->
             println("[SSE] Job $jobId found in COMPLETED cache. Sending result.")
             try {
                 val html = renderResult(completedResponse)
                 emitter.send(SseEmitter.event().name("message").data(html))
-                emitter.send(SseEmitter.event().name("message").data(sentinelDone))
-                emitter.send(SseEmitter.event().name("close"))
                 emitter.complete()
             } catch (e: Exception) {
                 println("[SSE-ERROR] Failed to send completed result for job $jobId: ${e.message}")
@@ -179,6 +168,13 @@ class PlaygroundController(
                 jobContext.jobHasCompleted.set(true)
                 println("[FUTURE] Future completed for job $jobId. Success: ${response != null}, Error: ${throwable != null}")
                 try {
+                    if (response != null && response.success) {
+                        println("[FUTURE] Caching successful result for job $jobId.")
+                        val normalizedSourceCode = response.sourceCode.trim().replace("\r\n", "\n")
+                        completedJobsCache.put(jobId, response)
+                        completedJobsCache.put(normalizedSourceCode, response)
+                    }
+
                     println("[FUTURE] Removing job $jobId from activeJobs.")
                     activeJobs.remove(jobId)
 
@@ -187,18 +183,9 @@ class PlaygroundController(
                         println("[FUTURE] Conditionally removing job state for tab ${jobContext.tabSessionId}. Removed: $removed")
                     }
 
-                    if (response != null && response.success) {
-                        println("[FUTURE] Caching successful result for job $jobId.")
-                        val normalizedSourceCode = response.sourceCode.trim().replace("\r\n", "\n")
-                        completedJobsCache.put(jobId, response)
-                        completedJobsCache.put(normalizedSourceCode, response)
-                    }
-
                     val html = renderResult(response)
                     println("[FUTURE] Sending final SSE event for job $jobId.")
                     emitter.send(SseEmitter.event().name("message").data(html))
-                    emitter.send(SseEmitter.event().name("message").data(sentinelDone))
-                    emitter.send(SseEmitter.event().name("close"))
                     println("[FUTURE] SSE events sent for job $jobId.")
                     emitter.complete()
                 } catch (e: Exception) {
@@ -236,8 +223,7 @@ class PlaygroundController(
                     templateEngine.render("fragments/playground-error", modelMap, output)
                 }
             }
-            val finalHtml =
-                """<div hx-swap-oob="innerHTML:#playground-output">${output}</div><div hx-swap-oob="delete" id="job-status-${response?.jobId}"></div>"""
+            val finalHtml = """<div hx-swap-oob="innerHTML:#playground-output">${output}</div>"""
             println("[RENDER] Finished rendering for job ${response?.jobId}")
             return finalHtml
         } catch (e: Exception) {
