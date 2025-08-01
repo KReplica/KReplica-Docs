@@ -51,9 +51,9 @@
             <input type="hidden" name="tabSessionId" :value="tabSessionId">
 
             <div class="playground-input-column" x-show="activeTab === 'editor'" x-cloak>
-                <div class="playground-editor-area" data-template-slug="${vm.activeTemplateSlug}">
+                <div class="playground-editor-area" data-template-slug="${vm.activeTemplateSlug.value}">
                     <div id="editor-source-container">
-                        <div data-template-slug="${vm.activeTemplateSlug}">
+                        <div data-template-slug="${vm.activeTemplateSlug.value}">
                             <textarea name="source" hidden>${vm.initialSourceCode}</textarea>
                         </div>
                     </div>

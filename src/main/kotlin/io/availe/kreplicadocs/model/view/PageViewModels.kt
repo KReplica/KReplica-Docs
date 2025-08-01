@@ -4,6 +4,7 @@ import io.availe.kreplicadocs.common.CodeSnippet
 import io.availe.kreplicadocs.common.PageId
 import io.availe.kreplicadocs.config.AppProperties
 import io.availe.kreplicadocs.model.NavLink
+import io.availe.kreplicadocs.model.TemplateSlug
 
 data class GuideSection(
     val id: String,
@@ -43,5 +44,5 @@ data class PlaygroundViewModel(
     override val currentPage: PageId,
     val availableTemplates: List<SelectOption>,
     val initialSourceCode: String,
-    val activeTemplateSlug: String
+    val activeTemplateSlug: TemplateSlug
 ) : PageViewModel

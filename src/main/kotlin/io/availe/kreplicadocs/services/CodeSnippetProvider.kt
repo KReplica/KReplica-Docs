@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.availe.kreplicadocs.common.CodeSnippet
 import io.availe.kreplicadocs.model.PlaygroundTemplate
+import io.availe.kreplicadocs.model.TemplateSlug
 import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.support.ResourcePatternResolver
@@ -56,9 +57,9 @@ class CodeSnippetProvider(
 
     fun getPlaygroundTemplates(): List<PlaygroundTemplate> = playgroundTemplates
 
-    fun getPlaygroundTemplateSource(slug: String): String {
-        val resource = resourcePatternResolver.getResource("classpath:playground-templates/$slug.kt")
-        if (!resource.exists()) throw FileNotFoundException("Playground template not found: $slug")
+    fun getPlaygroundTemplateSource(slug: TemplateSlug): String {
+        val resource = resourcePatternResolver.getResource("classpath:playground-templates/${slug.value}.kt")
+        if (!resource.exists()) throw FileNotFoundException("Playground template not found: ${slug.value}")
         return resource.inputStream.bufferedReader().use { it.readText() }
     }
 }

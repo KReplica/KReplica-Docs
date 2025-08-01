@@ -2,6 +2,7 @@ package io.availe.kreplicadocs.services
 
 import io.availe.kreplicadocs.common.PageId
 import io.availe.kreplicadocs.config.AppProperties
+import io.availe.kreplicadocs.model.TemplateSlug
 import io.availe.kreplicadocs.model.view.GuideViewModel
 import io.availe.kreplicadocs.model.view.IndexViewModel
 import io.availe.kreplicadocs.model.view.PlaygroundViewModel
@@ -39,7 +40,8 @@ class ViewModelFactory(
         val activeTemplate = templates.firstOrNull()
             ?: throw IllegalStateException("No playground templates found")
 
-        val initialSource = snippetProvider.getPlaygroundTemplateSource(activeTemplate.slug)
+        val activeTemplateSlug = TemplateSlug(activeTemplate.slug)
+        val initialSource = snippetProvider.getPlaygroundTemplateSource(activeTemplateSlug)
         val templateOptions = templates.map {
             SelectOption(
                 value = it.slug,
@@ -54,7 +56,7 @@ class ViewModelFactory(
             currentPage = PageId.PLAYGROUND,
             availableTemplates = templateOptions,
             initialSourceCode = initialSource,
-            activeTemplateSlug = activeTemplate.slug
+            activeTemplateSlug = activeTemplateSlug
         )
     }
 }

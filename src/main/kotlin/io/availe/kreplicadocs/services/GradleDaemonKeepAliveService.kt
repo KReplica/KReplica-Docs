@@ -1,6 +1,8 @@
 package io.availe.kreplicadocs.services
 
 import io.availe.kreplicadocs.model.CompileRequest
+import io.availe.kreplicadocs.model.JobId
+import io.availe.kreplicadocs.model.TemplateSlug
 import org.gradle.tooling.GradleConnector
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
@@ -14,14 +16,14 @@ class GradleDaemonKeepAliveService(
 ) {
 
     private val log = LoggerFactory.getLogger(GradleDaemonKeepAliveService::class.java)
-    private val keepAliveTemplateSlug = "basic-replication"
+    private val keepAliveTemplateSlug = TemplateSlug("basic-replication")
 
     @Scheduled(fixedRateString = "PT10M")
     fun pingDaemon() {
         try {
             val sourceCode = codeSnippetProvider.getPlaygroundTemplateSource(keepAliveTemplateSlug)
             val request = CompileRequest(
-                jobId = "keep-alive-${UUID.randomUUID()}",
+                jobId = JobId("keep-alive-${UUID.randomUUID()}"),
                 sourceCode = sourceCode
             )
             val cancellationTokenSource = GradleConnector.newCancellationTokenSource()

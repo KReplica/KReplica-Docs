@@ -41,6 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
     void initializeApp();
 });
 
+document.body.addEventListener('htmx:configRequest', function (evt) {
+    if (evt.detail.path === '/playground/compile' && window.KREPLICA_PLAYGROUND) {
+        const editor = window.KREPLICA_PLAYGROUND.getEditorInstance();
+        if (editor) {
+            evt.detail.parameters['source'] = editor.getValue();
+            log('Injected fresh editor content into compile request.');
+        }
+    }
+});
+
 document.body.addEventListener('htmx:sseOpen', function (evt) {
     log('EVENT -> htmx:sseOpen', {element: evt.detail.elt});
 });

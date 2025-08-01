@@ -2,6 +2,8 @@ package io.availe.kreplicadocs.services
 
 import io.availe.kreplicadocs.config.CacheNames
 import io.availe.kreplicadocs.model.CompileRequest
+import io.availe.kreplicadocs.model.JobId
+import io.availe.kreplicadocs.model.TemplateSlug
 import org.gradle.tooling.GradleConnector
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
@@ -29,9 +31,10 @@ class GradleDaemonWarmupService(
 
         templates.forEach { template ->
             try {
-                val sourceCode = codeSnippetProvider.getPlaygroundTemplateSource(template.slug)
+                val slug = TemplateSlug(template.slug)
+                val sourceCode = codeSnippetProvider.getPlaygroundTemplateSource(slug)
                 val request = CompileRequest(
-                    jobId = "warmup-${template.slug}-${UUID.randomUUID()}",
+                    jobId = JobId("warmup-${template.slug}-${UUID.randomUUID()}"),
                     sourceCode = sourceCode
                 )
                 val cancellationTokenSource = GradleConnector.newCancellationTokenSource()

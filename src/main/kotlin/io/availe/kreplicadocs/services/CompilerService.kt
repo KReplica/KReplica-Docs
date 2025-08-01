@@ -14,8 +14,8 @@ import java.nio.file.Files
 class CompilerService {
 
     fun compile(request: CompileRequest, cancellationTokenSource: CancellationTokenSource): CompileResponse {
-        println("[COMPILER] Starting Gradle build for job: ${request.jobId}")
-        val projectDir = Files.createTempDirectory("kreplica-job-${request.jobId}").toFile()
+        println("[COMPILER] Starting Gradle build for job: ${request.jobId.value}")
+        val projectDir = Files.createTempDirectory("kreplica-job-${request.jobId.value}").toFile()
 
         try {
             createProjectFiles(projectDir, request.sourceCode)
@@ -46,7 +46,7 @@ class CompilerService {
                     emptyMap()
                 }
 
-                println("[COMPILER] Gradle build SUCCEEDED for job: ${request.jobId}")
+                println("[COMPILER] Gradle build SUCCEEDED for job: ${request.jobId.value}")
                 return CompileResponse(
                     jobId = request.jobId,
                     sourceCode = request.sourceCode,
@@ -56,7 +56,7 @@ class CompilerService {
                 )
 
             } catch (e: Exception) {
-                println("[COMPILER] Gradle build FAILED for job: ${request.jobId}. Exception: ${e.javaClass.simpleName}")
+                println("[COMPILER] Gradle build FAILED for job: ${request.jobId.value}. Exception: ${e.javaClass.simpleName}")
                 return CompileResponse(
                     jobId = request.jobId,
                     sourceCode = request.sourceCode,

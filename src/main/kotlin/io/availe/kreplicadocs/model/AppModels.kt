@@ -2,6 +2,15 @@ package io.availe.kreplicadocs.model
 
 import io.availe.kreplicadocs.common.PageId
 
+@JvmInline
+value class JobId(val value: String)
+
+@JvmInline
+value class TabSessionId(val value: String)
+
+@JvmInline
+value class TemplateSlug(val value: String)
+
 data class NavLink(
     val href: String,
     val pageId: PageId,
@@ -9,12 +18,12 @@ data class NavLink(
 )
 
 data class CompileRequest(
-    val jobId: String,
+    val jobId: JobId,
     val sourceCode: String
 )
 
 data class CompileResponse(
-    val jobId: String,
+    val jobId: JobId,
     val sourceCode: String,
     val success: Boolean,
     val generatedFiles: Map<String, String>? = null,
@@ -22,25 +31,7 @@ data class CompileResponse(
 )
 
 @JvmInline
-value class ExampleSlug(val value: String)
-
-@JvmInline
 value class FileName(val value: String)
-
-data class FeatureTourSubStep(
-    val title: String,
-    val description: String,
-    val file: FileName
-)
-
-data class FeatureTourStep(
-    val title: String,
-    val description: String,
-    val file: FileName?,
-    val part: Int,
-    var endpoint: String = "",
-    val subSteps: List<FeatureTourSubStep> = emptyList()
-)
 
 data class PlaygroundTemplate(
     val slug: String,
