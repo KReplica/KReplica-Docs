@@ -7,7 +7,6 @@ import io.availe.kreplicadocs.model.view.GuideViewModel
 import io.availe.kreplicadocs.model.view.IndexViewModel
 import io.availe.kreplicadocs.model.view.PlaygroundViewModel
 import io.availe.kreplicadocs.model.view.SelectOption
-import io.availe.kreplicadocs.services.playground.CodeSnippetProvider
 import org.springframework.stereotype.Service
 
 @Service

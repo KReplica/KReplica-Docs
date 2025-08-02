@@ -4,6 +4,7 @@ import io.availe.kreplicadocs.config.CacheNames
 import io.availe.kreplicadocs.model.CompileRequest
 import io.availe.kreplicadocs.model.JobId
 import io.availe.kreplicadocs.model.TemplateSlug
+import io.availe.kreplicadocs.services.CodeSnippetProvider
 import org.gradle.tooling.GradleConnector
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
