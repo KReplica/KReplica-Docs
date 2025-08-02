@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit
 
 @Service
 class GradleDaemonManager(
-    private val playgroundService: PlaygroundService,
     private val gradleCompiler: GradleCompiler,
     private val codeSnippetProvider: CodeSnippetProvider,
     private val cacheManager: CacheManager
@@ -73,16 +72,12 @@ class GradleDaemonManager(
                 sourceCode = sourceCode
             )
             val cancellationTokenSource = GradleConnector.newCancellationTokenSource()
-            val responseFuture = playgroundService.submitCompilation(request, cancellationTokenSource)
+            val response = gradleCompiler.compile(request, cancellationTokenSource)
 
-            responseFuture.whenComplete { response, throwable ->
-                if (throwable != null) {
-                    log.error("Error during Gradle daemon keep-alive ping", throwable)
-                } else if (response != null && !response.success) {
-                    log.warn("Gradle daemon ping compilation failed: {}", response.message)
-                } else {
-                    log.info("Gradle daemon ping successful.")
-                }
+            if (response.success) {
+                log.info("Gradle daemon ping successful.")
+            } else {
+                log.warn("Gradle daemon ping compilation failed: {}", response.message)
             }
         } catch (e: Exception) {
             log.error("Failed to submit Gradle daemon keep-alive ping", e)
