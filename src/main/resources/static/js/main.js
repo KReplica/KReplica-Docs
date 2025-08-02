@@ -4,7 +4,7 @@ let activeController = null;
 
 async function loadController(name, element) {
     try {
-        const controllerModule = await import(`./controllers/${name}_controller.js`);
+        const controllerModule = await import(`./controllers/${name}-controller.js`);
         activeController = controllerModule.default;
         if (activeController && typeof activeController.init === 'function') {
             activeController.init(element);
