@@ -24,7 +24,7 @@
         position: relative;
         display: flex;
         flex-direction: column;
-        flex-grow: 1;
+        flex: 1 1 auto;
         min-block-size: 0;
         border: 1px solid var(--border-color);
         border-radius: var(--radius-3);
@@ -32,8 +32,8 @@
 
     #kreplica-editor {
         inline-size: 100%;
-        flex: 0 0 auto;
-        min-block-size: 15rem;
+        flex: 1 1 auto;
+        min-block-size: 0;
     }
 
     .playground-output-content {
@@ -199,6 +199,8 @@
         display: flex;
         flex-direction: column;
         min-block-size: 0;
+        flex: 1 1 auto;
+        min-inline-size: 0;
     }
 
     .playground-output-column {

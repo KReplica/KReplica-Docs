@@ -20,6 +20,23 @@ const isMobile = () => window.innerWidth < MOBILE_BREAKPOINT_PX;
 
 const getHiddenTextarea = () => document.querySelector('textarea[name="source"]');
 
+function isElementVisibleAndSized(el) {
+    if (!el) return false;
+    const rect = el.getBoundingClientRect();
+    return rect.width > 0 && rect.height > 0 && el.offsetParent !== null;
+}
+
+function waitForVisibleSize(el, ready) {
+    const check = () => {
+        if (isElementVisibleAndSized(el)) {
+            ready();
+        } else {
+            requestAnimationFrame(check);
+        }
+    };
+    requestAnimationFrame(check);
+}
+
 function resizeEditorToContent() {
     if (!kreplicaEditor) return;
     const editorNode = document.getElementById('kreplica-editor');
@@ -63,61 +80,72 @@ function initOutputObserver() {
 function initKReplicaPlayground() {
     if (kreplicaEditor || isInitializing) return;
     const editorNode = document.getElementById('kreplica-editor');
-    if (!editorNode) return;
+    const inputColumn = document.querySelector('.playground-input-column');
+    if (!editorNode || !inputColumn) return;
     isInitializing = true;
-    require.config({paths: {vs: 'https://unpkg.com/monaco-editor@0.52.2/min/vs'}});
-    require(['vs/editor/editor.main'], async () => {
-        try {
-            const res = await fetch('/language-model.json');
-            if (!res.ok) throw new Error(`Failed to load: ${res.statusText}`);
-            languageModel = await res.json();
-        } catch (e) {
-            console.error("Failed to load KReplica language model:", e);
-            languageModel = null;
-        }
 
-        const hiddenTextareaEl = getHiddenTextarea();
-        const initialCode = hiddenTextareaEl?.value || '';
-        const currentSiteTheme = document.documentElement.getAttribute('data-theme') || 'light';
-        const initialMonacoTheme = getMonacoTheme(currentSiteTheme);
-        kreplicaEditor = monaco.editor.create(editorNode, {
-            value: initialCode,
-            language: 'kotlin',
-            automaticLayout: false,
-            theme: initialMonacoTheme,
-            minimap: {enabled: false},
-            folding: true,
-            scrollBeyondLastLine: false,
-            scrollbar: {vertical: isMobile() ? 'auto' : 'hidden'},
-            lineHeight: 20
-        });
-
-        monaco.languages.registerCompletionItemProvider('kotlin', getCompletionProvider(languageModel));
-
-        kreplicaEditor.onDidChangeModelContent(() => {
-            const currentTextarea = getHiddenTextarea();
-            if (currentTextarea) currentTextarea.value = kreplicaEditor.getValue();
-        });
-
-        kreplicaEditor.onDidContentSizeChange(resizeEditorToContent);
-        resizeEditorToContent();
-
-        resizeObserver = new ResizeObserver(resizeEditorToContent);
-        const observeTarget = editorNode.parentElement || editorNode;
-        resizeObserver.observe(observeTarget);
-        cleanupFns.push(() => {
-            if (resizeObserver) {
-                resizeObserver.disconnect();
-                resizeObserver = null;
+    const start = () => {
+        require.config({paths: {vs: 'https://unpkg.com/monaco-editor@0.52.2/min/vs'}});
+        require(['vs/editor/editor.main'], async () => {
+            try {
+                const res = await fetch('/language-model.json');
+                if (!res.ok) throw new Error(`Failed to load: ${res.statusText}`);
+                languageModel = await res.json();
+            } catch (e) {
+                console.error('Failed to load KReplica language model:', e);
+                languageModel = null;
             }
+
+            const hiddenTextareaEl = getHiddenTextarea();
+            const initialCode = hiddenTextareaEl?.value || '';
+            const currentSiteTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const initialMonacoTheme = getMonacoTheme(currentSiteTheme);
+            kreplicaEditor = monaco.editor.create(editorNode, {
+                value: initialCode,
+                language: 'kotlin',
+                automaticLayout: true,
+                theme: initialMonacoTheme,
+                minimap: {enabled: false},
+                folding: true,
+                scrollBeyondLastLine: false,
+                scrollbar: {vertical: isMobile() ? 'auto' : 'hidden'},
+                lineHeight: 20
+            });
+
+            monaco.languages.registerCompletionItemProvider('kotlin', getCompletionProvider(languageModel));
+
+            kreplicaEditor.onDidChangeModelContent(() => {
+                const currentTextarea = getHiddenTextarea();
+                if (currentTextarea) currentTextarea.value = kreplicaEditor.getValue();
+            });
+
+            kreplicaEditor.onDidContentSizeChange(resizeEditorToContent);
+            resizeEditorToContent();
+
+            if (resizeObserver) resizeObserver.disconnect();
+            resizeObserver = new ResizeObserver(resizeEditorToContent);
+            resizeObserver.observe(inputColumn);
+            cleanupFns.push(() => {
+                if (resizeObserver) {
+                    resizeObserver.disconnect();
+                    resizeObserver = null;
+                }
+            });
+
+            const onVisibility = () => {
+                if (document.visibilityState === 'visible') resizeEditorToContent();
+            };
+            document.addEventListener('visibilitychange', onVisibility);
+            cleanupFns.push(() => document.removeEventListener('visibilitychange', onVisibility));
+            isInitializing = false;
         });
-        const onVisibility = () => {
-            if (document.visibilityState === 'visible') resizeEditorToContent();
-        };
-        document.addEventListener('visibilitychange', onVisibility);
-        cleanupFns.push(() => document.removeEventListener('visibilitychange', onVisibility));
-        isInitializing = false;
-    });
+    };
+
+    if (isElementVisibleAndSized(inputColumn)) {
+        start();
+    } else {
+        waitForVisibleSize(inputColumn, start);
+    }
 }
 
 function clearPlaygroundOutput() {
