@@ -2,7 +2,7 @@ package io.availe.kreplicadocs.web
 
 import io.availe.kreplicadocs.common.WebApp
 import io.availe.kreplicadocs.model.view.CompletionItem
-import io.availe.kreplicadocs.services.CompletionProviderService
+import io.availe.kreplicadocs.services.playground.CompletionProviderService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 

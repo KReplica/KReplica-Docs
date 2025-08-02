@@ -1,4 +1,4 @@
-package io.availe.kreplicadocs.services
+package io.availe.kreplicadocs.services.playground
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper

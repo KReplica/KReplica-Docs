@@ -1,4 +1,4 @@
-package io.availe.kreplicadocs.services
+package io.availe.kreplicadocs.services.playground
 
 import io.availe.kreplicadocs.model.view.CompletionItem
 import org.springframework.stereotype.Service

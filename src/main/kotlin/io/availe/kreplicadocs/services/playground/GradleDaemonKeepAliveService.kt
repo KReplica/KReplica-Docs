@@ -1,4 +1,4 @@
-package io.availe.kreplicadocs.services
+package io.availe.kreplicadocs.services.playground
 
 import io.availe.kreplicadocs.model.CompileRequest
 import io.availe.kreplicadocs.model.JobId

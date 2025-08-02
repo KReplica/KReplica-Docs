@@ -1,7 +1,8 @@
-package io.availe.kreplicadocs.services
+package io.availe.kreplicadocs.services.playground
 
 import io.availe.kreplicadocs.model.CompileRequest
 import io.availe.kreplicadocs.model.CompileResponse
+import org.gradle.tooling.BuildCancelledException
 import org.gradle.tooling.CancellationTokenSource
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
@@ -18,7 +19,7 @@ class AsyncCompilerService(private val compilerService: CompilerService) {
         println("[ASYNC] Running compilation for job: ${request.jobId} on thread ${Thread.currentThread().name}")
         if (cancellationTokenSource.token().isCancellationRequested) {
             println("[ASYNC] Job ${request.jobId} was cancelled before starting compilation.")
-            return CompletableFuture.failedFuture(org.gradle.tooling.BuildCancelledException("Job was cancelled before starting."))
+            return CompletableFuture.failedFuture(BuildCancelledException("Job was cancelled before starting."))
         }
         val result = compilerService.compile(request, cancellationTokenSource)
         println("[ASYNC] Compilation finished for job: ${request.jobId}. Success: ${result.success}")

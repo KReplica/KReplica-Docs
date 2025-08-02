@@ -8,9 +8,9 @@ import io.availe.kreplicadocs.common.PartialTemplate
 import io.availe.kreplicadocs.common.WebApp
 import io.availe.kreplicadocs.config.CacheNames
 import io.availe.kreplicadocs.model.*
-import io.availe.kreplicadocs.services.CodeSnippetProvider
-import io.availe.kreplicadocs.services.SandboxService
 import io.availe.kreplicadocs.services.ViewModelFactory
+import io.availe.kreplicadocs.services.playground.CodeSnippetProvider
+import io.availe.kreplicadocs.services.playground.SandboxService
 import jakarta.annotation.PostConstruct
 import org.gradle.tooling.CancellationTokenSource
 import org.gradle.tooling.GradleConnector
