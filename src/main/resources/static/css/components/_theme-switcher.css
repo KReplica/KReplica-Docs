@@ -2,6 +2,8 @@
     .theme-switcher {
         display: flex;
         align-items: center;
+        position: relative;
+        z-index: 31;
     }
 
     .theme-switcher button {
