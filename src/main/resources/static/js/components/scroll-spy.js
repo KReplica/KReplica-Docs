@@ -1,71 +1,118 @@
 import {rafThrottle} from "../utils/throttle.js";
 
-const SCROLL_OFFSET_PX = 85;
-
-let activeScrollListener = null;
-let activeResizeListener = null;
-let isScrollSpyPaused = false;
-
-export function pauseScrollSpy() {
-    isScrollSpyPaused = true;
-}
-
-export function resumeScrollSpy() {
-    isScrollSpyPaused = false;
-}
-
-export function initScrollSpy() {
-    if (activeScrollListener) window.removeEventListener("scroll", activeScrollListener);
-    if (activeResizeListener) window.removeEventListener("resize", activeResizeListener);
-
-    const linksContainer = document.querySelector('[data-js-id="guide-sidebar-links"]');
-    if (!linksContainer) {
-        console.error("[ScrollSpy] Missing sidebar container");
-        return;
+class ScrollSpy {
+    constructor(offsetPx = 85) {
+        this.offsetPx = offsetPx;
+        this.sections = [];
+        this.lastActiveId = null;
+        this.rafScroll = null;
+        this.rafResize = null;
+        this.isInitialized = false;
     }
 
-    const sections = Array.from(linksContainer.querySelectorAll('a[href^="#"]'))
-        .map(a => document.getElementById(a.getAttribute("href").slice(1)))
-        .filter(Boolean)
-        .sort((a, b) => a.offsetTop - b.offsetTop);
+    init() {
+        if (this.isInitialized) {
+            this.pause();
+        }
 
-    if (!sections.length) {
-        console.error("[ScrollSpy] No sections found");
-        return;
+        const linksContainer = document.querySelector('[data-js-id="guide-sidebar-links"]');
+        if (!linksContainer) {
+            console.error("[ScrollSpy] Missing sidebar container");
+            return;
+        }
+
+        this.sections = Array.from(linksContainer.querySelectorAll('a[href^="#"]'))
+            .map(a => document.getElementById(a.getAttribute("href").slice(1)))
+            .filter(Boolean)
+            .sort((a, b) => a.offsetTop - b.offsetTop);
+
+        if (!this.sections.length) {
+            console.error("[ScrollSpy] No sections found");
+            return;
+        }
+
+        this.lastActiveId = null;
+        this.rafScroll = rafThrottle(this.handleScroll.bind(this));
+        this.rafResize = rafThrottle(this.init.bind(this));
+        window.addEventListener("scroll", this.rafScroll, {passive: true});
+        window.addEventListener("resize", this.rafResize);
+        this.handleScroll();
+        this.isInitialized = true;
     }
 
-    let lastActiveId = null;
-
-    const handleScroll = () => {
-        if (isScrollSpyPaused) return;
-
+    handleScroll() {
         let newActiveId = null;
         const scrollBottom = Math.ceil(window.innerHeight + window.scrollY);
         const docHeight = document.documentElement.scrollHeight;
 
         if (scrollBottom >= docHeight) {
-            newActiveId = sections[sections.length - 1].id;
+            newActiveId = this.sections[this.sections.length - 1].id;
         } else {
             const scrollY = window.scrollY;
-            for (const section of sections) {
-                if (section.offsetTop - SCROLL_OFFSET_PX <= scrollY) newActiveId = section.id;
-                else break;
+            for (const section of this.sections) {
+                if (section.offsetTop - this.offsetPx <= scrollY) {
+                    newActiveId = section.id;
+                } else {
+                    break;
+                }
             }
         }
 
-        if (!newActiveId) newActiveId = sections[0].id;
+        if (!newActiveId) {
+            newActiveId = this.sections[0].id;
+        }
 
-        if (newActiveId !== lastActiveId) {
-            lastActiveId = newActiveId;
+        if (newActiveId !== this.lastActiveId) {
+            this.lastActiveId = newActiveId;
             document.body.dispatchEvent(new CustomEvent("section-active", {detail: {sectionId: newActiveId}}));
         }
-    };
+    }
 
-    activeScrollListener = rafThrottle(handleScroll);
-    activeResizeListener = rafThrottle(initScrollSpy);
+    pause() {
+        if (this.rafScroll) {
+            window.removeEventListener("scroll", this.rafScroll);
+        }
+        if (this.rafResize) {
+            window.removeEventListener("resize", this.rafResize);
+        }
+    }
 
-    window.addEventListener("scroll", activeScrollListener, {passive: true});
-    window.addEventListener("resize", activeResizeListener);
+    resume() {
+        if (!this.isInitialized) {
+            return;
+        }
+        if (this.rafScroll) {
+            window.addEventListener("scroll", this.rafScroll, {passive: true});
+        }
+        if (this.rafResize) {
+            window.addEventListener("resize", this.rafResize);
+        }
+    }
 
-    requestAnimationFrame(handleScroll);
+    destroy() {
+        this.pause();
+        this.sections = [];
+        this.lastActiveId = null;
+        this.rafScroll = null;
+        this.rafResize = null;
+        this.isInitialized = false;
+    }
+}
+
+const scrollSpy = new ScrollSpy();
+
+export function initScrollSpy() {
+    scrollSpy.init();
+}
+
+export function pauseScrollSpy() {
+    scrollSpy.pause();
+}
+
+export function resumeScrollSpy() {
+    scrollSpy.resume();
+}
+
+export function destroyScrollSpy() {
+    scrollSpy.destroy();
 }
