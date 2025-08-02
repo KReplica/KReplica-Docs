@@ -46,20 +46,20 @@
     }
 
     [data-theme="blue"] {
-        --primary-color: oklch(48% 0.15 259);
-        --secondary-color: oklch(60% 0.18 260);
-        --nav-active-color: var(--secondary-color);
-        --text-color: oklch(25% 0.01 255);
-        --text-light: oklch(45% 0.02 250);
-        --bg-color: oklch(99.2% 0.003 255);
+        --primary-color: oklch(46% 0.14 258);
+        --secondary-color: oklch(56% 0.18 262);
+        --nav-active-color: oklch(30% 0.07 262);
+        --text-color: oklch(29% 0 0);
+        --text-light: oklch(55% 0.01 250);
+        --bg-color: oklch(98.8% 0.008 255);
         --surface-color: oklch(100% 0 0);
-        --border-color: oklch(94% 0.01 255);
-        --sidebar-active-bg: oklch(50% 0.18 260);
-        --sidebar-active-text: #ffffff;
+        --border-color: oklch(92% 0.012 255);
+        --sidebar-active-bg: oklch(94% 0.02 255);
+        --sidebar-active-text: oklch(30% 0 0);
         --retro-shadow-color: oklch(88% 0.01 250);
-        --inline-code-bg: oklch(95% 0.015 255);
-        --inline-code-text: oklch(45% 0.13 262);
-        --highlight-bg: oklch(85% 0.12 260 / 0.7);
+        --inline-code-bg: oklch(94% 0.01 255);
+        --inline-code-text: oklch(40% 0.08 262);
+        --highlight-bg: oklch(94% 0.02 260 / 0.7);
         --highlight-outline: var(--secondary-color);
     }
 
