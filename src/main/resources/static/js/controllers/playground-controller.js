@@ -128,12 +128,16 @@ function clearPlaygroundOutput() {
 
 function resetPlayground() {
     clearPlaygroundOutput();
-    const container = document.getElementById('editor-source-container');
-    if (!container) return;
-    const slug = container.querySelector('[data-template-slug]')?.dataset.templateSlug || null;
-    if (!slug) return;
-    const url = `/playground/templates?template-select=${slug}`;
-    htmx.ajax('GET', url, {target: '#editor-source-container', swap: 'innerHTML'});
+    const templateSelect = document.getElementById('template-select');
+    if (!templateSelect) return;
+
+    const currentSlug = templateSelect.value;
+
+    const url = `/playground/templates?template-select=${encodeURIComponent(currentSlug)}`;
+    htmx.ajax('GET', url, {
+        target: '#editor-source-container',
+        swap: 'innerHTML'
+    });
 }
 
 function setupEventListeners() {
@@ -156,6 +160,11 @@ function setupEventListeners() {
     };
     window.addEventListener('theme-changed', themeChangeHandler);
     cleanupFns.push(() => window.removeEventListener('theme-changed', themeChangeHandler));
+    const editorSourceContainer = document.getElementById('editor-source-container');
+    if (editorSourceContainer) {
+        editorSourceContainer.addEventListener('htmx:afterSwap', updateEditorAfterSwap);
+        cleanupFns.push(() => editorSourceContainer.removeEventListener('htmx:afterSwap', updateEditorAfterSwap));
+    }
 }
 
 function getEditorInstance() {

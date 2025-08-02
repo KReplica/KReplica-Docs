@@ -1,7 +1,5 @@
 @param vm: io.availe.kreplicadocs.model.view.PlaygroundViewModel
 
-<script type="text/template" id="initial-source-code-template">${vm.initialSourceCode}</script>
-
 <div class="playground-container" data-controller="playground">
     <div class="playground-wrapper"
          x-data="{ activeTab: 'editor', isOutputReady: false, tabSessionId: generateUniqueId(), isSubmitting: false }"
@@ -19,8 +17,7 @@
                 hxTarget = "#editor-source-container",
                 hxPushUrl = "false",
                 hxIndicator = ".htmx-indicator",
-                hxSwap = "innerHTML",
-                hxOnAfterSwap = "KREPLICA_PLAYGROUND.updateEditorAfterSwap()"
+                hxSwap = "innerHTML"
                 )
             </div>
 
