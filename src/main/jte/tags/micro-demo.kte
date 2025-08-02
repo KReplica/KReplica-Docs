@@ -1,33 +1,22 @@
 @param beforeContent: gg.jte.Content
 @param afterContent: gg.jte.Content
 
-<div class="micro-demo-container">
-    <div class="micro-demo-mobile" x-data="{ activeTab: 'before' }">
-        <div class="micro-demo-tabs">
-            <button type="button" :class="{ 'active': activeTab === 'before' }" @click="activeTab = 'before'">
-                Your Interface
-            </button>
-            <button type="button" :class="{ 'active': activeTab === 'after' }" @click="activeTab = 'after'">
-                Generated DTOs
-            </button>
-        </div>
-        <div class="micro-demo-panes">
-            <div class="micro-demo-pane" x-show="activeTab === 'before'">
-                @template.tags.code(language="kotlin", content=beforeContent)
-            </div>
-            <div class="micro-demo-pane" x-show="activeTab === 'after'">
-                @template.tags.code(language="kotlin", content=afterContent)
-            </div>
-        </div>
+<div class="micro-demo" x-data="{ activeTab: 'before' }" :class="activeTab === 'after' ? 'show-after' : 'show-before'">
+    <div class="micro-demo-tabs">
+        <button type="button" :class="{ 'active': activeTab === 'before' }" @click="activeTab = 'before'">
+            Your Interface
+        </button>
+        <button type="button" :class="{ 'active': activeTab === 'after' }" @click="activeTab = 'after'">
+            Generated DTOs
+        </button>
     </div>
-
-    <div class="micro-demo-desktop" aria-hidden="true">
-        <div class="micro-demo-card">
-            <div class="micro-demo-card-header">Your Interface</div>
+    <div class="micro-demo-panes">
+        <div class="micro-demo-pane" data-pane="before">
+            <div class="micro-demo-pane-header">Your Interface</div>
             @template.tags.code(language="kotlin", content=beforeContent)
         </div>
-        <div class="micro-demo-card">
-            <div class="micro-demo-card-header">Generated DTOs</div>
+        <div class="micro-demo-pane" data-pane="after">
+            <div class="micro-demo-pane-header">Generated DTOs</div>
             @template.tags.code(language="kotlin", content=afterContent)
         </div>
     </div>
