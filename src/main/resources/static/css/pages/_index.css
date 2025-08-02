@@ -1,0 +1,27 @@
+.hero-cta {
+    text-align: center;
+    margin-block: 2.5rem;
+}
+
+@media (min-width: 48.0625rem) {
+    .micro-demo-tabs {
+        display: none;
+    }
+
+    .micro-demo-panes {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .micro-demo-pane {
+        padding: 1.5rem;
+    }
+
+    .micro-demo-pane:not(:first-child) {
+        border-inline-start: 1px solid var(--border-color);
+    }
+
+    .differentiators-list {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem 2.5rem;
+    }
+}

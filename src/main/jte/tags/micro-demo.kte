@@ -1,0 +1,21 @@
+@param beforeContent: gg.jte.Content
+@param afterContent: gg.jte.Content
+
+<div class="micro-demo-container" x-data="{ activeTab: 'before' }">
+    <div class="micro-demo-tabs">
+        <button type="button" :class="{ 'active': activeTab === 'before' }" @click="activeTab = 'before'">
+            Your Interface
+        </button>
+        <button type="button" :class="{ 'active': activeTab === 'after' }" @click="activeTab = 'after'">
+            Generated DTOs
+        </button>
+    </div>
+    <div class="micro-demo-panes">
+        <div class="micro-demo-pane" x-show="activeTab === 'before'">
+            @template.tags.code(language="kotlin", content=beforeContent)
+        </div>
+        <div class="micro-demo-pane" x-show="activeTab === 'after'">
+            @template.tags.code(language="kotlin", content=afterContent)
+        </div>
+    </div>
+</div>

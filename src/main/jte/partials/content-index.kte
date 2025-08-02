@@ -2,15 +2,48 @@
 @param vm: io.availe.kreplicadocs.model.view.IndexViewModel
 
 <div class="hero-section">
-    <h1>DTO generation for Kotlin CRUD APIs</h1>
-    <p>KReplica generates Kotlin code from interfaces, with explicit control over Create, Data, and Patch variants.</p>
+    <h1>Generate Kotlin DTOs from one interface</h1>
+    <p>KReplica is a KSP plugin that creates type-safe sealed hierarchies for Create, Data, and Patch
+        variants—eliminating boilerplate and runtime surprises.</p>
 </div>
 
-<h2>Get Started in 60 Seconds</h2>
-<p>Add the KSP and KReplica plugins to your module's <code>build.gradle.kts</code> file to start generating DTOs
-    automatically.</p>
+@template.tags.micro-demo(
+beforeContent = @`${vm.snippets[CodeSnippet.HOMEPAGE_MICRO_DEMO_BEFORE]}`,
+afterContent = @`${vm.snippets[CodeSnippet.HOMEPAGE_MICRO_DEMO_AFTER]}`
+)
 
-@template.tags.code(language = "kotlin", content = @`${vm.snippets[CodeSnippet.QUICKSTART_BUILD]}`)
+<div class="hero-cta">
+    <a href="/playground"
+       class="button-primary"
+       hx-get="/playground"
+       hx-target=".main-content"
+       hx-push-url="true"
+       hx-indicator=".page-progress">
+        Try in Playground
+    </a>
+</div>
+
+<div class="differentiators-section">
+    <ul class="differentiators-list">
+        <li>
+            @template.icons.checkmark(width="20", height="20", cssClass="differentiator-icon")
+            <span>Generates <strong>Create, Data & Patch</strong> variants automatically.</span>
+        </li>
+        <li>
+            @template.icons.checkmark(width="20", height="20", cssClass="differentiator-icon")
+            <span><strong>Sealed hierarchies</strong> force exhaustive <code>when</code> expressions.</span>
+        </li>
+        <li>
+            @template.icons.checkmark(width="20", height="20", cssClass="differentiator-icon")
+            <span><strong>Version-aware</strong>, so your code won't compile until you handle new versions.</span>
+        </li>
+        <li>
+            @template.icons.checkmark(width="20", height="20", cssClass="differentiator-icon")
+            <span>Powered by <strong>KSP</strong> for fast, reflection-free performance.</span>
+        </li>
+    </ul>
+</div>
+
 
 <div class="feature-highlight">
     <h2>Bulletproof Your APIs</h2>
@@ -25,10 +58,18 @@
 
     <div class="tour-cta">
         <a href="/guide"
-           class="button-primary"
+           class="button-secondary"
            hx-get="/guide"
            hx-target=".main-content"
            hx-push-url="/guide"
            hx-indicator=".page-progress">See More in the Guide</a>
     </div>
+</div>
+
+<div class="get-started-section">
+    <h2>Get Started in 60 Seconds</h2>
+    <p>Add the KSP and KReplica plugins to your module's <code>build.gradle.kts</code> file to start generating DTOs
+        automatically.</p>
+
+    @template.tags.code(language = "kotlin", content = @`${vm.snippets[CodeSnippet.QUICKSTART_BUILD]}`)
 </div>

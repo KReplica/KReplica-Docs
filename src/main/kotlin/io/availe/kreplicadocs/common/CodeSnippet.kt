@@ -14,5 +14,8 @@ enum class CodeSnippet(val path: String) {
     MAPPER_PATTERN_INTERFACE("mapper-pattern/01-generic-interface.kt"),
     MAPPER_PATTERN_DOMAIN_MODEL("mapper-pattern/02-domain-model.kt"),
     MAPPER_PATTERN_KREPLICA_INTERFACE("mapper-pattern/03-kreplica-interface.kt"),
-    MAPPER_PATTERN_IMPLEMENTATION("mapper-pattern/04-implementation.kt")
+    MAPPER_PATTERN_IMPLEMENTATION("mapper-pattern/04-implementation.kt"),
+
+    HOMEPAGE_MICRO_DEMO_BEFORE("homepage/micro-demo-before.kt"),
+    HOMEPAGE_MICRO_DEMO_AFTER("homepage/micro-demo-after.kt")
 }
