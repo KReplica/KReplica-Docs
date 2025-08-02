@@ -38,17 +38,40 @@
         opacity: 0.7;
         transition: opacity 0.2s ease-in-out;
         z-index: 2;
+    }
 
-        &:hover {
-            opacity: 1;
-        }
+    .copy-code-button:hover {
+        opacity: 1;
+    }
 
-        &:disabled {
-            opacity: 1;
-            cursor: default;
-            background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
-            color: #ffffff;
-        }
+    .copy-code-button:disabled {
+        opacity: 1;
+        cursor: default;
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+        color: #ffffff;
+    }
+
+    .code-block-wrapper.is-plain pre.plain {
+        padding: 1.25rem;
+        border-radius: var(--radius-3);
+        overflow: auto;
+        font-family: var(--font-mono, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace), serif;
+        font-size: 0.75rem;
+        max-inline-size: 100%;
+        margin: 0;
+        background: transparent;
+        color: inherit;
+        white-space: pre;
+    }
+
+    .code-block-wrapper.is-plain code.plain {
+        font-family: var(--font-mono, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace), serif;
+    }
+
+    .code-block-wrapper.alert .copy-code-button {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+        color: #ffffff;
     }
 }

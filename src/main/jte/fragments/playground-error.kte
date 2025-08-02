@@ -1,6 +1,5 @@
 @param message: String
 
-@template.tags.alert(type="danger", content=@`
-    <p><strong>Compilation Failed</strong></p>
-    <pre><code>${message}</code></pre>
-`)
+<div class="playground-content">
+    @template.tags.code(language="text", content=@`${message}`, extraClass="alert is-plain", plain=true)
+</div>
