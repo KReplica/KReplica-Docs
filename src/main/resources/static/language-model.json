@@ -1,7 +1,7 @@
 {
   "commonAnnotations": {
     "Deprecated": {
-      "insertText": "Deprecated(\"$0\")",
+      "insertText": "Deprecated(message = \"$0\")",
       "documentation": "Marks a declaration as deprecated."
     },
     "OptIn": {
@@ -15,7 +15,7 @@
   },
   "annotations": {
     "Replicate.Model": {
-      "insertText": "Replicate.Model($0)",
+      "insertText": "Replicate.Model(variants = [$0])",
       "documentation": "Primary annotation to mark an interface for DTO generation.",
       "parameters": {
         "variants": {
@@ -83,12 +83,13 @@
       }
     },
     "Replicate.Apply": {
-      "insertText": "Replicate.Apply([$0])",
+      "insertText": "Replicate.Apply(annotations = [$0])",
       "documentation": "Applies other annotations (like @Serializable) to generated DTOs.",
       "parameters": {
         "annotations": {
-          "insertText": "[$0]",
+          "insertText": "annotations = [$0]",
           "detail": "Array<KClass>",
+          "valueType": "KClass",
           "sortText": "1"
         }
       }
@@ -120,6 +121,12 @@
         "ENABLED",
         "DISABLED"
       ]
+    }
+  },
+  "kclasses": {
+    "Serializable": {
+      "insertText": "Serializable::class",
+      "documentation": "From kotlinx.serialization. Marks a class as serializable."
     }
   },
   "types": {
