@@ -32,21 +32,21 @@ afterContent = @`${vm.snippets[CodeSnippet.HOMEPAGE_MICRO_DEMO_AFTER]}`
 </div>
 
 <div class="differentiators-section">
-    <ul class="differentiators-list">
-        <li>
-            @template.icons.checkmark(width="20", height="20", cssClass="differentiator-icon")
+    <ul class="feature-list">
+        <li class="feature-item">
+            @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
             <span>Generates <strong>Create, Data & Patch</strong> variants automatically.</span>
         </li>
-        <li>
-            @template.icons.checkmark(width="20", height="20", cssClass="differentiator-icon")
+        <li class="feature-item">
+            @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
             <span><strong>Sealed hierarchies</strong> force exhaustive <code>when</code> expressions.</span>
         </li>
-        <li>
-            @template.icons.checkmark(width="20", height="20", cssClass="differentiator-icon")
+        <li class="feature-item">
+            @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
             <span><strong>Version-aware</strong>, so your code won't compile until you handle new versions.</span>
         </li>
-        <li>
-            @template.icons.checkmark(width="20", height="20", cssClass="differentiator-icon")
+        <li class="feature-item">
+            @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
             <span>Powered by <strong>KSP</strong> for fast, reflection-free performance.</span>
         </li>
     </ul>
