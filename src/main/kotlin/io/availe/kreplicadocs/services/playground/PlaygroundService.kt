@@ -16,7 +16,7 @@ import java.util.concurrent.Executor
 class PlaygroundService(
     private val gradleCompiler: GradleCompiler,
     private val cacheManager: CacheManager,
-    @Qualifier("compilationTaskExecutor") private val compilationExecutor: Executor
+    @param:Qualifier("compilationTaskExecutor") private val compilationExecutor: Executor
 ) {
     private val log = LoggerFactory.getLogger(PlaygroundService::class.java)
     private val permanentCache: Cache by lazy {

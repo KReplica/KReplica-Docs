@@ -66,6 +66,9 @@ tasks.bootJar {
             include("**/*.class")
         }).into("classes")
     })
+    manifest {
+        attributes["Enable-Native-Access"] = "ALL-UNNAMED"
+    }
 }
 
 
