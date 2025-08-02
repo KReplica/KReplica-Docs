@@ -4,7 +4,7 @@ import io.availe.kreplicadocs.model.view.CompletionItem
 import org.springframework.stereotype.Service
 
 @Service
-class CompletionProviderService {
+class PlaygroundCompletionProvider {
 
     private val completions = listOf(
         CompletionItem(

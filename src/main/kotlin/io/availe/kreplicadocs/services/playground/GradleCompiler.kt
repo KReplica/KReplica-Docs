@@ -4,6 +4,7 @@ import io.availe.kreplicadocs.model.CompileRequest
 import io.availe.kreplicadocs.model.CompileResponse
 import org.gradle.tooling.CancellationTokenSource
 import org.gradle.tooling.GradleConnector
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -11,10 +12,12 @@ import java.net.URI
 import java.nio.file.Files
 
 @Service
-class CompilerService {
+class GradleCompiler {
+
+    private val log = LoggerFactory.getLogger(GradleCompiler::class.java)
 
     fun compile(request: CompileRequest, cancellationTokenSource: CancellationTokenSource): CompileResponse {
-        println("[COMPILER] Starting Gradle build for job: ${request.jobId.value}")
+        log.info("Starting Gradle build for job: {}", request.jobId.value)
         val projectDir = Files.createTempDirectory("kreplica-job-${request.jobId.value}").toFile()
 
         try {
@@ -46,7 +49,7 @@ class CompilerService {
                     emptyMap()
                 }
 
-                println("[COMPILER] Gradle build SUCCEEDED for job: ${request.jobId.value}")
+                log.info("Gradle build SUCCEEDED for job: {}", request.jobId.value)
                 return CompileResponse(
                     jobId = request.jobId,
                     sourceCode = request.sourceCode,
@@ -56,7 +59,7 @@ class CompilerService {
                 )
 
             } catch (e: Exception) {
-                println("[COMPILER] Gradle build FAILED for job: ${request.jobId.value}. Exception: ${e.javaClass.simpleName}")
+                log.warn("Gradle build FAILED for job: {}. Exception: {}", request.jobId.value, e.javaClass.simpleName)
                 return CompileResponse(
                     jobId = request.jobId,
                     sourceCode = request.sourceCode,

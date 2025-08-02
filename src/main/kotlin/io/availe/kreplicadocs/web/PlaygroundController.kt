@@ -10,7 +10,7 @@ import io.availe.kreplicadocs.config.CacheNames
 import io.availe.kreplicadocs.model.*
 import io.availe.kreplicadocs.services.CodeSnippetProvider
 import io.availe.kreplicadocs.services.ViewModelFactory
-import io.availe.kreplicadocs.services.playground.SandboxService
+import io.availe.kreplicadocs.services.playground.PlaygroundService
 import jakarta.annotation.PostConstruct
 import org.gradle.tooling.CancellationTokenSource
 import org.gradle.tooling.GradleConnector
@@ -43,7 +43,7 @@ data class JobContext(
 class PlaygroundController(
     private val viewModelFactory: ViewModelFactory,
     private val snippetProvider: CodeSnippetProvider,
-    private val sandboxService: SandboxService,
+    private val playgroundService: PlaygroundService,
     private val templateEngine: TemplateEngine,
     private val cacheManager: CacheManager
 ) {
@@ -129,7 +129,7 @@ class PlaygroundController(
 
             val request = CompileRequest(jobId, sourceCode)
             val cancellationTokenSource = GradleConnector.newCancellationTokenSource()
-            val responseFuture = sandboxService.compile(request, cancellationTokenSource)
+            val responseFuture = playgroundService.submitCompilation(request, cancellationTokenSource)
             val jobContext =
                 JobContext(responseFuture, cancellationTokenSource, tabSessionId, newJobState)
 
