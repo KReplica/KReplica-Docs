@@ -12,9 +12,11 @@
     </div>
     <div class="micro-demo-panes">
         <div class="micro-demo-pane" x-show="activeTab === 'before'">
+            <div class="micro-demo-heading">Your Interface</div>
             @template.tags.code(language="kotlin", content=beforeContent)
         </div>
         <div class="micro-demo-pane" x-show="activeTab === 'after'">
+            <div class="micro-demo-heading">Generated DTOs</div>
             @template.tags.code(language="kotlin", content=afterContent)
         </div>
     </div>
