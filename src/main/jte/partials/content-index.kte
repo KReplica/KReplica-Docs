@@ -1,72 +1,53 @@
 @import io.availe.kreplicadocs.common.CodeSnippet
 @param vm: io.availe.kreplicadocs.model.view.IndexViewModel
 
-<div class="hero-grid">
-    <div class="hero-copy">
-        <div class="hero-section">
-            <h1>Generate Kotlin DTOs from one interface</h1>
-            <p>KReplica is a KSP plugin that creates type-safe sealed hierarchies for Create, Data, and Patch
-                variants—eliminating boilerplate and runtime surprises.</p>
-        </div>
-        <div class="hero-cta">
-            <div class="button-group">
-                <a href="/playground"
-                   class="button-primary"
-                   hx-get="/playground"
-                   hx-target=".main-content"
-                   hx-push-url="true"
-                   hx-indicator=".page-progress">
-                    Try in Playground
-                </a>
-                <a href="/guide"
-                   class="button-secondary"
-                   hx-get="/guide"
-                   hx-target=".main-content"
-                   hx-push-url="true"
-                   hx-indicator=".page-progress">
-                    See the Guide
-                </a>
-            </div>
-        </div>
-    </div>
+<div class="hero-section">
+    <h1>Generate Kotlin DTOs from one interface</h1>
+    <p>KReplica is a KSP plugin that creates type-safe sealed hierarchies for Create, Data, and Patch
+        variants—eliminating boilerplate and runtime surprises.</p>
+</div>
 
-    <div class="hero-demo">
-        @template.tags.micro-demo(
-        beforeContent = @`${vm.snippets[CodeSnippet.HOMEPAGE_MICRO_DEMO_BEFORE]}`,
-        afterContent = @`${vm.snippets[CodeSnippet.HOMEPAGE_MICRO_DEMO_AFTER]}`
-        )
-    </div>
+@template.tags.micro-demo(
+beforeContent = @`${vm.snippets[CodeSnippet.HOMEPAGE_MICRO_DEMO_BEFORE]}`,
+afterContent = @`${vm.snippets[CodeSnippet.HOMEPAGE_MICRO_DEMO_AFTER]}`
+)
+
+<div class="hero-cta">
+    <a href="/playground"
+       class="button-primary"
+       hx-get="/playground"
+       hx-target=".main-content"
+       hx-push-url="true"
+       hx-indicator=".page-progress">
+        Try in Playground
+    </a>
+    <a href="/guide"
+       class="button-secondary"
+       hx-get="/guide"
+       hx-target=".main-content"
+       hx-push-url="/guide"
+       hx-indicator=".page-progress">
+        See the Guide
+    </a>
 </div>
 
 <div class="differentiators-section">
     <ul class="differentiators-list">
-        <li class="feature-card">
+        <li>
             @template.icons.checkmark(width="20", height="20", cssClass="differentiator-icon")
-            <div>
-                <div class="feature-title">Create, Data & Patch</div>
-                <div class="feature-text">All variants generated automatically.</div>
-            </div>
+            <span>Generates <strong>Create, Data & Patch</strong> variants automatically.</span>
         </li>
-        <li class="feature-card">
+        <li>
             @template.icons.checkmark(width="20", height="20", cssClass="differentiator-icon")
-            <div>
-                <div class="feature-title">Sealed hierarchies</div>
-                <div class="feature-text">Forces exhaustive <code>when</code> expressions.</div>
-            </div>
+            <span><strong>Sealed hierarchies</strong> force exhaustive <code>when</code> expressions.</span>
         </li>
-        <li class="feature-card">
+        <li>
             @template.icons.checkmark(width="20", height="20", cssClass="differentiator-icon")
-            <div>
-                <div class="feature-title">Version-aware</div>
-                <div class="feature-text">Won’t compile until new versions are handled.</div>
-            </div>
+            <span><strong>Version-aware</strong>, so your code won't compile until you handle new versions.</span>
         </li>
-        <li class="feature-card">
+        <li>
             @template.icons.checkmark(width="20", height="20", cssClass="differentiator-icon")
-            <div>
-                <div class="feature-title">Built on KSP</div>
-                <div class="feature-text">Fast, reflection-free generation.</div>
-            </div>
+            <span>Powered by <strong>KSP</strong> for fast, reflection-free performance.</span>
         </li>
     </ul>
 </div>
@@ -87,37 +68,15 @@
            class="button-secondary"
            hx-get="/guide"
            hx-target=".main-content"
-           hx-push-url="true"
+           hx-push-url="/guide"
            hx-indicator=".page-progress">See More in the Guide</a>
     </div>
 </div>
 
 <div class="get-started-section">
     <h2>Get Started in 60 Seconds</h2>
-    <ol class="quick-steps">
-        <li>Add the KSP and KReplica plugins</li>
-        <li>Annotate a simple interface</li>
-        <li>Run Gradle and use the generated DTOs</li>
-    </ol>
+    <p>Add the KSP and KReplica plugins to your module's <code>build.gradle.kts</code> file to start generating DTOs
+        automatically.</p>
+
     @template.tags.code(language = "kotlin", content = @`${vm.snippets[CodeSnippet.QUICKSTART_BUILD]}`)
 </div>
-
-<section class="cta-band">
-    <h3>Build safer APIs faster</h3>
-    <p>Generate variant-aware DTOs from one interface and keep versioning under control.</p>
-    <div class="button-group">
-        <a href="/playground"
-           class="button-primary"
-           hx-get="/playground"
-           hx-target=".main-content"
-           hx-push-url="true"
-           hx-indicator=".page-progress">Try in Playground</a>
-        <a href="/guide"
-           class="button-secondary"
-           hx-get="/guide"
-           hx-target=".main-content"
-           hx-push-url="true"
-           hx-indicator=".page-progress">Read the Guide</a>
-        <a href="${vm.properties.repoUrl}" target="_blank" rel="noreferrer" class="button-link">GitHub</a>
-    </div>
-</section>

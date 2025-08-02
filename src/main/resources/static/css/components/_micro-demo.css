@@ -1,0 +1,97 @@
+@layer components {
+    .micro-demo-container {
+        margin-block: var(--space-7);
+    }
+
+    .micro-demo-mobile {
+        display: block;
+    }
+
+    .micro-demo-tabs {
+        display: flex;
+        gap: var(--space-2);
+        margin-block-end: var(--space-4);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-block-end: 1px solid var(--border-color);
+    }
+
+    .micro-demo-tabs button {
+        padding: 0.6rem 1rem;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 0.95rem;
+        color: var(--text-light);
+        border-block-end: 0.1875rem solid transparent;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .micro-demo-tabs button:hover {
+        color: var(--primary-color);
+    }
+
+    .micro-demo-tabs button.active {
+        color: var(--secondary-color);
+        border-block-end-color: var(--secondary-color);
+    }
+
+    .micro-demo-panes {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+        min-inline-size: 0;
+    }
+
+    .micro-demo-pane {
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-3);
+        box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+        padding: var(--space-5);
+        min-inline-size: 0;
+    }
+
+    .micro-demo-desktop {
+        display: none;
+    }
+
+    .micro-demo-card {
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-3);
+        box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+        padding: var(--space-6);
+        min-inline-size: 0;
+    }
+
+    .micro-demo-card-header {
+        font-weight: 600;
+        color: var(--text-light);
+        margin-block-end: var(--space-3);
+    }
+
+    .micro-demo-card .code-block-wrapper,
+    .micro-demo-card pre[class*="language-"] {
+        max-inline-size: 100%;
+    }
+
+    @media (min-width: 48.0625rem) {
+        .micro-demo-mobile {
+            display: none;
+        }
+
+        .micro-demo-desktop {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-7);
+            align-items: start;
+        }
+
+        .micro-demo-desktop > * {
+            min-inline-size: 0;
+        }
+    }
+}
