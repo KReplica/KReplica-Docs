@@ -7,6 +7,7 @@
      :class="{ 'is-open': isOpen }"
      @keydown.escape.window="isOpen = false"
      @click.outside="isOpen = false"
+     @close.stop="isOpen = false"
      x-cloak>
 
     <div class="fab-menu" data-js-id="fab-menu">

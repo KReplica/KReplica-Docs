@@ -4,6 +4,7 @@ let kreplicaEditor = null;
 let cleanupFns = [];
 let resizeObserver = null;
 let outputObserver = null;
+let isInitializing = false;
 
 const MOBILE_BREAKPOINT_PX = 992;
 
@@ -58,9 +59,10 @@ function initOutputObserver() {
 }
 
 function initKReplicaPlayground() {
-    if (kreplicaEditor) return;
+    if (kreplicaEditor || isInitializing) return;
     const editorNode = document.getElementById('kreplica-editor');
     if (!editorNode) return;
+    isInitializing = true;
     require.config({paths: {vs: 'https://unpkg.com/monaco-editor@0.52.2/min/vs'}});
     require(['vs/editor/editor.main'], async () => {
         const res = await fetch('/api/completions');
@@ -110,6 +112,7 @@ function initKReplicaPlayground() {
         };
         document.addEventListener('visibilitychange', onVisibility);
         cleanupFns.push(() => document.removeEventListener('visibilitychange', onVisibility));
+        isInitializing = false;
     });
 }
 
@@ -151,17 +154,11 @@ function setupEventListeners() {
     cleanupFns.push(() => window.removeEventListener('theme-changed', themeChangeHandler));
 }
 
-export function init() {
-    initKReplicaPlayground();
-    setupEventListeners();
-    initOutputObserver();
-}
-
-export function getEditorInstance() {
+function getEditorInstance() {
     return kreplicaEditor;
 }
 
-export function disposeEditor() {
+function disposeEditor() {
     cleanupFns.forEach(fn => {
         try {
             fn();
@@ -175,9 +172,10 @@ export function disposeEditor() {
         kreplicaEditor.dispose();
         kreplicaEditor = null;
     }
+    isInitializing = false;
 }
 
-export function setEditorValue(value) {
+function setEditorValue(value) {
     if (!kreplicaEditor) return;
     kreplicaEditor.setValue(value);
     const currentTextarea = getHiddenTextarea();
@@ -185,7 +183,7 @@ export function setEditorValue(value) {
     requestAnimationFrame(resizeEditorToContent);
 }
 
-export function setEditorModelFromSource(value) {
+function setEditorModelFromSource(value) {
     if (!kreplicaEditor) return;
     const oldModel = kreplicaEditor.getModel();
     const newModel = monaco.editor.createModel(value, 'kotlin');
@@ -196,7 +194,7 @@ export function setEditorModelFromSource(value) {
     requestAnimationFrame(resizeEditorToContent);
 }
 
-export function updateEditorAfterSwap() {
+function updateEditorAfterSwap() {
     const container = document.getElementById('editor-source-container');
     if (!container || !kreplicaEditor) return;
     const newSource = container.querySelector('textarea[name="source"]')?.value;
@@ -206,4 +204,20 @@ export function updateEditorAfterSwap() {
     clearPlaygroundOutput();
 }
 
-export {clearPlaygroundOutput};
+const publicApi = {
+    getEditorInstance,
+    updateEditorAfterSwap,
+};
+
+export default {
+    init() {
+        initKReplicaPlayground();
+        setupEventListeners();
+        initOutputObserver();
+        window.KREPLICA_PLAYGROUND = publicApi;
+    },
+    destroy() {
+        disposeEditor();
+        delete window.KREPLICA_PLAYGROUND;
+    }
+};

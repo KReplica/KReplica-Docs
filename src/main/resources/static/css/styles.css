@@ -181,6 +181,13 @@
         text-align: center;
         margin-block-start: 1.875rem;
     }
+
+    .playground-wrapper {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        min-height: 0;
+    }
 }
 
 @layer utilities {

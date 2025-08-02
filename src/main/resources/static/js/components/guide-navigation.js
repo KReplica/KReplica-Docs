@@ -34,14 +34,22 @@ function updateFabMenu(sectionId) {
     }
 }
 
+const handleSectionActive = (event) => {
+    const {sectionId} = event.detail || {};
+    if (sectionId) {
+        updateSidebar(sectionId);
+        updateFabMenu(sectionId);
+    }
+};
+
 export function initGuideNavigation() {
     if (isInitialized) return;
-    document.body.addEventListener('section-active', (event) => {
-        const {sectionId} = event.detail || {};
-        if (sectionId) {
-            updateSidebar(sectionId);
-            updateFabMenu(sectionId);
-        }
-    });
+    document.body.addEventListener('section-active', handleSectionActive);
     isInitialized = true;
+}
+
+export function destroyGuideNavigation() {
+    if (!isInitialized) return;
+    document.body.removeEventListener('section-active', handleSectionActive);
+    isInitialized = false;
 }

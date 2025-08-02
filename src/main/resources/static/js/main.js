@@ -1,7 +1,26 @@
 import {themeSwitcher} from './components/theme-switcher.js';
-import * as playground from './pages/playground.js';
 
-window.KREPLICA_PLAYGROUND = playground;
+let activeController = null;
+
+async function loadController(name, element) {
+    try {
+        const controllerModule = await import(`./controllers/${name}_controller.js`);
+        activeController = controllerModule.default;
+        if (activeController && typeof activeController.init === 'function') {
+            activeController.init(element);
+        }
+    } catch (e) {
+        console.error(`Failed to load controller: ${name}`, e);
+        activeController = null;
+    }
+}
+
+function destroyActiveController() {
+    if (activeController && typeof activeController.destroy === 'function') {
+        activeController.destroy();
+    }
+    activeController = null;
+}
 
 window.generateUniqueId = function () {
     if (crypto.randomUUID) return crypto.randomUUID();
@@ -10,22 +29,16 @@ window.generateUniqueId = function () {
     );
 };
 
-async function initializeApp() {
-    if (document.querySelector('[data-js-id="guide-sidebar-links"]')) {
-        const guide = await import('./pages/guide.js');
-        guide.init();
-    }
-    if (document.getElementById('kreplica-editor')) {
-        playground.init();
-    }
-}
-
 document.addEventListener('alpine:init', () => {
     Alpine.data('themeSwitcher', themeSwitcher);
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    void initializeApp();
+    const mainContent = document.querySelector('.main-content > [data-controller]');
+    if (mainContent) {
+        const controllerName = mainContent.dataset.controller;
+        void loadController(controllerName, mainContent);
+    }
 });
 
 document.body.addEventListener('htmx:configRequest', evt => {
@@ -35,39 +48,19 @@ document.body.addEventListener('htmx:configRequest', evt => {
     }
 });
 
-const afterSwapTasks = (elt) => {
-    Prism.highlightAllUnder(elt);
-    void initializeApp();
-};
-
-const handleOutputReady = elt => {
-    if (elt.id === 'playground-output') window.dispatchEvent(new CustomEvent('output-ready'));
-};
-
-document.body.addEventListener('htmx:afterSwap', e => {
-    const elt = e.detail.elt;
-    afterSwapTasks(elt);
-    handleOutputReady(elt);
-});
-
-document.body.addEventListener('htmx:oobAfterSwap', e => {
-    const elt = e.detail.elt;
-    afterSwapTasks(elt);
-    handleOutputReady(elt);
-});
-
-document.body.addEventListener('htmx:afterSettle', async () => {
-    if (document.querySelector('[data-js-id="guide-sidebar-links"]')) {
-        const {initScrollSpy} = await import('./components/scroll-spy.js');
-        initScrollSpy();
+document.body.addEventListener('htmx:beforeSwap', (event) => {
+    if (event.detail.target.classList.contains('main-content')) {
+        destroyActiveController();
     }
 });
 
-document.body.addEventListener('htmx:beforeSwap', () => {
-    const target = event?.detail?.target;
-    if (target?.classList?.contains('main-content')) {
-        import('./pages/playground.js').then(p => {
-            if (p.getEditorInstance()) p.disposeEditor();
-        });
+document.body.addEventListener('htmx:afterSwap', e => {
+    const mainContent = e.detail.target.querySelector('[data-controller]') || e.detail.target;
+    if (mainContent && mainContent.dataset.controller) {
+        void loadController(mainContent.dataset.controller, mainContent);
+    }
+    Prism.highlightAllUnder(e.detail.elt);
+    if (e.detail.elt.id === 'playground-output') {
+        window.dispatchEvent(new CustomEvent('output-ready'));
     }
 });

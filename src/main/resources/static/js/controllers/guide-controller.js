@@ -1,5 +1,5 @@
-import {initScrollSpy, pauseScrollSpy, resumeScrollSpy} from "../components/scroll-spy.js";
-import {initGuideNavigation} from "../components/guide-navigation.js";
+import {destroyScrollSpy, initScrollSpy, pauseScrollSpy, resumeScrollSpy} from "../components/scroll-spy.js";
+import {destroyGuideNavigation, initGuideNavigation} from "../components/guide-navigation.js";
 
 const HEADER_OFFSET_PX = 80;
 let scrollSpyTimeoutId;
@@ -45,15 +45,20 @@ function bindFabNavClicks() {
     fab.addEventListener("click", e => {
         const anchor = e.target.closest('a[href^="#"]');
         if (!anchor) return;
-        const fabContainer = e.target.closest("[x-data]");
-        if (fabContainer?.__x) fabContainer.__x.data.isOpen = false;
+        fab.dispatchEvent(new CustomEvent('close'));
         handleNavClick(e, anchor.getAttribute("href").slice(1));
     });
 }
 
-export function init() {
-    initGuideNavigation();
-    initScrollSpy();
-    bindSidebarNavClicks();
-    bindFabNavClicks();
-}
+export default {
+    init() {
+        initGuideNavigation();
+        initScrollSpy();
+        bindSidebarNavClicks();
+        bindFabNavClicks();
+    },
+    destroy() {
+        destroyScrollSpy();
+        destroyGuideNavigation();
+    }
+};
