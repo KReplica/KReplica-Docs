@@ -5,6 +5,7 @@ let cleanupFns = [];
 let resizeObserver = null;
 let outputObserver = null;
 let isInitializing = false;
+let languageModel = null;
 
 const MOBILE_BREAKPOINT_PX = 992;
 
@@ -58,6 +59,131 @@ function initOutputObserver() {
     });
 }
 
+function getCompletionProvider() {
+    return {
+        triggerCharacters: ['@', '.', '(', ',', ' ', '['],
+        provideCompletionItems: (model, position) => {
+            if (!languageModel) return {suggestions: []};
+
+            const textUntilPosition = model.getValueInRange({
+                startLineNumber: position.lineNumber,
+                startColumn: 1,
+                endLineNumber: position.lineNumber,
+                endColumn: position.column
+            });
+
+            const annotationMatch = textUntilPosition.match(/@([\w.]+)\s*\(([^)]*)$/);
+
+            // Context: @ trigger, but not inside parens
+            if (textUntilPosition.endsWith('@') && !annotationMatch) {
+                const kreplicaAnnos = Object.keys(languageModel.annotations).map(key => ({
+                    label: `@${key}`,
+                    kind: monaco.languages.CompletionItemKind.Function,
+                    documentation: languageModel.annotations[key].documentation,
+                    insertText: languageModel.annotations[key].insertText.substring(1),
+                    insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                }));
+                const commonAnnos = Object.keys(languageModel.commonAnnotations).map(key => ({
+                    label: `@${key}`,
+                    kind: monaco.languages.CompletionItemKind.Function,
+                    documentation: languageModel.commonAnnotations[key].documentation,
+                    insertText: languageModel.commonAnnotations[key].insertText,
+                    insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                }));
+                return {suggestions: [...kreplicaAnnos, ...commonAnnos]};
+            }
+
+            // Context: Inside annotation parens
+            if (annotationMatch) {
+                const annotationName = annotationMatch[1];
+                const paramsText = annotationMatch[2];
+
+                // Special case for @Replicate.Apply
+                if (annotationName === "Replicate.Apply" && paramsText.endsWith('[')) {
+                    return {
+                        suggestions: [{
+                            label: 'Serializable::class',
+                            kind: monaco.languages.CompletionItemKind.Class,
+                            insertText: 'Serializable::class',
+                            documentation: 'A common annotation for kotlinx.serialization.'
+                        }]
+                    };
+                }
+
+                // Check for array context like variants = [
+                const arrayParamMatch = paramsText.match(/(\w+)\s*=\s*\[([^\]]*)$/);
+                if (arrayParamMatch) {
+                    const paramName = arrayParamMatch[1];
+                    const annotationDef = languageModel.annotations[annotationName];
+                    const paramDef = annotationDef?.parameters[paramName];
+                    if (paramDef?.valueContext) {
+                        const enumDef = languageModel.enums[paramDef.valueContext];
+                        if (enumDef) {
+                            return {
+                                suggestions: enumDef.members.map(member => ({
+                                    label: `${paramDef.valueContext}.${member}`,
+                                    kind: monaco.languages.CompletionItemKind.EnumMember,
+                                    insertText: `${paramDef.valueContext}.${member}`,
+                                }))
+                            };
+                        }
+                    }
+                }
+
+                // Default: suggest parameters
+                const annotation = languageModel.annotations[annotationName];
+                if (annotation) {
+                    const typedParams = paramsText.split(',').map(p => p.split('=')[0].trim());
+                    const suggestions = Object.entries(annotation.parameters)
+                        .filter(([paramName]) => !typedParams.includes(paramName))
+                        .map(([paramName, paramInfo]) => ({
+                            label: paramName,
+                            kind: monaco.languages.CompletionItemKind.Property,
+                            detail: paramInfo.detail,
+                            documentation: paramInfo.documentation,
+                            insertText: paramInfo.insertText,
+                            sortText: paramInfo.sortText || "99",
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                        }));
+                    return {suggestions};
+                }
+            }
+
+            // Context: Dot notation for enums or types
+            const dotMatch = textUntilPosition.match(/(\w+)\.$/);
+            if (dotMatch) {
+                const typeName = dotMatch[1];
+                const enumDef = languageModel.enums[typeName];
+                if (enumDef) {
+                    return {
+                        suggestions: enumDef.members.map(member => ({
+                            label: member,
+                            kind: monaco.languages.CompletionItemKind.EnumMember,
+                            insertText: member,
+                        }))
+                    };
+                }
+                const typeDef = languageModel.types[typeName];
+                if (typeDef) {
+                    return {
+                        suggestions: typeDef.members.map(member => ({
+                            label: member.name,
+                            kind: monaco.languages.CompletionItemKind.Method,
+                            detail: member.detail,
+                            documentation: member.documentation,
+                            insertText: member.insertText,
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                        }))
+                    };
+                }
+            }
+
+            return {suggestions: []};
+        }
+    };
+}
+
+
 function initKReplicaPlayground() {
     if (kreplicaEditor || isInitializing) return;
     const editorNode = document.getElementById('kreplica-editor');
@@ -65,14 +191,15 @@ function initKReplicaPlayground() {
     isInitializing = true;
     require.config({paths: {vs: 'https://unpkg.com/monaco-editor@0.52.2/min/vs'}});
     require(['vs/editor/editor.main'], async () => {
-        const res = await fetch('/api/completions');
-        const completionsData = await res.json();
-        const suggestions = completionsData.map(item => ({
-            label: item.label,
-            kind: monaco.languages.CompletionItemKind[item.kind] || monaco.languages.CompletionItemKind.Text,
-            insertText: item.insertText,
-            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
-        }));
+        try {
+            const res = await fetch('/language-model.json');
+            if (!res.ok) throw new Error(`Failed to load: ${res.statusText}`);
+            languageModel = await res.json();
+        } catch (e) {
+            console.error("Failed to load KReplica language model:", e);
+            languageModel = null;
+        }
+
         const hiddenTextareaEl = getHiddenTextarea();
         const initialCode = hiddenTextareaEl?.value || '';
         const currentSiteTheme = document.documentElement.getAttribute('data-theme') || 'light';
@@ -88,16 +215,17 @@ function initKReplicaPlayground() {
             scrollbar: {vertical: isMobile() ? 'auto' : 'hidden'},
             lineHeight: 20
         });
-        monaco.languages.registerCompletionItemProvider('kotlin', {
-            triggerCharacters: ['@', '.'],
-            provideCompletionItems: () => ({suggestions})
-        });
+
+        monaco.languages.registerCompletionItemProvider('kotlin', getCompletionProvider());
+
         kreplicaEditor.onDidChangeModelContent(() => {
             const currentTextarea = getHiddenTextarea();
             if (currentTextarea) currentTextarea.value = kreplicaEditor.getValue();
         });
+
         kreplicaEditor.onDidContentSizeChange(resizeEditorToContent);
         resizeEditorToContent();
+
         resizeObserver = new ResizeObserver(resizeEditorToContent);
         const observeTarget = editorNode.parentElement || editorNode;
         resizeObserver.observe(observeTarget);

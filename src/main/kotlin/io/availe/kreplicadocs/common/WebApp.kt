@@ -18,10 +18,5 @@ object WebApp {
             const val TEMPLATE_SWAP = "/playground/templates"
             const val COMPILE = "/playground/compile"
         }
-
-        object Api {
-            const val COMPLETIONS = "/api/completions"
-        }
     }
-
 }
