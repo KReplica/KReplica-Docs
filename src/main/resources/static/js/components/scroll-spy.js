@@ -1,5 +1,7 @@
 import {rafThrottle} from "../utils/throttle.js";
 
+const SCROLL_OFFSET_PX = 85;
+
 let activeScrollListener = null;
 let activeResizeListener = null;
 let isScrollSpyPaused = false;
@@ -13,18 +15,24 @@ export function resumeScrollSpy() {
 }
 
 export function initScrollSpy() {
-    if (activeScrollListener) window.removeEventListener('scroll', activeScrollListener);
-    if (activeResizeListener) window.removeEventListener('resize', activeResizeListener);
+    if (activeScrollListener) window.removeEventListener("scroll", activeScrollListener);
+    if (activeResizeListener) window.removeEventListener("resize", activeResizeListener);
 
     const linksContainer = document.querySelector('[data-js-id="guide-sidebar-links"]');
-    if (!linksContainer) return;
+    if (!linksContainer) {
+        console.error("[ScrollSpy] Missing sidebar container");
+        return;
+    }
 
     const sections = Array.from(linksContainer.querySelectorAll('a[href^="#"]'))
-        .map(a => document.getElementById(a.getAttribute('href').slice(1)))
+        .map(a => document.getElementById(a.getAttribute("href").slice(1)))
         .filter(Boolean)
         .sort((a, b) => a.offsetTop - b.offsetTop);
 
-    if (!sections.length) return;
+    if (!sections.length) {
+        console.error("[ScrollSpy] No sections found");
+        return;
+    }
 
     let lastActiveId = null;
 
@@ -39,26 +47,25 @@ export function initScrollSpy() {
             newActiveId = sections[sections.length - 1].id;
         } else {
             const scrollY = window.scrollY;
-            const offset = 85;
             for (const section of sections) {
-                if (section.offsetTop - offset <= scrollY) newActiveId = section.id;
+                if (section.offsetTop - SCROLL_OFFSET_PX <= scrollY) newActiveId = section.id;
                 else break;
             }
         }
 
-        if (!newActiveId && sections.length) newActiveId = sections[0].id;
+        if (!newActiveId) newActiveId = sections[0].id;
 
         if (newActiveId !== lastActiveId) {
             lastActiveId = newActiveId;
-            document.body.dispatchEvent(new CustomEvent('section-active', {detail: {sectionId: newActiveId}}));
+            document.body.dispatchEvent(new CustomEvent("section-active", {detail: {sectionId: newActiveId}}));
         }
     };
 
     activeScrollListener = rafThrottle(handleScroll);
     activeResizeListener = rafThrottle(initScrollSpy);
 
-    window.addEventListener('scroll', activeScrollListener, {passive: true});
-    window.addEventListener('resize', activeResizeListener);
+    window.addEventListener("scroll", activeScrollListener, {passive: true});
+    window.addEventListener("resize", activeResizeListener);
 
     requestAnimationFrame(handleScroll);
 }

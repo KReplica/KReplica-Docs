@@ -1,3 +1,5 @@
+import {getMonacoTheme} from '../utils/theme.js';
+
 let kreplicaEditor = null;
 let cleanupFns = [];
 let resizeObserver = null;
@@ -11,19 +13,9 @@ const ACTIONS = {
     CLEAR_OUTPUT: 'clear-output'
 };
 
-const THEME_TO_MONACO = {
-    light: 'vs-dark',
-    blue: 'vs',
-    dark: 'vs-dark'
-};
+const isMobile = () => window.innerWidth < MOBILE_BREAKPOINT_PX;
 
-function isMobile() {
-    return window.innerWidth < MOBILE_BREAKPOINT_PX;
-}
-
-function getHiddenTextarea() {
-    return document.querySelector('textarea[name="source"]');
-}
+const getHiddenTextarea = () => document.querySelector('textarea[name="source"]');
 
 function resizeEditorToContent() {
     if (!kreplicaEditor) return;
@@ -37,7 +29,7 @@ function resizeEditorToContent() {
     }
     const height = kreplicaEditor.getContentHeight();
     editorNode.style.height = height + 'px';
-    const width = editorNode.clientWidth || editorNode.parentElement.clientWidth || 0;
+    const width = editorNode.clientWidth || editorNode.parentElement?.clientWidth || 0;
     kreplicaEditor.layout({width, height});
 }
 
@@ -45,7 +37,7 @@ function initOutputObserver() {
     if (outputObserver) outputObserver.disconnect();
     const outputNode = document.getElementById('playground-output');
     if (!outputNode) return;
-    const observerCallback = (mutationsList) => {
+    const observerCallback = mutationsList => {
         for (const mutation of mutationsList) {
             if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
                 outputObserver.disconnect();
@@ -70,61 +62,54 @@ function initKReplicaPlayground() {
     const editorNode = document.getElementById('kreplica-editor');
     if (!editorNode) return;
     require.config({paths: {vs: 'https://unpkg.com/monaco-editor@0.52.2/min/vs'}});
-    require(['vs/editor/editor.main'], function () {
-        fetch('/api/completions')
-            .then(r => r.json())
-            .then(completionsData => {
-                const KREPLICA_COMPLETIONS = completionsData.map(item => ({
-                    label: item.label,
-                    kind: monaco.languages.CompletionItemKind[item.kind] || monaco.languages.CompletionItemKind.Text,
-                    insertText: item.insertText,
-                    insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
-                }));
-                const hiddenTextareaEl = getHiddenTextarea();
-                const initialCode = hiddenTextareaEl ? hiddenTextareaEl.value : '';
-                const currentSiteTheme = document.documentElement.getAttribute('data-theme') || 'light';
-                const initialMonacoTheme = THEME_TO_MONACO[currentSiteTheme] || 'vs-dark';
-                kreplicaEditor = monaco.editor.create(editorNode, {
-                    value: initialCode,
-                    language: 'kotlin',
-                    automaticLayout: false,
-                    theme: initialMonacoTheme,
-                    minimap: {enabled: false},
-                    folding: true,
-                    scrollBeyondLastLine: false,
-                    scrollbar: {vertical: isMobile() ? 'auto' : 'hidden'},
-                    lineHeight: 20
-                });
-                monaco.languages.registerCompletionItemProvider('kotlin', {
-                    triggerCharacters: ['@', '.'],
-                    provideCompletionItems() {
-                        return {suggestions: KREPLICA_COMPLETIONS};
-                    }
-                });
-                kreplicaEditor.onDidChangeModelContent(() => {
-                    const currentTextarea = getHiddenTextarea();
-                    if (currentTextarea) currentTextarea.value = kreplicaEditor.getValue();
-                });
-                kreplicaEditor.onDidContentSizeChange(resizeEditorToContent);
-                resizeEditorToContent();
-                resizeObserver = new ResizeObserver(resizeEditorToContent);
-                const observeTarget = editorNode.parentElement || editorNode;
-                resizeObserver.observe(observeTarget);
-                cleanupFns.push(() => {
-                    if (resizeObserver) {
-                        try {
-                            resizeObserver.disconnect();
-                        } catch {
-                        }
-                        resizeObserver = null;
-                    }
-                });
-                const onVisibility = () => {
-                    if (document.visibilityState === 'visible') resizeEditorToContent();
-                };
-                document.addEventListener('visibilitychange', onVisibility);
-                cleanupFns.push(() => document.removeEventListener('visibilitychange', onVisibility));
-            });
+    require(['vs/editor/editor.main'], async () => {
+        const res = await fetch('/api/completions');
+        const completionsData = await res.json();
+        const suggestions = completionsData.map(item => ({
+            label: item.label,
+            kind: monaco.languages.CompletionItemKind[item.kind] || monaco.languages.CompletionItemKind.Text,
+            insertText: item.insertText,
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+        }));
+        const hiddenTextareaEl = getHiddenTextarea();
+        const initialCode = hiddenTextareaEl?.value || '';
+        const currentSiteTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const initialMonacoTheme = getMonacoTheme(currentSiteTheme);
+        kreplicaEditor = monaco.editor.create(editorNode, {
+            value: initialCode,
+            language: 'kotlin',
+            automaticLayout: false,
+            theme: initialMonacoTheme,
+            minimap: {enabled: false},
+            folding: true,
+            scrollBeyondLastLine: false,
+            scrollbar: {vertical: isMobile() ? 'auto' : 'hidden'},
+            lineHeight: 20
+        });
+        monaco.languages.registerCompletionItemProvider('kotlin', {
+            triggerCharacters: ['@', '.'],
+            provideCompletionItems: () => ({suggestions})
+        });
+        kreplicaEditor.onDidChangeModelContent(() => {
+            const currentTextarea = getHiddenTextarea();
+            if (currentTextarea) currentTextarea.value = kreplicaEditor.getValue();
+        });
+        kreplicaEditor.onDidContentSizeChange(resizeEditorToContent);
+        resizeEditorToContent();
+        resizeObserver = new ResizeObserver(resizeEditorToContent);
+        const observeTarget = editorNode.parentElement || editorNode;
+        resizeObserver.observe(observeTarget);
+        cleanupFns.push(() => {
+            if (resizeObserver) {
+                resizeObserver.disconnect();
+                resizeObserver = null;
+            }
+        });
+        const onVisibility = () => {
+            if (document.visibilityState === 'visible') resizeEditorToContent();
+        };
+        document.addEventListener('visibilitychange', onVisibility);
+        cleanupFns.push(() => document.removeEventListener('visibilitychange', onVisibility));
     });
 }
 
@@ -138,8 +123,7 @@ function resetPlayground() {
     clearPlaygroundOutput();
     const container = document.getElementById('editor-source-container');
     if (!container) return;
-    const slugEl = container.querySelector('[data-template-slug]');
-    const slug = slugEl ? slugEl.dataset.templateSlug : null;
+    const slug = container.querySelector('[data-template-slug]')?.dataset.templateSlug || null;
     if (!slug) return;
     const url = `/playground/templates?template-select=${slug}`;
     htmx.ajax('GET', url, {target: '#editor-source-container', swap: 'innerHTML'});
@@ -148,24 +132,15 @@ function resetPlayground() {
 function setupEventListeners() {
     const playgroundContainer = document.querySelector('.playground-container');
     if (!playgroundContainer) return;
-    const onClick = (e) => {
-        const actionTarget = e.target.closest('[data-action]');
-        if (!actionTarget) return;
-        const action = actionTarget.dataset.action;
-        switch (action) {
-            case ACTIONS.RUN:
-                break;
-            case ACTIONS.RESET_ALL:
-                if (!e.target.closest('.split-button-arrow')) resetPlayground();
-                break;
-            case ACTIONS.CLEAR_OUTPUT:
-                clearPlaygroundOutput();
-                break;
-        }
+    const onClick = e => {
+        const action = e.target.closest('[data-action]')?.dataset.action;
+        if (!action) return;
+        if (action === ACTIONS.RESET_ALL && !e.target.closest('.split-button-arrow')) resetPlayground();
+        if (action === ACTIONS.CLEAR_OUTPUT) clearPlaygroundOutput();
     };
     playgroundContainer.addEventListener('click', onClick);
     cleanupFns.push(() => playgroundContainer.removeEventListener('click', onClick));
-    const themeChangeHandler = (e) => {
+    const themeChangeHandler = e => {
         const monacoTheme = e?.detail?.monacoTheme;
         if (kreplicaEditor && monacoTheme) {
             monaco.editor.setTheme(monacoTheme);

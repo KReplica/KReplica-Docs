@@ -1,49 +1,27 @@
-const THEME_TO_MONACO = {
-    light: 'vs-dark',
-    blue: 'vs',
-    dark: 'vs-dark'
-};
+import {getMonacoTheme, initTheme, setTheme, THEMES} from "../utils/theme.js";
 
 export function themeSwitcher() {
     return {
-        themes: ['light', 'blue', 'dark'],
-        theme: 'light',
-        nextTheme: 'blue',
+        themes: THEMES,
+        theme: "light",
         get monacoTheme() {
-            return THEME_TO_MONACO[this.theme] || 'vs-dark';
+            return getMonacoTheme(this.theme);
+        },
+        get nextTheme() {
+            const i = this.themes.indexOf(this.theme);
+            return this.themes[(i + 1) % this.themes.length];
         },
         init() {
-            this.theme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', this.theme);
-            window.dispatchEvent(new CustomEvent('theme-changed', {
-                detail: {
-                    theme: this.theme,
-                    monacoTheme: this.monacoTheme
-                }
-            }));
-            this.updateNextTheme();
-            this.$watch('theme', (newTheme) => {
-                localStorage.setItem('theme', newTheme);
-                document.documentElement.setAttribute('data-theme', newTheme);
-                window.dispatchEvent(new CustomEvent('theme-changed', {
-                    detail: {
-                        theme: newTheme,
-                        monacoTheme: this.monacoTheme
-                    }
-                }));
-                this.updateNextTheme();
+            this.theme = initTheme();
+            this.$watch("theme", newTheme => {
+                setTheme(newTheme);
             });
         },
         applyTheme(theme) {
             this.theme = theme;
         },
         cycleTheme() {
-            const i = this.themes.indexOf(this.theme);
-            this.applyTheme(this.themes[(i + 1) % this.themes.length]);
-        },
-        updateNextTheme() {
-            const i = this.themes.indexOf(this.theme);
-            this.nextTheme = this.themes[(i + 1) % this.themes.length];
+            this.applyTheme(this.nextTheme);
         }
     };
 }
