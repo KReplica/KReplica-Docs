@@ -11,12 +11,12 @@
   },
   {
     "slug": "nominal-typing",
-    "name": "3. Nominal Typing Part I",
+    "name": "3. Nominal Typing Part I: Usage Guide",
     "description": "Demonstrates how to enable nominal typing to wrap primitive types in value classes, preventing common errors like mixing up different ID types."
   },
   {
     "slug": "advanced-nominal-typing",
-    "name": "4. Nominal Typing Part II",
+    "name": "4. Nominal Typing Part II: Edge Case Examples",
     "description": "Demonstrates how to enable nominal typing to wrap primitive types in value classes, preventing common errors like mixing up different ID types."
   },
   {
