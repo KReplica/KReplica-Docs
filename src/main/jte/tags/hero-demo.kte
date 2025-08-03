@@ -2,7 +2,7 @@
 @param afterContent: gg.jte.Content
 
 <div class="hero-demo"
-     x-data="heroTypewriter()">
+     x-data="heroTypewriter">
     <div class="hero-demo-pane" data-pane="before">
         <div class="hero-demo-pane-header">1. You define an interface</div>
         @template.tags.code(language="kotlin", content=beforeContent)
