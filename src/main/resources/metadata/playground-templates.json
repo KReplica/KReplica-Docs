@@ -11,17 +11,17 @@
   },
   {
     "slug": "nominal-typing",
-    "name": "3. Nominal Typing",
+    "name": "3. Nominal Typing Part I",
     "description": "Demonstrates how to enable nominal typing to wrap primitive types in value classes, preventing common errors like mixing up different ID types."
   },
   {
     "slug": "advanced-nominal-typing",
-    "name": "4. Advanced Nominal Typing",
+    "name": "4. Nominal Typing Part II",
     "description": "Demonstrates how to enable nominal typing to wrap primitive types in value classes, preventing common errors like mixing up different ID types."
   },
   {
     "slug": "advanced-serialization",
-    "name": "5. Advanced Serialization",
+    "name": "5. Advanced Serialization Features",
     "description": "Shows integration with `kotlinx.serialization`. While many annotations can be applied directly, @Replicate.Apply serves as a workaround for those that can't (like @Serializable) or for applying annotations to specific variants."
   },
   {
