@@ -8,11 +8,11 @@
 @import "components/_animations.css" layer(components);
 @import "components/_fab.css" layer(components);
 @import "components/_theme-switcher.css" layer(components);
-@import "components/_hero-demo.css" layer(components);
 @import "layout/_header.css" layer(layout);
 @import "layout/_footer.css" layer(layout);
 @import "layout/_sidebar.css" layer(layout);
 @import "pages/_playground.css" layer(pages);
+@import "components/_micro-demo.css" layer(components);
 @import "pages/_index.css" layer(pages);
 
 @layer reset {

@@ -8,28 +8,59 @@
             variants—eliminating boilerplate and runtime surprises.</p>
     </div>
 
-    <div class="hero-demo-wrapper">
-        @template.tags.hero-demo(
-        beforeContent = @`${vm.snippets[CodeSnippet.HOMEPAGE_MICRO_DEMO_BEFORE]}`,
-        afterContent = @`${vm.snippets[CodeSnippet.HOMEPAGE_MICRO_DEMO_AFTER]}`
-        )
-        <div class="hero-cta">
-            <a href="/playground"
-               class="button-primary"
-               hx-get="/playground"
-               hx-target=".main-content"
-               hx-push-url="true"
-               hx-indicator=".page-progress">
-                Try in Playground
-            </a>
-            <a href="/guide"
-               class="button-secondary"
-               hx-get="/guide"
-               hx-target=".main-content"
-               hx-push-url="/guide"
-               hx-indicator=".page-progress">
-                See the Guide
-            </a>
+    <div class="demo-and-cta-container">
+        <div class="desktop-layout">
+            <div class="interface-column">
+                <div class="code-header">Your Interface</div>
+                @template.tags.code(language="kotlin", content=@`${vm.snippets[CodeSnippet.HOMEPAGE_MICRO_DEMO_BEFORE]}`)
+                <div class="hero-cta">
+                    <a href="/playground"
+                       class="button-primary"
+                       hx-get="/playground"
+                       hx-target=".main-content"
+                       hx-push-url="true"
+                       hx-indicator=".page-progress">
+                        Try in Playground
+                    </a>
+                    <a href="/guide"
+                       class="button-secondary"
+                       hx-get="/guide"
+                       hx-target=".main-content"
+                       hx-push-url="/guide"
+                       hx-indicator=".page-progress">
+                        See the Guide
+                    </a>
+                </div>
+            </div>
+            <div class="generated-column">
+                <div class="code-header">Generated DTOs</div>
+                @template.tags.code(language="kotlin", content=@`${vm.snippets[CodeSnippet.HOMEPAGE_MICRO_DEMO_AFTER]}`)
+            </div>
+        </div>
+
+        <div class="mobile-layout">
+            @template.tags.micro-demo(
+            beforeContent = @`${vm.snippets[CodeSnippet.HOMEPAGE_MICRO_DEMO_BEFORE]}`,
+            afterContent = @`${vm.snippets[CodeSnippet.HOMEPAGE_MICRO_DEMO_AFTER]}`
+            )
+            <div class="hero-cta">
+                <a href="/playground"
+                   class="button-primary"
+                   hx-get="/playground"
+                   hx-target=".main-content"
+                   hx-push-url="true"
+                   hx-indicator=".page-progress">
+                    Try in Playground
+                </a>
+                <a href="/guide"
+                   class="button-secondary"
+                   hx-get="/guide"
+                   hx-target=".main-content"
+                   hx-push-url="/guide"
+                   hx-indicator=".page-progress">
+                    See the Guide
+                </a>
+            </div>
         </div>
     </div>
 
