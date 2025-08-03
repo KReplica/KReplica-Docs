@@ -1,0 +1,24 @@
+@param tabs: List<io.availe.kreplicadocs.model.view.Tab>
+
+@if(tabs.isNotEmpty())
+    <div class="workflow-container" x-data="{ activeTab: '${tabs.get(0).id}' }">
+        <div class="workflow-tabs" role="tablist">
+            @for(tab in tabs)
+                <button role="tab"
+                        :class="{ 'active': activeTab === '${tab.id}' }"
+                        @click="activeTab = '${tab.id}'">
+                    ${tab.label}
+                </button>
+            @endfor
+        </div>
+        @for(tab in tabs)
+            <div class="workflow-content" x-show="activeTab === '${tab.id}'" x-cloak>
+                !{var description = tab.description;}
+                @if(description != null && !description.isEmpty())
+                    <p>${description}</p>
+                @endif
+                @template.tags.code(language="kotlin", content=@`${tab.codeSnippet}`)
+            </div>
+        @endfor
+    </div>
+@endif

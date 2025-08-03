@@ -27,7 +27,9 @@ data class IndexViewModel(
     override val navLinks: List<NavLink>,
     override val properties: AppProperties,
     override val currentPage: PageId,
-    val snippets: Map<CodeSnippet, String>
+    val snippets: Map<CodeSnippet, String>,
+    val heroDemoTabs: List<Tab>,
+    val whenTabs: List<Tab>
 ) : PageViewModel
 
 data class GuideViewModel(
@@ -35,7 +37,10 @@ data class GuideViewModel(
     override val properties: AppProperties,
     override val currentPage: PageId,
     val snippets: Map<CodeSnippet, String>,
-    val guideNav: List<GuideSection>
+    val guideNav: List<GuideSection>,
+    val whenTabs: List<Tab>,
+    val contextualNestingTabs: List<Tab>,
+    val apiMapperTabs: List<Tab>
 ) : PageViewModel
 
 data class PlaygroundViewModel(

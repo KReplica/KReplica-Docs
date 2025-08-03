@@ -14,6 +14,7 @@ class ViewModelFactory(
     private val snippetProvider: CodeSnippetProvider,
     private val appProperties: AppProperties,
     private val navigationProvider: NavigationProvider,
+    private val tabProvider: TabProvider,
 ) {
 
     fun createIndexViewModel(): IndexViewModel {
@@ -21,7 +22,9 @@ class ViewModelFactory(
             navLinks = navigationProvider.getNavLinks(),
             properties = appProperties,
             currentPage = PageId.INDEX,
-            snippets = snippetProvider.getSnippets()
+            snippets = snippetProvider.getSnippets(),
+            heroDemoTabs = tabProvider.getTabs("heroDemoTabs"),
+            whenTabs = tabProvider.getTabs("whenTabs")
         )
     }
 
@@ -31,7 +34,10 @@ class ViewModelFactory(
             properties = appProperties,
             currentPage = PageId.GUIDE,
             snippets = snippetProvider.getSnippets(),
-            guideNav = navigationProvider.getGuideNav()
+            guideNav = navigationProvider.getGuideNav(),
+            whenTabs = tabProvider.getTabs("whenTabs"),
+            contextualNestingTabs = tabProvider.getTabs("contextualNestingTabs"),
+            apiMapperTabs = tabProvider.getTabs("apiMapperTabs")
         )
     }
 

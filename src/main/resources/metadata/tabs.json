@@ -1,0 +1,74 @@
+{
+  "heroDemoTabs": [
+    {
+      "id": "interface",
+      "label": "Your Interface",
+      "codeSnippetKey": "HOMEPAGE_MICRO_DEMO_BEFORE"
+    },
+    {
+      "id": "generated",
+      "label": "Generated DTOs",
+      "codeSnippetKey": "HOMEPAGE_MICRO_DEMO_AFTER"
+    }
+  ],
+  "whenTabs": [
+    {
+      "id": "all",
+      "label": "Handle Everything",
+      "description": "By using the top-level schema interface, your <code>when</code> expression must exhaustively handle every version and variant.",
+      "codeSnippetKey": "WHEN_EXPRESSION_ALL"
+    },
+    {
+      "id": "version",
+      "label": "Handle by Version",
+      "description": "By typing a parameter as a specific version (e.g., <code>UserAccountSchema.V2</code>), the compiler ensures you handle all variants within that version only.",
+      "codeSnippetKey": "WHEN_EXPRESSION_BY_VERSION"
+    },
+    {
+      "id": "variant",
+      "label": "Handle by Variant",
+      "description": "By using a local variant interface (e.g., <code>UserAccountSchema.DataVariant</code>), you can handle all DTOs of a specific kind, across all versions.",
+      "codeSnippetKey": "WHEN_EXPRESSION_BY_VARIANT"
+    }
+  ],
+  "contextualNestingTabs": [
+    {
+      "id": "auto",
+      "label": "The Smart Way (Automatic)",
+      "description": "Let KReplica handle the complexity. Simply nest the base interface of the child model (<code>V1</code>). KReplica automatically ensures that the <code>Create</code> variant of the parent uses the <code>Create</code> variant of the child, and so on.",
+      "codeSnippetKey": "NESTING_AUTOMATIC"
+    },
+    {
+      "id": "manual",
+      "label": "The Hard Way (Manual)",
+      "description": "To appreciate the automatic approach, here is how you would have to do it manually. Notice how you need to explicitly reference generated types and use <code>@Replicate.Property</code> to wire up each variant. This is verbose and error-prone.",
+      "codeSnippetKey": "NESTING_MANUAL"
+    }
+  ],
+  "apiMapperTabs": [
+    {
+      "id": "pattern",
+      "label": "1. The Reusable Pattern",
+      "description": "Define this generic interface once in your project. It uses KReplica's <strong>Global Variant Interfaces</strong> (e.g., <code>KReplicaDataVariant</code>) as generic constraints, making it compatible with any model KReplica generates.",
+      "codeSnippetKey": "MAPPER_PATTERN_INTERFACE"
+    },
+    {
+      "id": "domain",
+      "label": "2. The Domain Model",
+      "description": "This is your internal domain model. It contains business logic, validation, and is completely decoupled from the API layer.",
+      "codeSnippetKey": "MAPPER_PATTERN_DOMAIN_MODEL"
+    },
+    {
+      "id": "interface",
+      "label": "3. The KReplica Interface",
+      "description": "This is the simple KReplica interface you write. It defines the data contract for the <code>UserAccount</code>.",
+      "codeSnippetKey": "MAPPER_PATTERN_KREPLICA_INTERFACE"
+    },
+    {
+      "id": "mapper",
+      "label": "4. The Implementation",
+      "description": "Finally, implement the generic mapper for your specific model. The Kotlin compiler, guided by the generic constraints, ensures you correctly map between the domain model and the specific DTO variants (<code>Data</code>, <code>CreateRequest</code>, <code>PatchRequest</code>).",
+      "codeSnippetKey": "MAPPER_PATTERN_IMPLEMENTATION"
+    }
+  ]
+}

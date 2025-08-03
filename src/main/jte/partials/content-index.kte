@@ -9,10 +9,7 @@
     </div>
 
     <div class="demo-and-cta-container">
-        @template.tags.hero-demo-tabs(
-        interfaceContent = @`${vm.snippets[CodeSnippet.HOMEPAGE_MICRO_DEMO_BEFORE]}`,
-        generatedContent = @`${vm.snippets[CodeSnippet.HOMEPAGE_MICRO_DEMO_AFTER]}`
-        )
+        @template.tags.tabs(tabs = vm.heroDemoTabs)
         <div class="hero-cta" style="margin-block-start: 2.5rem;">
             <a href="/playground" class="button-primary" hx-get="/playground" hx-target=".main-content"
                hx-push-url="true" hx-indicator=".page-progress">
@@ -51,11 +48,7 @@
         <p>KReplica uses sealed hierarchies to enable exhaustive <code>when</code> expressions. If you add a new API
             version, your code won't compile until you handle it—no more runtime surprises.</p>
 
-        @template.tags.when-tabs(
-        allSnippet = vm.snippets[CodeSnippet.WHEN_EXPRESSION_ALL],
-        byVersionSnippet = vm.snippets[CodeSnippet.WHEN_EXPRESSION_BY_VERSION],
-        byVariantSnippet = vm.snippets[CodeSnippet.WHEN_EXPRESSION_BY_VARIANT]
-        )
+        @template.tags.tabs(tabs = vm.whenTabs)
     </div>
 
     <div class="get-started-section">

@@ -5,6 +5,6 @@
         @template.fragments.guide-sidebar(vm = vm)
     </aside>
     <div class="guide-main-content">
-        @template.partials.guide-content(snippets = vm.snippets)
+        @template.partials.guide-content(vm = vm)
     </div>
 </div>
