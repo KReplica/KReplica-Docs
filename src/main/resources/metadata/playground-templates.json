@@ -38,5 +38,10 @@
     "slug": "contextual-nesting-versioned",
     "name": "8. Contextual Nesting (Versioned)",
     "description": "Illustrates how KReplica intelligently handles nested replicated models, ensuring a parent's `CreateRequest` automatically uses the child's `CreateRequest`."
+  },
+  {
+    "slug": "hide-annotation",
+    "name": "9. The Hide Annotation",
+    "description": "Illustrates how KReplica intelligently handles nested replicated models, ensuring a parent's `CreateRequest` automatically uses the child's `CreateRequest`."
   }
 ]
