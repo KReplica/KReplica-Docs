@@ -4,16 +4,8 @@ import io.availe.Replicate
 import io.availe.models.DtoVariant
 
 /*
-Here, we wish to include a versioned UserAccount as a property of AdminAccount.
-However, we want the following structure:
-
-AdminAccount DATA variant should include UserAccount DATA variant
-AdminAccount CREATE variant should include UserAccount CREATE variant
-AdminAccount PATCH variant should include UserAccount PATCH variant
-
-We can do this manually with include/exclude property modifiers, but
-that is a lot of boilerplate. Instead, we can just list the interface
-UserAccount as a property of AdminAccount.
+This is basically the same thing as (unversioned) contextual nesting.
+Except that instead of putting "UserAccountSchema," you put "UserAccountSchema.V1"
 */
 
 private interface UserAccount {

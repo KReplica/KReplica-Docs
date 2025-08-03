@@ -24,5 +24,5 @@ private interface UserAccount {
 // Here, we define AdminAccount to include the UserAccount interface as a property.
 @Replicate.Model(variants = [DtoVariant.DATA, DtoVariant.CREATE, DtoVariant.PATCH])
 private interface AdminAccount {
-    val user: UserAccount
+    val user: UserAccountSchema
 }
