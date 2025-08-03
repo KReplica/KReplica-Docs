@@ -1,5 +1,6 @@
 package io.availe.kreplicadocs.services.playground
 
+import io.availe.kreplicadocs.common.CodeSnippet
 import io.availe.kreplicadocs.config.CacheNames
 import io.availe.kreplicadocs.model.CompileRequest
 import io.availe.kreplicadocs.model.JobId
@@ -31,19 +32,30 @@ class GradleDaemonManager(
         val permanentCache = cacheManager.getCache(CacheNames.PERMANENT_TEMPLATES)
             ?: throw IllegalStateException("Cache '${CacheNames.PERMANENT_TEMPLATES}' not found.")
 
+        val snippetsToCompile = mutableMapOf<String, String>()
+
         codeSnippetProvider.getPlaygroundTemplates().forEach { template ->
+            val slug = TemplateSlug(template.slug)
+            val sourceCode = codeSnippetProvider.getPlaygroundTemplateSource(slug)
+            snippetsToCompile[template.slug] = sourceCode
+        }
+
+        val homepageDemoSource = codeSnippetProvider.getSnippets()[CodeSnippet.HOMEPAGE_DEMO_SOURCE]
+        if (homepageDemoSource != null) {
+            snippetsToCompile[CodeSnippet.HOMEPAGE_DEMO_SOURCE.name] = homepageDemoSource
+        }
+
+        snippetsToCompile.forEach { (name, sourceCode) ->
             try {
-                val slug = TemplateSlug(template.slug)
-                val sourceCode = codeSnippetProvider.getPlaygroundTemplateSource(slug)
                 val normalizedSourceCode = sourceCode.trim().replace("\r\n", "\n")
 
                 if (permanentCache[normalizedSourceCode] != null) {
-                    log.debug("Cache already primed for template: {}", slug.value)
+                    log.debug("Cache already primed for: {}", name)
                     return@forEach
                 }
 
                 val request = CompileRequest(
-                    jobId = JobId("warmup-${template.slug}-${UUID.randomUUID()}"),
+                    jobId = JobId("warmup-$name-${UUID.randomUUID()}"),
                     sourceCode = sourceCode
                 )
                 val cancellationTokenSource = GradleConnector.newCancellationTokenSource()
@@ -51,12 +63,12 @@ class GradleDaemonManager(
 
                 if (response.success) {
                     permanentCache.put(normalizedSourceCode, response)
-                    log.info("Successfully compiled and cached starter template: {}", template.slug)
+                    log.info("Successfully compiled and cached: {}", name)
                 } else {
-                    log.error("Warmup compilation FAILED for template {}: {}", template.slug, response.message)
+                    log.error("Warmup compilation FAILED for {}: {}", name, response.message)
                 }
             } catch (e: Exception) {
-                log.error("Exception during warmup for template '{}'", template.name, e)
+                log.error("Exception during warmup for '{}'", name, e)
             }
         }
         log.info("Gradle daemon warmup and cache priming complete.")

@@ -3,31 +3,31 @@
     {
       "id": "interface",
       "label": "Your Interface",
-      "codeSnippetKey": "HOMEPAGE_MICRO_DEMO_BEFORE"
+      "codeSnippetKey": "HOMEPAGE_DEMO_SOURCE"
     },
     {
       "id": "generated",
       "label": "Generated DTOs",
-      "codeSnippetKey": "HOMEPAGE_MICRO_DEMO_AFTER"
+      "generatedFrom": "HOMEPAGE_DEMO_SOURCE"
     }
   ],
   "whenTabs": [
     {
       "id": "all",
       "label": "Handle Everything",
-      "description": "By using the top-level schema interface, your <code>when</code> expression must exhaustively handle every version and variant.",
+      "description": "By using the top-level schema interface, your `when` expression must exhaustively handle every version and variant.",
       "codeSnippetKey": "WHEN_EXPRESSION_ALL"
     },
     {
       "id": "version",
       "label": "Handle by Version",
-      "description": "By typing a parameter as a specific version (e.g., <code>UserAccountSchema.V2</code>), the compiler ensures you handle all variants within that version only.",
+      "description": "By typing a parameter as a specific version (e.g., `UserAccountSchema.V2`), the compiler ensures you handle all variants within that version only.",
       "codeSnippetKey": "WHEN_EXPRESSION_BY_VERSION"
     },
     {
       "id": "variant",
       "label": "Handle by Variant",
-      "description": "By using a local variant interface (e.g., <code>UserAccountSchema.DataVariant</code>), you can handle all DTOs of a specific kind, across all versions.",
+      "description": "By using a local variant interface (e.g., `UserAccountSchema.DataVariant`), you can handle all DTOs of a specific kind, across all versions.",
       "codeSnippetKey": "WHEN_EXPRESSION_BY_VARIANT"
     }
   ],
@@ -35,13 +35,13 @@
     {
       "id": "auto",
       "label": "The Smart Way (Automatic)",
-      "description": "Let KReplica handle the complexity. Simply nest the base interface of the child model (<code>V1</code>). KReplica automatically ensures that the <code>Create</code> variant of the parent uses the <code>Create</code> variant of the child, and so on.",
+      "description": "Let KReplica handle the complexity. Simply nest the base interface of the child model (e.g. `UserAccount`). KReplica automatically ensures that the `Create` variant of the parent uses the `Create` variant of the child, and so on.",
       "codeSnippetKey": "NESTING_AUTOMATIC"
     },
     {
       "id": "manual",
       "label": "The Hard Way (Manual)",
-      "description": "To appreciate the automatic approach, here is how you would have to do it manually. Notice how you need to explicitly reference generated types and use <code>@Replicate.Property</code> to wire up each variant. This is verbose and error-prone.",
+      "description": "To appreciate the automatic approach, here is how you would have to do it manually. Notice how you need to explicitly reference generated types and use `@Replicate.Property` to wire up each variant. This is verbose and error-prone.",
       "codeSnippetKey": "NESTING_MANUAL"
     }
   ],
@@ -49,7 +49,7 @@
     {
       "id": "pattern",
       "label": "1. The Reusable Pattern",
-      "description": "Define this generic interface once in your project. It uses KReplica's <strong>Global Variant Interfaces</strong> (e.g., <code>KReplicaDataVariant</code>) as generic constraints, making it compatible with any model KReplica generates.",
+      "description": "Define this generic interface once in your project. It uses KReplica's <strong>Global Variant Interfaces</strong> (e.g., `KReplicaDataVariant`) as generic constraints, making it compatible with any model KReplica generates.",
       "codeSnippetKey": "MAPPER_PATTERN_INTERFACE"
     },
     {
@@ -61,7 +61,7 @@
     {
       "id": "interface",
       "label": "3. The KReplica Interface",
-      "description": "This is the simple KReplica interface you write. It defines the data contract for the <code>UserAccount</code>.",
+      "description": "This is the simple KReplica interface you write. It defines the data contract for the `UserAccount`.",
       "codeSnippetKey": "MAPPER_PATTERN_KREPLICA_INTERFACE"
     },
     {

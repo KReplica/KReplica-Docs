@@ -1,22 +1,19 @@
 package io.availe.demo.playground
 
 import io.availe.Replicate
-import io.availe.models.AutoContextual
 import io.availe.models.DtoVariant
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.Serializable
-import java.time.Instant
 
 private interface UserAccount
 
-@Replicate.Model(variants = [DtoVariant.DATA], autoContextual = AutoContextual.DISABLED)
-@Replicate.Apply([Serializable::class])
+@Replicate.Model(variants = [DtoVariant.DATA])
 private interface V1 : UserAccount {
     val id: Int
+    val username: String
+}
 
-    @Contextual
-    val startTime: Instant
-
-    @Replicate.Property(autoContextual = AutoContextual.ENABLED)
-    val endTime: List<List<Instant>>
+@Replicate.Model(variants = [DtoVariant.DATA, DtoVariant.PATCH])
+private interface V2 : UserAccount {
+    val id: Int
+    val username: String
+    val email: String
 }

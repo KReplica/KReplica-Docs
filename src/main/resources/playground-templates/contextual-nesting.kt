@@ -13,4 +13,5 @@ private interface V1 : UserAccount {
 @Replicate.Model(variants = [DtoVariant.DATA, DtoVariant.CREATE, DtoVariant.PATCH])
 private interface AdminAccount {
     val user: V1
+    val permissions: List<String>
 }

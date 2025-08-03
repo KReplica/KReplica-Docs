@@ -1,27 +1,32 @@
 [
   {
     "slug": "basic-replication",
-    "name": "Basic Replication",
-    "description": "A starter template demonstrating core control over variants and properties using @Replicate.Model and @Replicate.Property."
+    "name": "1. Basic Replication",
+    "description": "Demonstrates the core annotations. Shows how to generate DATA, CREATE, and PATCH variants and how to override model-level settings for specific properties."
   },
   {
     "slug": "schema-versioning",
-    "name": "Schema Versioning",
-    "description": "A starter template showing how to evolve models safely using a versioned, sealed hierarchy."
+    "name": "2. Schema Versioning",
+    "description": "Shows how to safely evolve an API by creating a versioned, sealed hierarchy (V1, V2). This enables compile-time safety with exhaustive `when` expressions."
   },
   {
-    "slug": "serializable-integration",
-    "name": "Serializable Integration",
-    "description": "A starter template illustrating how to apply `kotlinx.serialization` annotations to generated DTOs."
+    "slug": "nominal-typing",
+    "name": "3. Nominal Typing",
+    "description": "Demonstrates how to enable nominal typing to wrap primitive types in value classes, preventing common errors like mixing up different ID types."
+  },
+  {
+    "slug": "advanced-serialization",
+    "name": "4. Advanced Serialization",
+    "description": "Shows integration with `kotlinx.serialization`. While many annotations can be applied directly, @Replicate.Apply serves as a workaround for those that can't (like @Serializable) or for applying annotations to specific variants."
   },
   {
     "slug": "contextual-nesting",
-    "name": "Contextual Nesting",
-    "description": "A starter template showing how KReplica intelligently handles nested replicated models across different variants."
+    "name": "5. Contextual Nesting",
+    "description": "Illustrates how KReplica intelligently handles nested replicated models, ensuring a parent's `CreateRequest` automatically uses the child's `CreateRequest`."
   },
   {
-    "slug": "hide-annotation",
-    "name": "Hide Annotation",
-    "description": "A starter template demonstrating how to use @Replicate.Hide to temporarily disable code generation for a model."
+    "slug": "utility-annotations",
+    "name": "6. Utility Annotations",
+    "description": "Covers other useful features: applying standard annotations like @Deprecated directly, using @Replicate.Hide to disable generation, and manually setting version numbers with @Replicate.SchemaVersion."
   }
 ]
