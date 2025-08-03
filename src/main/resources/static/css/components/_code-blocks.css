@@ -1,4 +1,8 @@
 @layer components {
+    .code-block-wrapper {
+        position: relative;
+    }
+
     pre[class*="language-"] {
         padding: 1.25rem;
         border-radius: var(--radius-3);
