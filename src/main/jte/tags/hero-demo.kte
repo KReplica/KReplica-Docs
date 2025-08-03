@@ -1,0 +1,25 @@
+@param beforeContent: gg.jte.Content
+@param afterContent: gg.jte.Content
+
+<div class="hero-demo"
+     x-data="heroTypewriter()">
+    <div class="hero-demo-pane" data-pane="before">
+        <div class="hero-demo-pane-header">1. You define an interface</div>
+        @template.tags.code(language="kotlin", content=beforeContent)
+    </div>
+
+    <div class="hero-demo-pane hero-demo-pane-output"
+         data-pane="after"
+         :class="{ 'is-active': isPaneVisible }">
+        <div class="hero-demo-pane-header">2. KReplica generates the DTOs</div>
+
+        <template x-ref="sourceCodeTemplate">
+            <pre><code>${afterContent}</code></pre>
+        </template>
+
+        <div class="code-block-wrapper">
+            <pre class="language-kotlin"><code x-ref="outputCode" class="language-kotlin"></code><span
+                        class="typing-caret" x-show="isTyping" x-cloak></span></pre>
+        </div>
+    </div>
+</div>
