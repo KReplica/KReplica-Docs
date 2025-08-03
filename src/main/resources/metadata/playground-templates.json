@@ -26,12 +26,12 @@
   },
   {
     "slug": "serialization-and-apply-annotation",
-    "name": "6. Serialization and The Apply Annotation",
+    "name": "6. Serialization Part I: The Apply Annotation",
     "description": "Covers other useful features: applying standard annotations like @Deprecated directly, using @Replicate.Hide to disable generation, and manually setting version numbers with @Replicate.SchemaVersion."
   },
   {
     "slug": "advanced-serialization",
-    "name": "7. Advanced Serialization Features",
+    "name": "7. Serialization Part II: Advanced Features",
     "description": "Shows integration with `kotlinx.serialization`. While many annotations can be applied directly, @Replicate.Apply serves as a workaround for those that can't (like @Serializable) or for applying annotations to specific variants."
   },
   {
