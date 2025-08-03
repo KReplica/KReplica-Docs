@@ -13,15 +13,6 @@ private interface LegacyAccount {
     val id: Int
 }
 
-// --- Hiding a Model ---
-// The @Replicate.Hide annotation tells KReplica to skip code generation for this model.
-// This is useful for temporarily testing the impact of removing a schema.
-@Replicate.Model(variants = [DtoVariant.DATA])
-@Replicate.Hide
-private interface HiddenAccount {
-    val id: Int
-}
-
 // --- Manually Specify Version Number ---
 // If you do not wish to use the V<number> naming convention for versions...
 private interface Product
