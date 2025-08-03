@@ -21,7 +21,7 @@ private interface UserAccount {
     val id: Int
 }
 
-// Next, define a parent model that contains the child model.
+// Here, we define AdminAccount to include the UserAccount interface as a property.
 @Replicate.Model(variants = [DtoVariant.DATA, DtoVariant.CREATE, DtoVariant.PATCH])
 private interface AdminAccount {
     val user: UserAccount
