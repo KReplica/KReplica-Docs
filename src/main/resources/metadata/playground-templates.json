@@ -20,28 +20,23 @@
     "description": "Demonstrates how to enable nominal typing to wrap primitive types in value classes, preventing common errors like mixing up different ID types."
   },
   {
+    "slug": "direct-annotations",
+    "name": "5. Directly Applying Annotations",
+    "description": "Covers other useful features: applying standard annotations like @Deprecated directly, using @Replicate.Hide to disable generation, and manually setting version numbers with @Replicate.SchemaVersion."
+  },
+  {
     "slug": "advanced-serialization",
-    "name": "5. Advanced Serialization Features",
+    "name": "6. Advanced Serialization Features",
     "description": "Shows integration with `kotlinx.serialization`. While many annotations can be applied directly, @Replicate.Apply serves as a workaround for those that can't (like @Serializable) or for applying annotations to specific variants."
   },
   {
     "slug": "contextual-nesting-unversioned",
-    "name": "6. Contextual Nesting (Unversioned)",
+    "name": "7. Contextual Nesting (Unversioned)",
     "description": "Illustrates how KReplica intelligently handles nested replicated models, ensuring a parent's `CreateRequest` automatically uses the child's `CreateRequest`."
   },
   {
     "slug": "contextual-nesting-versioned",
-    "name": "7. Contextual Nesting (Versioned)",
+    "name": "8. Contextual Nesting (Versioned)",
     "description": "Illustrates how KReplica intelligently handles nested replicated models, ensuring a parent's `CreateRequest` automatically uses the child's `CreateRequest`."
-  },
-  {
-    "slug": "utility-annotations",
-    "name": "8. Utility Annotations",
-    "description": "Covers other useful features: applying standard annotations like @Deprecated directly, using @Replicate.Hide to disable generation, and manually setting version numbers with @Replicate.SchemaVersion."
-  },
-  {
-    "slug": "hide-annotation",
-    "name": "9. Hide Annotation",
-    "description": "Covers other useful features: applying standard annotations like @Deprecated directly, using @Replicate.Hide to disable generation, and manually setting version numbers with @Replicate.SchemaVersion."
   }
 ]
