@@ -73,5 +73,5 @@ won't cause crashes or unexpected behavior.
 
 Fixing it is possible by making it so that KReplica doesn't insert @Contextual at
 the value class-level, but instead at the variant's property-level. But this is not
-my biggest concern at the momement, since I consider it a minimal-level issue.
+my biggest concern at the momement, since I consider it almost a non-issue.
 */
