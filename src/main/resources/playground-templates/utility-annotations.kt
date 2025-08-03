@@ -12,14 +12,3 @@ private interface LegacyAccount {
     @Deprecated("Use newId instead")
     val id: Int
 }
-
-// --- Manually Specify Version Number ---
-// If you do not wish to use the V<number> naming convention for versions...
-private interface Product
-
-// ...you can use @Replicate.SchemaVersion to manually specify the version number.
-@Replicate.Model(variants = [DtoVariant.DATA])
-@Replicate.SchemaVersion(1)
-private interface InitialProduct : Product {
-    val sku: String
-}
