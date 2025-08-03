@@ -6,7 +6,7 @@
   },
   {
     "slug": "schema-versioning",
-    "name": "2. Schema Versioning",
+    "name": "2. Versioned DTOs",
     "description": "Shows how to safely evolve an API by creating a versioned, sealed hierarchy (V1, V2). This enables compile-time safety with exhaustive `when` expressions."
   },
   {
