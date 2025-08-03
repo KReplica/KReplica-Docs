@@ -4,11 +4,15 @@ import io.availe.Replicate
 import io.availe.models.DtoVariant
 import io.availe.models.NominalTyping
 
+/*
+All inline-value classes are generated in the bottom of the output file.
+ */
+
 // Enabling nominal typing wraps primitive properties in inline value classes.
 @Replicate.Model(variants = [DtoVariant.DATA], nominalTyping = NominalTyping.ENABLED)
 private interface Order {
     // These will be generated as `OrderId(val value: Long)` and `CustomerId(val value: Long)`.
-    val orderId: Long
+    val id: Long
     val customerId: Long
 
     // You can disable nominal typing on a per-property basis.
