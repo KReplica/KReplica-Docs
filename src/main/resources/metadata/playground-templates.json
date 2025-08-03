@@ -28,5 +28,10 @@
     "slug": "utility-annotations",
     "name": "6. Utility Annotations",
     "description": "Covers other useful features: applying standard annotations like @Deprecated directly, using @Replicate.Hide to disable generation, and manually setting version numbers with @Replicate.SchemaVersion."
+  },
+  {
+    "slug": "hide-annotation",
+    "name": "7. Hide Annotation",
+    "description": "Covers other useful features: applying standard annotations like @Deprecated directly, using @Replicate.Hide to disable generation, and manually setting version numbers with @Replicate.SchemaVersion."
   }
 ]
