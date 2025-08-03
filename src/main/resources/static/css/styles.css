@@ -12,7 +12,6 @@
 @import "layout/_footer.css" layer(layout);
 @import "layout/_sidebar.css" layer(layout);
 @import "pages/_playground.css" layer(pages);
-@import "components/_micro-demo.css" layer(components);
 @import "pages/_index.css" layer(pages);
 
 @layer reset {

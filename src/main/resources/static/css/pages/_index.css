@@ -35,10 +35,6 @@
     display: none;
 }
 
-.mobile-layout .hero-cta {
-    margin-block-start: 2.5rem;
-}
-
 .code-header {
     font-weight: 600;
     color: var(--text-light);

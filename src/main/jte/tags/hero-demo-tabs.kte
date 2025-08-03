@@ -1,0 +1,19 @@
+@param interfaceContent: gg.jte.Content
+@param generatedContent: gg.jte.Content
+
+<div class="workflow-container" x-data="{ activeTab: 'interface' }">
+    <div class="workflow-tabs" role="tablist">
+        <button role="tab" :class="{ 'active': activeTab === 'interface' }" @click="activeTab = 'interface'">
+            Your Interface
+        </button>
+        <button role="tab" :class="{ 'active': activeTab === 'generated' }" @click="activeTab = 'generated'">
+            Generated DTOs
+        </button>
+    </div>
+    <div class="workflow-content" x-show="activeTab === 'interface'" x-cloak>
+        @template.tags.code(language="kotlin", content=interfaceContent)
+    </div>
+    <div class="workflow-content" x-show="activeTab === 'generated'" x-cloak>
+        @template.tags.code(language="kotlin", content=generatedContent)
+    </div>
+</div>
