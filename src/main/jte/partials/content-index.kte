@@ -77,5 +77,15 @@
             <h3>Releases</h3>
             <p>List of all versions; release numbers also match Maven Central artifacts.</p>
         </a>
+        <a href="https://github.com/KReplica/KReplica" class="link-card" target="_blank"
+           rel="noopener noreferrer">
+            <h3>Repository</h3>
+            <p>View the project's repository and its source code.</p>
+        </a>
+        <a href="https://github.com/KReplica/KReplica" class="link-card" target="_blank"
+           rel="noopener noreferrer">
+            <h3>Sponsor</h3>
+            <p>Support me.</p>
+        </a>
     </div>
 </div>
