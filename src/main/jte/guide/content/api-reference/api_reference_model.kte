@@ -14,7 +14,8 @@
     </dd>
     <dt><code>autoContextual: AutoContextual</code> (Default: <code>ENABLED</code>)</dt>
     <dd>Controls automatic integration with <code>kotlinx.serialization</code> by adding
-        <code>@Contextual</code> to non-primitive property types.
+        <code>@Contextual</code> to non-primitive property types if the <code>kotlinx.serialization</code>
+        plugin is applied.
     </dd>
 </dl>
 !{ val modelExample = vm.examples["api-ref-replicate-model"] }
