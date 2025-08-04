@@ -72,25 +72,6 @@
         color: #0c5460;
     }
 
-    .hero-section {
-        text-align: center;
-        padding: 3.75rem 1.25rem 0;
-
-        h1 {
-            font-size: 3rem;
-        }
-
-        p {
-            font-size: 1.2rem;
-            color: var(--text-color);
-            max-inline-size: 37.5rem;
-            margin-inline: auto;
-        }
-    }
-
-    .feature-highlight {
-    }
-
     .htmx-indicator {
         opacity: 0;
         transition: opacity 0.2s ease-in;
@@ -125,37 +106,37 @@
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         border-block-end: 1px solid var(--border-color);
+    }
 
-        button {
-            padding: 0.85rem 1.25rem;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: var(--text-light);
-            border-block-end: 0.1875rem solid transparent;
-            transition: all 0.2s ease;
-            font-weight: 600;
+    .workflow-tabs button {
+        padding: 0.85rem 1.25rem;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: var(--text-light);
+        border-block-end: 0.1875rem solid transparent;
+        transition: all 0.2s ease;
+        font-weight: 600;
+    }
 
-            &:hover {
-                color: var(--primary-color);
-            }
+    .workflow-tabs button:hover {
+        color: var(--primary-color);
+    }
 
-            &.active {
-                color: var(--secondary-color);
-                border-block-end-color: var(--secondary-color);
-            }
-        }
+    .workflow-tabs button.active {
+        color: var(--secondary-color);
+        border-block-end-color: var(--secondary-color);
     }
 
     .workflow-content {
         padding: 1.5rem 1.5rem 0.5rem;
+    }
 
-        p {
-            margin-block-start: 0;
-            font-size: 1rem;
-            line-height: 1.6;
-        }
+    .workflow-content p {
+        margin-block-start: 0;
+        font-size: 1rem;
+        line-height: 1.6;
     }
 
     .playground-wrapper {
@@ -176,20 +157,6 @@
     @media (min-width: 48.0625rem) {
         .examples-container {
             grid-template-columns: var(--sidebar-width) 1fr;
-        }
-    }
-
-    @media (max-width: 48rem) {
-        .hero-section {
-            padding: 2.5rem 0.9375rem;
-
-            h1 {
-                font-size: clamp(2rem, 6vw, 2.4rem);
-            }
-
-            p {
-                font-size: 1rem;
-            }
         }
     }
 

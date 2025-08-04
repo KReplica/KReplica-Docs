@@ -1,8 +1,27 @@
+.hero-section {
+    text-align: center;
+    padding: 3.75rem 1.25rem 0;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+}
+
+.hero-section p {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    max-inline-size: 37.5rem;
+    margin-inline: auto;
+}
+
 .hero-cta {
     display: flex;
     gap: 1rem;
     justify-content: center;
     flex-wrap: wrap;
+}
+
+.feature-highlight {
 }
 
 .feature-list {
@@ -41,5 +60,19 @@
     .feature-list {
         grid-template-columns: 1fr 1fr;
         gap: 1.5rem 2.5rem;
+    }
+}
+
+@media (max-width: 48rem) {
+    .hero-section {
+        padding: 2.5rem 0.9375rem;
+    }
+
+    .hero-section h1 {
+        font-size: clamp(2rem, 6vw, 2.4rem);
+    }
+
+    .hero-section p {
+        font-size: 1rem;
     }
 }
