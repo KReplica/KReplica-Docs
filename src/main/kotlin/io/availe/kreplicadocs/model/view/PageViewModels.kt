@@ -1,5 +1,6 @@
 package io.availe.kreplicadocs.model.view
 
+import gg.jte.Content
 import io.availe.kreplicadocs.common.CodeSnippet
 import io.availe.kreplicadocs.common.PageId
 import io.availe.kreplicadocs.config.AppProperties
@@ -8,13 +9,26 @@ import io.availe.kreplicadocs.model.TemplateSlug
 
 data class GuideNavSubSection(
     val id: String,
-    val title: String
+    val title: String,
 )
 
 data class GuideNavSection(
     val id: String,
     val title: String,
-    val subsections: List<GuideNavSubSection> = emptyList()
+    val subsections: List<GuideNavSubSection> = emptyList(),
+)
+
+data class GuideContentSubSection(
+    val id: String,
+    val title: String,
+    val content: Content,
+)
+
+data class GuideContentSection(
+    val id: String,
+    val title: String,
+    val description: Content,
+    val subsections: List<GuideContentSubSection>,
 )
 
 interface PageViewModel {
@@ -29,14 +43,14 @@ data class IndexViewModel(
     override val currentPage: PageId,
     val snippets: Map<CodeSnippet, String>,
     val heroDemoTabs: List<Tab>,
-    val whenTabs: List<Tab>
+    val whenTabs: List<Tab>,
 ) : PageViewModel
 
 data class ProcessedGuideExample(
     val inputCode: String,
     val outputFiles: Map<String, String>?,
     val inputTabLabel: String,
-    val outputTabLabel: String
+    val outputTabLabel: String,
 )
 
 data class GuideViewModel(
@@ -46,7 +60,8 @@ data class GuideViewModel(
     val snippets: Map<CodeSnippet, String>,
     val guideNav: List<GuideNavSection>,
     val examples: Map<String, ProcessedGuideExample>,
-    val tabs: Map<String, List<Tab>>
+    val tabs: Map<String, List<Tab>>,
+    val guideContent: List<GuideContentSection>,
 ) : PageViewModel
 
 data class PlaygroundViewModel(
@@ -55,5 +70,5 @@ data class PlaygroundViewModel(
     override val currentPage: PageId,
     val availableTemplates: List<SelectOption>,
     val initialSourceCode: String,
-    val activeTemplateSlug: TemplateSlug
+    val activeTemplateSlug: TemplateSlug,
 ) : PageViewModel

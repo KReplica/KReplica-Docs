@@ -1,0 +1,87 @@
+@param builder: io.availe.kreplicadocs.services.GuideBuilder
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+@! builder.addSection(
+id = "top",
+title = "KReplica Developer Guide",
+content = @template.guide.content.top(vm = vm)
+) !@
+
+@! builder.startSection(
+id = "api-reference",
+title = "API Reference",
+description = @`<p>KReplica is configured using a small set of powerful annotations. This section serves as a dictionary
+    for every available option.</p>`
+) !@
+@! builder.addSubSection(
+id = "api-ref-replicate-model",
+title = "@Replicate.Model & @Property",
+content = @template.guide.content.api_reference_model(vm = vm)
+) !@
+@! builder.addSubSection(
+id = "api-ref-versioning",
+title = "Schema Versioning",
+content = @template.guide.content.api_reference_versioning(vm = vm)
+) !@
+@! builder.addSubSection(
+id = "api-ref-nominal-typing",
+title = "Nominal Typing",
+content = @template.guide.content.api_reference_nominal_typing(vm = vm)
+) !@
+@! builder.addSubSection(
+id = "api-ref-contextual-nesting",
+title = "Contextual Nesting",
+content = @template.guide.content.api_reference_contextual_nesting(vm = vm)
+) !@
+@! builder.addSubSection(
+id = "api-ref-applying-annotations",
+title = "Applying Annotations",
+content = @template.guide.content.api_reference_applying_annotations(vm = vm)
+) !@
+@! builder.addSubSection(
+id = "api-ref-hide-annotation",
+title = "Disabling with @Replicate.Hide",
+content = @template.guide.content.api_reference_hide_annotation(vm = vm)
+) !@
+@! builder.endSection() !@
+
+@! builder.startSection(
+id = "generated-code",
+title = "Understanding the Generated Code",
+description = @`<p>The code KReplica generates is designed for maximum safety and flexibility. It's built on two key
+    concepts you'll work with: sealed hierarchies and variant interfaces.</p>`
+) !@
+@! builder.addSubSection(
+id = "generated-code-sealed",
+title = "Sealed Hierarchies",
+content = @template.guide.content.generated_code_sealed(vm = vm)
+) !@
+@! builder.addSubSection(
+id = "generated-code-variants",
+title = "Local vs. Global Variants",
+content = @template.guide.content.generated_code_variants(vm = vm)
+) !@
+@! builder.endSection() !@
+
+@! builder.startSection(
+id = "patterns",
+title = "Core Patterns & Use Cases",
+description = @`<p>Learn how to apply KReplica's features to solve common development challenges.</p>`
+) !@
+@! builder.addSubSection(
+id = "patterns-kotlinx-serialization",
+title = "kotlinx.serialization",
+content = @template.guide.content.patterns_kotlinx_serialization(vm = vm)
+) !@
+@! builder.addSubSection(
+id = "patterns-api-mappers",
+title = "Type-Safe API Mappers",
+content = @template.guide.content.patterns_api_mappers(vm = vm)
+) !@
+@! builder.endSection() !@
+
+@! builder.addSection(
+id = "faq",
+title = "Frequently Asked Questions",
+content = @template.guide.content.faq(vm = vm)
+) !@

@@ -1,0 +1,12 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>KReplica uses a simple naming convention (e.g., <code>private interface V1 :
+        MySchema</code>) to automatically create versioned, sealed hierarchies. If you
+    prefer not to use this convention, you can manually assign a version number with <code>@Replicate.SchemaVersion(number
+        = ...)</code>.</p>
+!{ val versioningExample = vm.examples["api-ref-versioning"] }
+@if(versioningExample != null)
+    <div class="workflow-container">
+        @template.tags.guide-example(example = versioningExample)
+    </div>
+@endif

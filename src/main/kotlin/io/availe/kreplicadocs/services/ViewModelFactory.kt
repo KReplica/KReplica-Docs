@@ -39,7 +39,7 @@ class ViewModelFactory(
                     id = def.id,
                     label = def.label,
                     description = def.description,
-                    example = processedExample
+                    example = processedExample,
                 )
             } else {
                 val codeSnippet = when {
@@ -65,7 +65,7 @@ class ViewModelFactory(
                     id = def.id,
                     label = def.label,
                     description = def.description,
-                    codeSnippet = codeSnippet
+                    codeSnippet = codeSnippet,
                 )
             }
         }
@@ -78,7 +78,7 @@ class ViewModelFactory(
             currentPage = PageId.INDEX,
             snippets = snippetProvider.getSnippets(),
             heroDemoTabs = getTabsForKey("heroDemoTabs"),
-            whenTabs = getTabsForKey("whenTabs")
+            whenTabs = getTabsForKey("whenTabs"),
         )
     }
 
@@ -88,12 +88,12 @@ class ViewModelFactory(
 
         val exampleMapping = mapOf(
             "api-ref-replicate-model" to CodeSnippet.GUIDE_REF_MODEL_VARIANTS,
-            "api-ref-versioning" to CodeSnippet.GUIDE_REF_VERSIONING
+            "api-ref-versioning" to CodeSnippet.GUIDE_REF_VERSIONING,
         )
 
         val tabsMapping = mapOf(
             "api-ref-contextual-nesting" to "contextualNestingTabs",
-            "patterns-api-mappers" to "apiMapperTabs"
+            "patterns-api-mappers" to "apiMapperTabs",
         )
 
         exampleMapping.forEach { (id, snippet) ->
@@ -104,14 +104,43 @@ class ViewModelFactory(
             tabs[id] = getTabsForKey(key)
         }
 
+        val tempVmForBuilder = GuideViewModel(
+            navLinks = emptyList(),
+            properties = appProperties,
+            currentPage = PageId.GUIDE,
+            snippets = snippetProvider.getSnippets(),
+            guideNav = emptyList(),
+            examples = examples,
+            tabs = tabs,
+            guideContent = emptyList(),
+        )
+
+        val builder = GuideBuilder()
+        val model = mapOf("vm" to tempVmForBuilder, "builder" to builder)
+
+        templateEngine.render("guide/manifest.kte", model, gg.jte.output.StringOutput())
+
+        val guideContent = builder.build()
+
+        val guideNav = guideContent.map { section ->
+            GuideNavSection(
+                id = section.id,
+                title = section.title,
+                subsections = section.subsections.map { subsection ->
+                    GuideNavSubSection(id = subsection.id, title = subsection.title)
+                },
+            )
+        }
+
         return GuideViewModel(
             navLinks = navigationProvider.getNavLinks(),
             properties = appProperties,
             currentPage = PageId.GUIDE,
             snippets = snippetProvider.getSnippets(),
-            guideNav = navigationProvider.getGuideNav(),
+            guideNav = guideNav,
             examples = examples,
-            tabs = tabs
+            tabs = tabs,
+            guideContent = guideContent,
         )
     }
 
@@ -125,7 +154,7 @@ class ViewModelFactory(
             inputCode = sourceCodeNormalizer.forDisplay(originalSource),
             outputFiles = response?.generatedFiles,
             inputTabLabel = "Your Interface",
-            outputTabLabel = "Generated DTOs"
+            outputTabLabel = "Generated DTOs",
         )
     }
 
@@ -140,7 +169,7 @@ class ViewModelFactory(
             SelectOption(
                 value = it.slug,
                 label = it.name,
-                selected = it.slug == activeTemplate.slug
+                selected = it.slug == activeTemplate.slug,
             )
         }
 
@@ -150,7 +179,7 @@ class ViewModelFactory(
             currentPage = PageId.PLAYGROUND,
             availableTemplates = templateOptions,
             initialSourceCode = initialSource,
-            activeTemplateSlug = activeTemplateSlug
+            activeTemplateSlug = activeTemplateSlug,
         )
     }
 }

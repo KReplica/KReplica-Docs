@@ -1,0 +1,6 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+!{ val mappersTabs = vm.tabs["patterns-api-mappers"] }
+@if(mappersTabs != null)
+    @template.tags.tabs(tabs = mappersTabs)
+@endif

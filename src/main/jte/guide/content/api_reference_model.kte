@@ -1,0 +1,25 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>This is the primary annotation that marks an interface for DTO generation. Use
+    <code>@Replicate.Property</code>
+    on individual properties to override these model-level settings.</p>
+<dl>
+    <dt><code>variants: Array&lt;DtoVariant&gt;</code> (Required)</dt>
+    <dd>Specifies which DTO variants to generate. Possible values are
+        <code>DtoVariant.DATA</code>, <code>DtoVariant.CREATE</code>, and <code>DtoVariant.PATCH</code>.
+    </dd>
+    <dt><code>nominalTyping: NominalTyping</code> (Default: <code>DISABLED</code>)</dt>
+    <dd>When <code>ENABLED</code>, this wraps primitive properties in type-safe value
+        classes to prevent accidentally mixing up types like IDs.
+    </dd>
+    <dt><code>autoContextual: AutoContextual</code> (Default: <code>ENABLED</code>)</dt>
+    <dd>Controls automatic integration with <code>kotlinx.serialization</code> by adding
+        <code>@Contextual</code> to non-primitive property types.
+    </dd>
+</dl>
+!{ val modelExample = vm.examples["api-ref-replicate-model"] }
+@if(modelExample != null)
+    <div class="workflow-container">
+        @template.tags.guide-example(example = modelExample)
+    </div>
+@endif

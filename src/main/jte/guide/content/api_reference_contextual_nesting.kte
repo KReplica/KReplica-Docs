@@ -1,0 +1,9 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>When nesting one replicated model inside another, KReplica intelligently matches the
+    variants. A parent model's <code>CreateRequest</code> will automatically use the child's
+    <code>CreateRequest</code>. This works for both versioned and unversioned schemas.</p>
+!{ val nestingTabs = vm.tabs["api-ref-contextual-nesting"] }
+@if(nestingTabs != null)
+    @template.tags.tabs(tabs = nestingTabs)
+@endif
