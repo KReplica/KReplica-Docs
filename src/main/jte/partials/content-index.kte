@@ -23,19 +23,19 @@
 <ul class="feature-list">
     <li class="feature-item">
         @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
-        <span>Generates <strong>Create, Data & Patch</strong> variants automatically.</span>
+        <span>Generates <strong>Create, Data & Patch</strong> from one interface.</span>
     </li>
     <li class="feature-item">
         @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
-        <span><strong>Sealed hierarchies</strong> force exhaustive <code>when</code> expressions.</span>
+        <span><strong>Sealed hierarchies</strong> allow exhaustive <code>when</code> expressions.</span>
     </li>
     <li class="feature-item">
         @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
-        <span><strong>Version-aware</strong>, so your code won't compile until you handle new versions.</span>
+        <span>Generate <strong>versioned DTOs</strong> with ease.</span>
     </li>
     <li class="feature-item">
         @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
-        <span>Powered by <strong>KSP</strong> for fast, reflection-free performance.</span>
+        <span>Compile-time codegen powered via <strong>KSP</strong> and <strong>Kotlin Poet</strong>.</span>
     </li>
 </ul>
 
@@ -81,11 +81,6 @@
            rel="noopener noreferrer">
             <h3>Repository</h3>
             <p>View the project's repository and its source code.</p>
-        </a>
-        <a href="https://github.com/KReplica/KReplica" class="link-card" target="_blank"
-           rel="noopener noreferrer">
-            <h3>Sponsor</h3>
-            <p>Support me.</p>
         </a>
     </div>
 </div>
