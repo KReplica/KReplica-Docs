@@ -1,21 +1,26 @@
 @import io.availe.kreplicadocs.model.view.Tab
+@import gg.jte.Content
 
 @param example: io.availe.kreplicadocs.model.view.ProcessedGuideExample
 
 !{
-    val tabs = listOf(
-        Tab("input", example.inputTabLabel, null, null),
-        Tab("output", example.outputTabLabel, null, null)
-    )
+    val tabs = mutableListOf(Tab("input", example.inputTabLabel, null, null))
+    val outputFiles = example.outputFiles
+    if (outputFiles != null && outputFiles.isNotEmpty()) {
+        tabs.add(Tab("output", "Generated Code", null, null))
+    }
 
-    val contentMap = mapOf(
-        "input" to @`
+    val contentMap = mutableMapOf<String, Content>()
+
+    contentMap["input"] = @`
     @template.tags.code(language="kotlin", content=@`${example.inputCode}`)
-`,
-        "output" to @`
-    @template.tags.generated-code-viewer(files = example.outputFiles)
 `
-    )
+
+    if (outputFiles != null) {
+        contentMap["output"] = @`
+    @template.tags.generated-code-viewer(files = outputFiles)
+`
+    }
 }
 
 @template.tags.tabs(tabs = tabs, rawContent = contentMap)

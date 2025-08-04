@@ -1,6 +1,7 @@
 package io.availe.kreplicadocs.services
 
 import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.availe.kreplicadocs.common.CodeSnippet
 import io.availe.kreplicadocs.model.PlaygroundTemplate
@@ -19,6 +20,7 @@ class CodeSnippetProvider(
     private val log = LoggerFactory.getLogger(CodeSnippetProvider::class.java)
     private val snippets = mutableMapOf<CodeSnippet, String>()
     private val playgroundTemplates = mutableListOf<PlaygroundTemplate>()
+    private var tabsJson: JsonNode? = null
 
     @PostConstruct
     fun init() {
@@ -61,5 +63,15 @@ class CodeSnippetProvider(
         val resource = resourcePatternResolver.getResource("classpath:playground-templates/${slug.value}.kt")
         if (!resource.exists()) throw FileNotFoundException("Playground template not found: ${slug.value}")
         return resource.inputStream.bufferedReader().use { it.readText() }
+    }
+
+    fun getTabsJson(): JsonNode {
+        if (tabsJson == null) {
+            val resource = resourcePatternResolver.getResource("classpath:metadata/tabs.json")
+            tabsJson = resource.inputStream.use {
+                objectMapper.readTree(it)
+            }
+        }
+        return tabsJson!!
     }
 }

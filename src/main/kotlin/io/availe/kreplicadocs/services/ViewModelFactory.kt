@@ -1,13 +1,18 @@
 package io.availe.kreplicadocs.services
 
+import gg.jte.TemplateEngine
+import gg.jte.output.StringOutput
+import io.availe.kreplicadocs.common.CodeSnippet
 import io.availe.kreplicadocs.common.PageId
 import io.availe.kreplicadocs.config.AppProperties
 import io.availe.kreplicadocs.config.CacheNames
 import io.availe.kreplicadocs.model.CompileResponse
 import io.availe.kreplicadocs.model.TemplateSlug
 import io.availe.kreplicadocs.model.view.*
+import org.springframework.cache.Cache
 import org.springframework.cache.CacheManager
 import org.springframework.stereotype.Service
+import org.springframework.ui.ModelMap
 
 @Service
 class ViewModelFactory(
@@ -17,8 +22,14 @@ class ViewModelFactory(
     private val tabProvider: TabProvider,
     private val sourceCodeNormalizer: SourceCodeNormalizer,
     private val guideContentProvider: GuideContentProvider,
-    private val cacheManager: CacheManager
+    private val cacheManager: CacheManager,
+    private val templateEngine: TemplateEngine,
 ) {
+
+    private val permanentCache: Cache by lazy {
+        cacheManager.getCache(CacheNames.PERMANENT_TEMPLATES)
+            ?: throw IllegalStateException("Cache '${CacheNames.PERMANENT_TEMPLATES}' not found.")
+    }
 
     fun createIndexViewModel(): IndexViewModel {
         return IndexViewModel(
@@ -32,36 +43,45 @@ class ViewModelFactory(
     }
 
     fun createGuideViewModel(): GuideViewModel {
-        val permanentCache = cacheManager.getCache(CacheNames.PERMANENT_TEMPLATES)
-            ?: throw IllegalStateException("Cache '${CacheNames.PERMANENT_TEMPLATES}' not found.")
-        val guideContentStubs = guideContentProvider.getGuideContent()
+        val guideNav = navigationProvider.getGuideNav()
+        val guideContentStubs = guideContentProvider.getGuideContent().associateBy { it.id }
+        val allSnippets = snippetProvider.getSnippets()
 
-        val processedContent = guideContentStubs.map { sectionStub ->
-            val processedSubsections = sectionStub.subsections.map { subsectionStub ->
-                val example = subsectionStub.exampleSlug?.let { slug ->
-                    val exampleStub = guideContentProvider.getGuideContent()
-                        .flatMap { it.subsections }
-                        .find { it.exampleSlug == slug }
-                    val originalSource = snippetProvider.getPlaygroundTemplateSource(TemplateSlug(slug))
-                    val cacheKey = sourceCodeNormalizer.getCacheKey(originalSource)
-                    val response = permanentCache.get(cacheKey, CompileResponse::class.java)
-                    ProcessedGuideExample(
-                        inputCode = sourceCodeNormalizer.forDisplay(originalSource),
-                        outputFiles = response?.generatedFiles,
-                        inputTabLabel = exampleStub?.exampleSlug ?: "Your Interface",
-                        outputTabLabel = exampleStub?.exampleSlug ?: "Generated DTOs"
-                    )
+        val processedContent = guideNav.map { sectionNav ->
+            val sectionStub = guideContentStubs[sectionNav.id]
+            val processedSubsections = sectionNav.subsections.map { subsectionNav ->
+                val subsectionStub = sectionStub?.subsections?.find { it.id == subsectionNav.id }
+
+                val example = subsectionStub?.exampleSnippetKey?.let { key ->
+                    processGuideExample(CodeSnippet.valueOf(key))
                 }
-                val tabs = subsectionStub.useTabsKey?.let { tabProvider.getTabs(it) }
+
+                val tabs = subsectionStub?.useTabsKey?.let { key ->
+                    tabProvider.getTabs(key).map { tab ->
+                        val nestedExampleKey = getSnippetKeyFromTab(key, tab.id)
+                        if (nestedExampleKey != null) {
+                            val processedExample = processGuideExample(CodeSnippet.valueOf(nestedExampleKey))
+                            tab.copy(example = processedExample, codeSnippet = null)
+                        } else {
+                            tab
+                        }
+                    }
+                }
+
+                val referenceSnippet = subsectionStub?.snippetKey?.let { allSnippets[CodeSnippet.valueOf(it)] }
 
                 ProcessedGuideSubsection(
-                    id = subsectionStub.id,
+                    id = subsectionNav.id,
+                    title = subsectionNav.title,
                     example = example,
-                    tabs = tabs
+                    tabs = tabs,
+                    referenceSnippet = referenceSnippet
                 )
             }
+
             ProcessedGuideSection(
-                id = sectionStub.id,
+                id = sectionNav.id,
+                title = sectionNav.title,
                 subsections = processedSubsections
             )
         }
@@ -70,10 +90,35 @@ class ViewModelFactory(
             navLinks = navigationProvider.getNavLinks(),
             properties = appProperties,
             currentPage = PageId.GUIDE,
-            snippets = snippetProvider.getSnippets(),
-            guideNav = navigationProvider.getGuideNav(),
+            snippets = allSnippets,
+            guideNav = guideNav,
             content = processedContent
         )
+    }
+
+    private fun getSnippetKeyFromTab(tabKey: String, tabId: String): String? {
+        val jsonNode = snippetProvider.getTabsJson()
+        return jsonNode.path(tabKey).find { it.path("id").asText() == tabId }?.path("exampleSnippetKey")?.asText(null)
+    }
+
+    private fun processGuideExample(snippet: CodeSnippet): ProcessedGuideExample {
+        val originalSource = snippetProvider.getSnippets()[snippet]
+            ?: error("Snippet ${snippet.name} not found.")
+        val cacheKey = sourceCodeNormalizer.getCacheKey(originalSource)
+        val response = permanentCache.get(cacheKey, CompileResponse::class.java)
+        return ProcessedGuideExample(
+            inputCode = sourceCodeNormalizer.forDisplay(originalSource),
+            outputFiles = response?.generatedFiles,
+            inputTabLabel = "Your Interface",
+            outputTabLabel = "Generated DTOs"
+        )
+    }
+
+    private fun renderExampleToString(example: ProcessedGuideExample): String {
+        val modelMap = ModelMap("example", example)
+        val output = StringOutput()
+        templateEngine.render("tags/guide-example.kte", modelMap, output)
+        return output.toString()
     }
 
     fun createPlaygroundViewModel(): PlaygroundViewModel {

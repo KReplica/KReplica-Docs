@@ -16,5 +16,11 @@ enum class CodeSnippet(val path: String) {
     MAPPER_PATTERN_KREPLICA_INTERFACE("mapper-pattern/03-kreplica-interface.kt"),
     MAPPER_PATTERN_IMPLEMENTATION("mapper-pattern/04-implementation.kt"),
 
-    HOMEPAGE_DEMO_SOURCE("homepage/demo-source.kt")
+    HOMEPAGE_DEMO_SOURCE("homepage/demo-source.kt"),
+
+    GUIDE_REF_MODEL_VARIANTS("guide-reference/model-variants.kt"),
+    GUIDE_REF_PROPERTY_EXCLUDE("guide-reference/property-exclude.kt"),
+    GUIDE_REF_VERSIONING("guide-reference/versioning.kt"),
+    GUIDE_REF_NESTING_UNVERSIONED("guide-reference/nesting-unversioned.kt"),
+    GUIDE_REF_NESTING_VERSIONED("guide-reference/nesting-versioned.kt")
 }

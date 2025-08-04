@@ -10,8 +10,9 @@ data class GuideExampleStub(
 
 data class GuideSubsectionStub(
     @param:JsonProperty("id") val id: String,
-    @param:JsonProperty("exampleSlug") val exampleSlug: String? = null,
-    @param:JsonProperty("useTabsKey") val useTabsKey: String? = null
+    @param:JsonProperty("exampleSnippetKey") val exampleSnippetKey: String? = null,
+    @param:JsonProperty("useTabsKey") val useTabsKey: String? = null,
+    @param:JsonProperty("snippetKey") val snippetKey: String? = null
 )
 
 data class GuideSectionStub(

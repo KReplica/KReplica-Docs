@@ -33,16 +33,16 @@
   ],
   "contextualNestingTabs": [
     {
-      "id": "auto",
-      "label": "The Smart Way (Automatic)",
-      "description": "Let KReplica handle the complexity. Simply nest the base interface of the child model (e.g. `UserAccount`). KReplica automatically ensures that the `Create` variant of the parent uses the `Create` variant of the child, and so on.",
-      "codeSnippetKey": "NESTING_AUTOMATIC"
+      "id": "unversioned",
+      "label": "Unversioned Nesting",
+      "description": "KReplica automatically matches variants when you nest an unversioned schema. A parent's `CreateRequest` will use the child's `CreateRequest`.",
+      "exampleSnippetKey": "GUIDE_REF_NESTING_UNVERSIONED"
     },
     {
-      "id": "manual",
-      "label": "The Hard Way (Manual)",
-      "description": "To appreciate the automatic approach, here is how you would have to do it manually. Notice how you need to explicitly reference generated types and use `@Replicate.Property` to wire up each variant. This is verbose and error-prone.",
-      "codeSnippetKey": "NESTING_MANUAL"
+      "id": "versioned",
+      "label": "Versioned Nesting",
+      "description": "The same automatic matching applies to specific versions of a schema. Nesting `UserAccountSchema.V1` will correctly use the variants from that version.",
+      "exampleSnippetKey": "GUIDE_REF_NESTING_VERSIONED"
     }
   ],
   "apiMapperTabs": [

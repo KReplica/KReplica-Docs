@@ -41,12 +41,15 @@ data class ProcessedGuideExample(
 
 data class ProcessedGuideSubsection(
     val id: String,
+    val title: String,
     val example: ProcessedGuideExample? = null,
-    val tabs: List<Tab>? = null
+    val tabs: List<Tab>? = null,
+    val referenceSnippet: String? = null
 )
 
 data class ProcessedGuideSection(
     val id: String,
+    val title: String,
     val subsections: List<ProcessedGuideSubsection>
 )
 

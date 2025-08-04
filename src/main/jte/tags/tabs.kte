@@ -20,11 +20,16 @@
                         ${contentBlock}
                     @endif
                 @else
-                    !{val description = tab.description;}
-                    @if(description != null && !description.isEmpty())
-                        <p>${description}</p>
+                    !{val example = tab.example}
+                    @if(example != null)
+                        @template.tags.guide-example(example = example)
+                    @else
+                        !{val description = tab.description}
+                        @if(description != null && !description.isEmpty())
+                            <p>${description}</p>
+                        @endif
+                        @template.tags.code(language="kotlin", content=@`${tab.codeSnippet}`)
                     @endif
-                    @template.tags.code(language="kotlin", content=@`${tab.codeSnippet}`)
                 @endif
             </div>
         @endfor

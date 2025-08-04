@@ -7,27 +7,15 @@
     "subsections": [
       {
         "id": "api-ref-replicate-model",
-        "exampleSlug": "basic-replication"
+        "exampleSnippetKey": "GUIDE_REF_MODEL_VARIANTS"
       },
       {
         "id": "api-ref-versioning",
-        "exampleSlug": "schema-versioning"
-      },
-      {
-        "id": "api-ref-nominal-typing",
-        "exampleSlug": "nominal-typing"
+        "exampleSnippetKey": "GUIDE_REF_VERSIONING"
       },
       {
         "id": "api-ref-contextual-nesting",
         "useTabsKey": "contextualNestingTabs"
-      },
-      {
-        "id": "api-ref-applying-annotations",
-        "exampleSlug": "serialization-and-apply-annotation"
-      },
-      {
-        "id": "api-ref-hide-annotation",
-        "exampleSlug": "hide-annotation"
       }
     ]
   },
@@ -36,19 +24,17 @@
     "subsections": [
       {
         "id": "generated-code-sealed",
-        "useTabsKey": "whenTabs"
+        "snippetKey": "WHEN_EXPRESSION_ALL"
       },
       {
-        "id": "generated-code-variants"
+        "id": "generated-code-variants",
+        "snippetKey": "MAPPER_PATTERN_INTERFACE"
       }
     ]
   },
   {
     "id": "patterns",
     "subsections": [
-      {
-        "id": "patterns-kotlinx-serialization"
-      },
       {
         "id": "patterns-api-mappers",
         "useTabsKey": "apiMapperTabs"

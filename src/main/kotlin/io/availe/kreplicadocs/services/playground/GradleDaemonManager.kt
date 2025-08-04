@@ -1,10 +1,12 @@
 package io.availe.kreplicadocs.services.playground
 
+import io.availe.kreplicadocs.common.CodeSnippet
 import io.availe.kreplicadocs.config.CacheNames
 import io.availe.kreplicadocs.model.CompileRequest
 import io.availe.kreplicadocs.model.JobId
 import io.availe.kreplicadocs.model.TemplateSlug
 import io.availe.kreplicadocs.services.CodeSnippetProvider
+import io.availe.kreplicadocs.services.GuideContentProvider
 import io.availe.kreplicadocs.services.SourceCodeNormalizer
 import org.gradle.tooling.GradleConnector
 import org.slf4j.LoggerFactory
@@ -21,7 +23,8 @@ class GradleDaemonManager(
     private val gradleCompiler: GradleCompiler,
     private val codeSnippetProvider: CodeSnippetProvider,
     private val cacheManager: CacheManager,
-    private val sourceCodeNormalizer: SourceCodeNormalizer
+    private val sourceCodeNormalizer: SourceCodeNormalizer,
+    private val guideContentProvider: GuideContentProvider
 ) {
 
     private val log = LoggerFactory.getLogger(GradleDaemonManager::class.java)
@@ -33,27 +36,46 @@ class GradleDaemonManager(
         val permanentCache = cacheManager.getCache(CacheNames.PERMANENT_TEMPLATES)
             ?: throw IllegalStateException("Cache '${CacheNames.PERMANENT_TEMPLATES}' not found.")
 
-        val allTemplates = codeSnippetProvider.getPlaygroundTemplates()
-        val homepageDemoSource =
-            codeSnippetProvider.getSnippets()[io.availe.kreplicadocs.common.CodeSnippet.HOMEPAGE_DEMO_SOURCE]
+        val snippetsToCompile = mutableSetOf<CodeSnippet>()
 
-        val snippetsToCompile =
-            allTemplates.associate { it.slug to codeSnippetProvider.getPlaygroundTemplateSource(TemplateSlug(it.slug)) }
-                .toMutableMap()
-        if (homepageDemoSource != null) {
-            snippetsToCompile[io.availe.kreplicadocs.common.CodeSnippet.HOMEPAGE_DEMO_SOURCE.name] = homepageDemoSource
+        guideContentProvider.getGuideContent().asSequence()
+            .flatMap { it.subsections }
+            .mapNotNull { it.exampleSnippetKey }
+            .forEach { snippetsToCompile.add(CodeSnippet.valueOf(it)) }
+
+        try {
+            val tabsJson = codeSnippetProvider.getTabsJson()
+            tabsJson.fields().forEach { (_, tabGroupNode) ->
+                tabGroupNode.forEach { tabNode ->
+                    tabNode.path("exampleSnippetKey").takeIf { !it.isMissingNode }?.asText()?.let {
+                        snippetsToCompile.add(CodeSnippet.valueOf(it))
+                    }
+                    tabNode.path("generatedFrom").takeIf { !it.isMissingNode }?.asText()?.let {
+                        snippetsToCompile.add(CodeSnippet.valueOf(it))
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            log.error("Could not parse tabs.json for cache priming.", e)
         }
 
-        snippetsToCompile.forEach { (name, sourceCode) ->
+        snippetsToCompile.add(CodeSnippet.HOMEPAGE_DEMO_SOURCE)
+
+        val allSnippets = codeSnippetProvider.getSnippets()
+
+        snippetsToCompile.forEach { snippet ->
             try {
+                val sourceCode = allSnippets[snippet]
+                    ?: throw IllegalStateException("Source for ${snippet.name} not found")
+
                 val cacheKey = sourceCodeNormalizer.getCacheKey(sourceCode)
                 if (permanentCache[cacheKey] != null) {
-                    log.debug("Cache already primed for: {}", name)
+                    log.debug("Cache already primed for: {}", snippet.name)
                     return@forEach
                 }
 
                 val request = CompileRequest(
-                    jobId = JobId("warmup-$name-${UUID.randomUUID()}"),
+                    jobId = JobId("warmup-${snippet.name}-${UUID.randomUUID()}"),
                     sourceCode = sourceCode
                 )
                 val cancellationTokenSource = GradleConnector.newCancellationTokenSource()
@@ -61,12 +83,12 @@ class GradleDaemonManager(
 
                 if (response.success) {
                     permanentCache.put(cacheKey, response)
-                    log.info("Successfully compiled and cached: {}", name)
+                    log.info("Successfully compiled and cached: {}", snippet.name)
                 } else {
-                    log.error("Warmup compilation FAILED for {}: {}", name, response.message)
+                    log.error("Warmup compilation FAILED for {}: {}", snippet.name, response.message)
                 }
             } catch (e: Exception) {
-                log.error("Exception during warmup for '{}'", name, e)
+                log.error("Exception during warmup for '{}'", snippet.name, e)
             }
         }
         log.info("Gradle daemon warmup and cache priming complete.")
