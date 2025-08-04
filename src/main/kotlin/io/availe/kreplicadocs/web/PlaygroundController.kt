@@ -9,6 +9,7 @@ import io.availe.kreplicadocs.common.WebApp
 import io.availe.kreplicadocs.config.CacheNames
 import io.availe.kreplicadocs.model.*
 import io.availe.kreplicadocs.services.CodeSnippetProvider
+import io.availe.kreplicadocs.services.SourceCodeNormalizer
 import io.availe.kreplicadocs.services.ViewModelFactory
 import io.availe.kreplicadocs.services.playground.PlaygroundService
 import jakarta.annotation.PostConstruct
@@ -45,7 +46,8 @@ class PlaygroundController(
     private val snippetProvider: CodeSnippetProvider,
     private val playgroundService: PlaygroundService,
     private val templateEngine: TemplateEngine,
-    private val cacheManager: CacheManager
+    private val cacheManager: CacheManager,
+    private val sourceCodeNormalizer: SourceCodeNormalizer
 ) {
 
     private val log = LoggerFactory.getLogger(PlaygroundController::class.java)
@@ -91,9 +93,9 @@ class PlaygroundController(
         log.debug("Received compile request for tab: {}", tabSessionId.value)
 
         val sourceCode = compileRequestForm.source
-        val normalizedSourceCode = sourceCode.trim().replace("\r\n", "\n")
+        val cacheKey = sourceCodeNormalizer.getCacheKey(sourceCode)
 
-        permanentCache.get(normalizedSourceCode, CompileResponse::class.java)?.let {
+        permanentCache.get(cacheKey, CompileResponse::class.java)?.let {
             log.debug("Permanent cache HIT. Returning results directly.")
             model.addAttribute("files", it.generatedFiles)
             return FragmentTemplate.PLAYGROUND_RESULTS.path
@@ -111,7 +113,7 @@ class PlaygroundController(
                 return FragmentTemplate.PLAYGROUND_COMPILING.path
             }
 
-            completedJobsCache.get(normalizedSourceCode, CompileResponse::class.java)?.let {
+            completedJobsCache.get(cacheKey, CompileResponse::class.java)?.let {
                 log.debug("Completed jobs cache HIT. Returning results directly.")
                 model.addAttribute("files", it.generatedFiles)
                 return FragmentTemplate.PLAYGROUND_RESULTS.path
@@ -204,9 +206,9 @@ class PlaygroundController(
 
     private fun handleJobResult(response: CompileResponse?) {
         if (response != null && response.success) {
-            val normalizedSourceCode = response.sourceCode.trim().replace("\r\n", "\n")
+            val cacheKey = sourceCodeNormalizer.getCacheKey(response.sourceCode)
             completedJobsCache.put(response.jobId, response)
-            completedJobsCache.put(normalizedSourceCode, response)
+            completedJobsCache.put(cacheKey, response)
         }
     }
 

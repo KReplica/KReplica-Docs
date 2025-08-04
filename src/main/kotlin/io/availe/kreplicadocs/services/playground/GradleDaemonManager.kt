@@ -1,11 +1,11 @@
 package io.availe.kreplicadocs.services.playground
 
-import io.availe.kreplicadocs.common.CodeSnippet
 import io.availe.kreplicadocs.config.CacheNames
 import io.availe.kreplicadocs.model.CompileRequest
 import io.availe.kreplicadocs.model.JobId
 import io.availe.kreplicadocs.model.TemplateSlug
 import io.availe.kreplicadocs.services.CodeSnippetProvider
+import io.availe.kreplicadocs.services.SourceCodeNormalizer
 import org.gradle.tooling.GradleConnector
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
@@ -20,7 +20,8 @@ import java.util.concurrent.TimeUnit
 class GradleDaemonManager(
     private val gradleCompiler: GradleCompiler,
     private val codeSnippetProvider: CodeSnippetProvider,
-    private val cacheManager: CacheManager
+    private val cacheManager: CacheManager,
+    private val sourceCodeNormalizer: SourceCodeNormalizer
 ) {
 
     private val log = LoggerFactory.getLogger(GradleDaemonManager::class.java)
@@ -32,24 +33,21 @@ class GradleDaemonManager(
         val permanentCache = cacheManager.getCache(CacheNames.PERMANENT_TEMPLATES)
             ?: throw IllegalStateException("Cache '${CacheNames.PERMANENT_TEMPLATES}' not found.")
 
-        val snippetsToCompile = mutableMapOf<String, String>()
+        val allTemplates = codeSnippetProvider.getPlaygroundTemplates()
+        val homepageDemoSource =
+            codeSnippetProvider.getSnippets()[io.availe.kreplicadocs.common.CodeSnippet.HOMEPAGE_DEMO_SOURCE]
 
-        codeSnippetProvider.getPlaygroundTemplates().forEach { template ->
-            val slug = TemplateSlug(template.slug)
-            val sourceCode = codeSnippetProvider.getPlaygroundTemplateSource(slug)
-            snippetsToCompile[template.slug] = sourceCode
-        }
-
-        val homepageDemoSource = codeSnippetProvider.getSnippets()[CodeSnippet.HOMEPAGE_DEMO_SOURCE]
+        val snippetsToCompile =
+            allTemplates.associate { it.slug to codeSnippetProvider.getPlaygroundTemplateSource(TemplateSlug(it.slug)) }
+                .toMutableMap()
         if (homepageDemoSource != null) {
-            snippetsToCompile[CodeSnippet.HOMEPAGE_DEMO_SOURCE.name] = homepageDemoSource
+            snippetsToCompile[io.availe.kreplicadocs.common.CodeSnippet.HOMEPAGE_DEMO_SOURCE.name] = homepageDemoSource
         }
 
         snippetsToCompile.forEach { (name, sourceCode) ->
             try {
-                val normalizedSourceCode = sourceCode.trim().replace("\r\n", "\n")
-
-                if (permanentCache[normalizedSourceCode] != null) {
+                val cacheKey = sourceCodeNormalizer.getCacheKey(sourceCode)
+                if (permanentCache[cacheKey] != null) {
                     log.debug("Cache already primed for: {}", name)
                     return@forEach
                 }
@@ -62,7 +60,7 @@ class GradleDaemonManager(
                 val response = gradleCompiler.compile(request, cancellationTokenSource)
 
                 if (response.success) {
-                    permanentCache.put(normalizedSourceCode, response)
+                    permanentCache.put(cacheKey, response)
                     log.info("Successfully compiled and cached: {}", name)
                 } else {
                     log.error("Warmup compilation FAILED for {}: {}", name, response.message)

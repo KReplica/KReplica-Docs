@@ -25,7 +25,8 @@ class TabProvider(
     private val resourcePatternResolver: ResourcePatternResolver,
     private val objectMapper: ObjectMapper,
     private val codeSnippetProvider: CodeSnippetProvider,
-    private val cacheManager: CacheManager
+    private val cacheManager: CacheManager,
+    private val sourceCodeNormalizer: SourceCodeNormalizer
 ) {
     private lateinit var tabGroups: Map<String, List<TabDefinition>>
     private lateinit var permanentCache: Cache
@@ -56,9 +57,9 @@ class TabProvider(
                     val sourceSnippetEnum = CodeSnippet.valueOf(def.generatedFrom)
                     val sourceCode = snippets[sourceSnippetEnum]
                         ?: "Error: Source snippet for key '${def.generatedFrom}' not found."
-                    val normalizedSourceCode = sourceCode.trim().replace("\r\n", "\n")
+                    val cacheKey = sourceCodeNormalizer.getCacheKey(sourceCode)
 
-                    val cachedResponse = permanentCache.get(normalizedSourceCode, CompileResponse::class.java)
+                    val cachedResponse = permanentCache.get(cacheKey, CompileResponse::class.java)
                     cachedResponse?.generatedFiles?.values?.firstOrNull()
                         ?: "Compiling... please wait a moment and refresh."
                 }

@@ -15,6 +15,7 @@ class ViewModelFactory(
     private val appProperties: AppProperties,
     private val navigationProvider: NavigationProvider,
     private val tabProvider: TabProvider,
+    private val sourceCodeNormalizer: SourceCodeNormalizer
 ) {
 
     fun createIndexViewModel(): IndexViewModel {
