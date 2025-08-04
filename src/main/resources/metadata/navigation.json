@@ -19,18 +19,37 @@
   "guideNav": [
     {
       "id": "top",
-      "title": "Top",
-      "subsections": []
+      "title": "Introduction"
     },
     {
-      "id": "quick-start",
-      "title": "Quick Start",
-      "subsections": []
-    },
-    {
-      "id": "core-concept",
-      "title": "The Core Concept",
-      "subsections": []
+      "id": "api-reference",
+      "title": "API Reference",
+      "subsections": [
+        {
+          "id": "api-ref-replicate-model",
+          "title": "@Replicate.Model & @Property"
+        },
+        {
+          "id": "api-ref-versioning",
+          "title": "Schema Versioning"
+        },
+        {
+          "id": "api-ref-nominal-typing",
+          "title": "Nominal Typing"
+        },
+        {
+          "id": "api-ref-contextual-nesting",
+          "title": "Contextual Nesting"
+        },
+        {
+          "id": "api-ref-applying-annotations",
+          "title": "Applying Annotations"
+        },
+        {
+          "id": "api-ref-hide-annotation",
+          "title": "Disabling with @Replicate.Hide"
+        }
+      ]
     },
     {
       "id": "generated-code",
@@ -47,42 +66,16 @@
       ]
     },
     {
-      "id": "api-reference",
-      "title": "Configuration API Reference",
-      "subsections": [
-        {
-          "id": "api-ref-replicate-model",
-          "title": "@Replicate.Model"
-        },
-        {
-          "id": "api-ref-replicate-property",
-          "title": "@Replicate.Property"
-        },
-        {
-          "id": "api-ref-supporting-annotations",
-          "title": "Supporting Annotations"
-        }
-      ]
-    },
-    {
       "id": "patterns",
       "title": "Core Patterns & Use Cases",
       "subsections": [
         {
-          "id": "patterns-schema-versioning",
-          "title": "Schema Versioning"
-        },
-        {
-          "id": "patterns-contextual-nesting",
-          "title": "Contextual Variant Nesting"
+          "id": "patterns-kotlinx-serialization",
+          "title": "kotlinx.serialization"
         },
         {
           "id": "patterns-api-mappers",
-          "title": "Recipe: Type-Safe API Mappers"
-        },
-        {
-          "id": "patterns-kotlinx-serialization",
-          "title": "Integrating with kotlinx.serialization"
+          "title": "Type-Safe API Mappers"
         }
       ]
     },
@@ -92,7 +85,7 @@
       "subsections": [
         {
           "id": "faq-property-scope",
-          "title": "Broader Property Replication?"
+          "title": "Property Scope"
         },
         {
           "id": "faq-compilation-order",
@@ -100,7 +93,7 @@
         },
         {
           "id": "faq-private-keyword",
-          "title": "Use of `private` Keyword"
+          "title": "`private` Keyword"
         }
       ]
     }

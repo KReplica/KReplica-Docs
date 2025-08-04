@@ -1,4 +1,4 @@
-@param section: io.availe.kreplicadocs.model.view.GuideSection
+@param section: io.availe.kreplicadocs.model.view.GuideNavSection
 @param includeOverview: Boolean = false
 
 @if(includeOverview)

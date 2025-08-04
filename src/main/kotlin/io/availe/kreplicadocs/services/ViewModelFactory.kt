@@ -2,11 +2,11 @@ package io.availe.kreplicadocs.services
 
 import io.availe.kreplicadocs.common.PageId
 import io.availe.kreplicadocs.config.AppProperties
+import io.availe.kreplicadocs.config.CacheNames
+import io.availe.kreplicadocs.model.CompileResponse
 import io.availe.kreplicadocs.model.TemplateSlug
-import io.availe.kreplicadocs.model.view.GuideViewModel
-import io.availe.kreplicadocs.model.view.IndexViewModel
-import io.availe.kreplicadocs.model.view.PlaygroundViewModel
-import io.availe.kreplicadocs.model.view.SelectOption
+import io.availe.kreplicadocs.model.view.*
+import org.springframework.cache.CacheManager
 import org.springframework.stereotype.Service
 
 @Service
@@ -15,7 +15,9 @@ class ViewModelFactory(
     private val appProperties: AppProperties,
     private val navigationProvider: NavigationProvider,
     private val tabProvider: TabProvider,
-    private val sourceCodeNormalizer: SourceCodeNormalizer
+    private val sourceCodeNormalizer: SourceCodeNormalizer,
+    private val guideContentProvider: GuideContentProvider,
+    private val cacheManager: CacheManager
 ) {
 
     fun createIndexViewModel(): IndexViewModel {
@@ -30,15 +32,42 @@ class ViewModelFactory(
     }
 
     fun createGuideViewModel(): GuideViewModel {
+        val permanentCache = cacheManager.getCache(CacheNames.PERMANENT_TEMPLATES)
+            ?: throw IllegalStateException("Cache '${CacheNames.PERMANENT_TEMPLATES}' not found.")
+        val guideContentStubs = guideContentProvider.getGuideContent()
+
+        val processedContent = guideContentStubs.map { sectionStub ->
+            val processedSubsections = sectionStub.subsections.map { subsectionStub ->
+                val example = subsectionStub.exampleSlug?.let { slug ->
+                    val originalSource = snippetProvider.getPlaygroundTemplateSource(TemplateSlug(slug))
+                    val cacheKey = sourceCodeNormalizer.getCacheKey(originalSource)
+                    val response = permanentCache.get(cacheKey, CompileResponse::class.java)
+                    ProcessedGuideExample(
+                        inputCode = sourceCodeNormalizer.forDisplay(originalSource),
+                        outputFiles = response?.generatedFiles
+                    )
+                }
+                val tabs = subsectionStub.useTabsKey?.let { tabProvider.getTabs(it) }
+
+                ProcessedGuideSubsection(
+                    id = subsectionStub.id,
+                    example = example,
+                    tabs = tabs
+                )
+            }
+            ProcessedGuideSection(
+                id = sectionStub.id,
+                subsections = processedSubsections
+            )
+        }
+
         return GuideViewModel(
             navLinks = navigationProvider.getNavLinks(),
             properties = appProperties,
             currentPage = PageId.GUIDE,
             snippets = snippetProvider.getSnippets(),
             guideNav = navigationProvider.getGuideNav(),
-            whenTabs = tabProvider.getTabs("whenTabs"),
-            contextualNestingTabs = tabProvider.getTabs("contextualNestingTabs"),
-            apiMapperTabs = tabProvider.getTabs("apiMapperTabs")
+            content = processedContent
         )
     }
 
