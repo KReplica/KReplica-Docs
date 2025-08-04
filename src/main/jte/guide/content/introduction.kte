@@ -1,19 +1,18 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
 @template.tags.alert(type="info", content=@`
-    <p><strong>New to KReplica?</strong> For a hands-on introduction, we <strong>strongly
+    <p><strong>New to KReplica?</strong> For a hands-on introduction, I <strong>strongly
             recommend</strong> starting with the <a href="/playground" hx-get="/playground"
                                                     hx-target=".main-content" hx-push-url="true"
                                                     hx-indicator=".page-progress">Playground</a>. It
         provides a live, side-by-side view of how your interfaces are transformed into DTOs.</p>
-    <p>This guide serves as a comprehensive deep-dive and API reference, perfect for after you've
-        grasped the core concepts in the playground.</p>
+    <p>Everything in the <strong>API Reference</strong> is also available in the Playground. The sections after API
+        Reference cover additional content not found in the Playground.</p>
 `)
-<p>This guide provides a detailed reference for KReplica's API and features, walking through core
-    concepts and common patterns to help you get the most out of the library. KReplica is a DTO
-    generator that eliminates boilerplate for Create, Read, and Update operations by generating
-    type-safe Kotlin data classes from simple interfaces.</p>
-<h2>Quick Start</h2>
-<p>Add the KSP and KReplica plugins to your module's <code>build.gradle.kts</code> file to start
-    generating DTOs automatically.</p>
+
+<p>This guide walks through KReplica's API, codegen output, and common patterns. KReplica is a DTO generator, which lets
+    you define multiple DTO variants from one interface, among other things.</p>
+
+<p>To start, simply add the KSP and KReplica plugins to your module's <code>build.gradle.kts</code> file.
+    project.</p>
 @template.tags.code(language = "kotlin", content = @`${vm.snippets[io.availe.kreplicadocs.common.CodeSnippet.QUICKSTART_BUILD]}`)
