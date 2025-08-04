@@ -3,36 +3,26 @@
 
 @param example: io.availe.kreplicadocs.model.view.ProcessedGuideExample
 
-@if(example.isCompilingPlaceholder)
-    <div class="workflow-container">
-        <div class="workflow-content">
-            <div class="placeholder-text">
-                <p>Compiling... please wait a moment and refresh.</p>
-            </div>
-        </div>
+!{
+    val outputFiles = example.outputFiles
+}
+<div class="workflow-container" x-data="{ activeTab: 'input' }">
+    <div class="workflow-tabs" role="tablist">
+        <button role="tab" :class="{ 'active': activeTab === 'input' }" @click="activeTab = 'input'">
+            ${example.inputTabLabel}
+        </button>
+        <button role="tab" :class="{ 'active': activeTab === 'output' }" @click="activeTab = 'output'">
+            Generated Code
+        </button>
     </div>
-@else
-    !{
-        val outputFiles = example.outputFiles
-    }
-    <div class="workflow-container" x-data="{ activeTab: 'input' }">
-        <div class="workflow-tabs" role="tablist">
-            <button role="tab" :class="{ 'active': activeTab === 'input' }" @click="activeTab = 'input'">
-                ${example.inputTabLabel}
-            </button>
-            @if (outputFiles != null && outputFiles.isNotEmpty())
-                <button role="tab" :class="{ 'active': activeTab === 'output' }" @click="activeTab = 'output'">
-                    Generated Code
-                </button>
-            @endif
-        </div>
-        <div class="workflow-content" x-show="activeTab === 'input'" x-cloak>
-            @template.tags.code(language="kotlin", content=@`${example.inputCode}`)
-        </div>
-        @if (outputFiles != null && outputFiles.isNotEmpty())
-            <div class="workflow-content" x-show="activeTab === 'output'" x-cloak>
-                @template.tags.generated-code-viewer(files = outputFiles)
-            </div>
+    <div class="workflow-content" x-show="activeTab === 'input'" x-cloak>
+        @template.tags.code(language="kotlin", content=@`${example.inputCode}`)
+    </div>
+    <div class="workflow-content" x-show="activeTab === 'output'" x-cloak>
+        @if (outputFiles != null && !outputFiles.isEmpty())
+            @template.tags.generated-code-viewer(files = outputFiles)
+        @else
+            @template.tags.code(language="text", content=@`Compiling... please wait a moment and refresh.`, plain=true)
         @endif
     </div>
-@endif
+</div>
