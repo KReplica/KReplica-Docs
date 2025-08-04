@@ -71,7 +71,9 @@
 
                     !{val example = subsection.example}
                     @if(example != null)
-                        @template.tags.guide-example(example = example)
+                        <div class="workflow-container">
+                            @template.tags.guide-example(example = example)
+                        </div>
                     @endif
 
                     !{val tabs = subsection.tabs}
