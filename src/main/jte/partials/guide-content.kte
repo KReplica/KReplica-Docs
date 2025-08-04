@@ -3,130 +3,134 @@
 <div class="guide-content">
     @for(section in vm.content)
         <section id="${section.id}">
-            @when(section.id)
-            @case("top")
-            <h1>KReplica Developer Guide</h1>
-            @template.tags.alert(type="info", content=@`
-                <p><strong>New to KReplica?</strong> For a hands-on introduction, we <strong>strongly recommend</strong>
-                    starting with the <a href="/playground" hx-get="/playground" hx-target=".main-content"
-                                         hx-push-url="true" hx-indicator=".page-progress">Playground</a>. It provides a
-                    live, side-by-side view of how your interfaces are transformed into DTOs.</p>
-                <p>This guide serves as a comprehensive deep-dive and API reference, perfect for after you've grasped
-                    the core concepts in the playground.</p>
-            `)
-            <p>This guide provides a detailed reference for KReplica's API and features, walking through core concepts
-                and common patterns to help you get the most out of the library. KReplica is a DTO generator that
-                eliminates boilerplate for Create, Read, and Update operations by generating type-safe Kotlin data
-                classes from simple interfaces.</p>
+            @if(section.id.equals("top"))
+                <h1>KReplica Developer Guide</h1>
+                @template.tags.alert(type="info", content=@`
+                    <p><strong>New to KReplica?</strong> For a hands-on introduction, we <strong>strongly
+                            recommend</strong> starting with the <a href="/playground" hx-get="/playground"
+                                                                    hx-target=".main-content" hx-push-url="true"
+                                                                    hx-indicator=".page-progress">Playground</a>. It
+                        provides a live, side-by-side view of how your interfaces are transformed into DTOs.</p>
+                    <p>This guide serves as a comprehensive deep-dive and API reference, perfect for after you've
+                        grasped the core concepts in the playground.</p>
+                `)
+                <p>This guide provides a detailed reference for KReplica's API and features, walking through core
+                    concepts and common patterns to help you get the most out of the library. KReplica is a DTO
+                    generator that eliminates boilerplate for Create, Read, and Update operations by generating
+                    type-safe Kotlin data classes from simple interfaces.</p>
 
-            <h2>Quick Start</h2>
-            <p>Add the KSP and KReplica plugins to your module's <code>build.gradle.kts</code> file to start generating
-                DTOs automatically.</p>
-            @template.tags.code(language = "kotlin", content = @`${vm.snippets[io.availe.kreplicadocs.common.CodeSnippet.QUICKSTART_BUILD]}`)
-
-            @case("api-reference")
-            <h2>API Reference: Configuring Generation</h2>
-            <p>KReplica is configured using a small set of powerful annotations. This section details how each one
-                works, showing how to define your interface and what the generated output looks like.</p>
-            @case("generated-code")
-            <h2>Understanding the Generated Code</h2>
-            <p>At first glance, the code KReplica generates can seem complex. This complexity is intentional and unlocks
-                powerful, type-safe patterns. This section breaks down the key components of the generated output.</p>
-            @case("patterns")
-            <h2>Core Patterns & Use Cases</h2>
-            <p>Now that you understand the building blocks, let's see how to apply KReplica's features to solve common
-                development challenges.</p>
-            @case("faq")
-            <h2>Frequently Asked Questions</h2>
-            @endwhen
+                <h2>Quick Start</h2>
+                <p>Add the KSP and KReplica plugins to your module's <code>build.gradle.kts</code> file to start
+                    generating DTOs automatically.</p>
+                @template.tags.code(language = "kotlin", content = @`${vm.snippets[io.availe.kreplicadocs.common.CodeSnippet.QUICKSTART_BUILD]}`)
+            @elseif(section.id.equals("api-reference"))
+                <h2>API Reference: Configuring Generation</h2>
+                <p>KReplica is configured using a small set of powerful annotations. This section details how each one
+                    works, showing how to define your interface and what the generated output looks like.</p>
+            @elseif(section.id.equals("generated-code"))
+                <h2>Understanding the Generated Code</h2>
+                <p>At first glance, the code KReplica generates can seem complex. This complexity is intentional and
+                    unlocks powerful, type-safe patterns. This section breaks down the key components of the generated
+                    output.</p>
+            @elseif(section.id.equals("patterns"))
+                <h2>Core Patterns & Use Cases</h2>
+                <p>Now that you understand the building blocks, let's see how to apply KReplica's features to solve
+                    common development challenges.</p>
+            @elseif(section.id.equals("faq"))
+                <h2>Frequently Asked Questions</h2>
+            @endif
 
             @for(subsection in section.subsections)
                 <div id="${subsection.id}" style="margin-top: 2rem;">
-                    @when(subsection.id)
-                    @case("api-ref-replicate-model")
-                    <h3><code>@Replicate.Model</code> & <code>@Replicate.Property</code></h3>
-                    <p>These are the primary annotations for controlling code generation. <code>@Replicate.Model</code>
-                        is a class-level annotation that triggers generation and sets default behavior. <code>@Replicate.Property</code>
-                        is a field-level annotation that provides fine-grained overrides for a specific property.</p>
-                    @case("api-ref-versioning")
-                    <h3>Schema Versioning</h3>
-                    <p>To safely evolve your API, KReplica supports versioned schemas. By creating interfaces that
-                        follow a <code>V&lt;number&gt;</code> naming convention and extend a common base interface,
-                        KReplica will group them into a single, version-aware sealed hierarchy. If you prefer not to use
-                        the naming convention, you can manually specify a version number with <code>@Replicate.SchemaVersion</code>.
-                    </p>
-                    @case("api-ref-nominal-typing")
-                    <h3>Nominal Typing</h3>
-                    <p>Enabling nominal typing wraps primitive properties in inline value classes, preventing common
-                        errors like passing a <code>CustomerId</code> into a <code>ProductId</code> field. While this
-                        adds type-safety at the DTO level, a more robust approach is often to handle this in your domain
-                        model. This feature is provided for those who prefer a "flat model" architecture where DTOs and
-                        domain models are one and the same.</p>
-                    @case("api-ref-contextual-nesting")
-                    <h3>Contextual Nesting</h3>
-                    <p>When nesting one replicated model inside another, KReplica intelligently matches the variants. A
-                        parent model's <code>CreateRequest</code> will automatically use the child's
-                        <code>CreateRequest</code>, eliminating verbose and error-prone manual configuration.</p>
-                    @case("api-ref-applying-annotations")
-                    <h3>Applying External Annotations</h3>
-                    <p>Many standard annotations, like <code>@Deprecated</code>, can be applied directly to your source
-                        interface and will be copied to the generated DTOs. For annotations that cannot be applied to
-                        interfaces (like <code>@Serializable</code>), use <code>@Replicate.Apply</code> to add them to
-                        the generated classes.</p>
-                    @case("api-ref-hide-annotation")
-                    <h3>Disabling Generation with <code>@Replicate.Hide</code></h3>
-                    <p>The <code>@Replicate.Hide</code> annotation tells KReplica to completely skip code generation for
-                        the annotated model. This is useful for temporarily testing the impact of removing a schema
-                        without deleting your interface definition.</p>
-                    @case("generated-code-sealed")
-                    <h4>Sealed Hierarchies for Bulletproof APIs</h4>
-                    <p>The foundation of KReplica's safety is the sealed hierarchy. This structure allows you to use
-                        Kotlin's exhaustive <code>when</code> expressions, forcing you to handle every DTO variant at
-                        compile time. If you add a new version to your API, your code won't compile until you handle
-                        it—no more runtime surprises.</p>
-                    @case("generated-code-variants")
-                    <h4>Local vs. Global Variants</h4>
-                    <p>KReplica generates two categories of interfaces for different use cases:</p>
-                    <ul>
-                        <li><strong>Local Variants</strong> (e.g., <code>UserAccountSchema.PatchRequestVariant</code>):
-                            Use these when working <em>within a single model's world</em>. They are perfect for handling
-                            all patch requests, but only for the <code>UserAccount</code> model.
-                        </li>
-                        <li><strong>Global Variants</strong> (e.g., <code>KReplicaPatchVariant&lt;V&gt;</code>): This is
-                            the key to writing reusable code. Use these to create patterns that work <em>across any
-                                KReplica model</em>, such as a generic API mapper.
-                        </li>
-                    </ul>
-                    @case("patterns-kotlinx-serialization")
-                    <h3>Integrating with kotlinx.serialization</h3>
-                    <p>Use <code>@Replicate.Apply([Serializable::class])</code> to make all generated DTOs serializable.
-                        For complex types like <code>Instant</code> or generics, KReplica's <code>autoContextual =
-                            ENABLED</code> setting (the default) will automatically add the <code>@Contextual</code>
-                        annotation where needed, preventing common serialization errors.</p>
-                    @case("patterns-api-mappers")
-                    <h3>Recipe: Type-Safe API Mappers</h3>
-                    <p>Let's use the Global Variant Interfaces to build a completely reusable bridge between your DTOs
-                        and your internal domain models. This pattern allows you to define one generic <code>ApiSchemaMapper</code>
-                        for your entire application, ensuring compile-time safety when converting between layers.</p>
-                    @case("faq-property-scope")
-                    <h3>Can a <code>@Replicate.Property</code> have a broader scope than its
-                        <code>@Replicate.Model</code>?</h3>
-                    <p>No. The replication of all properties must be a subset of the parent model’s variants. This rule
-                        ensures fail-fast feedback. If you restrict a parent’s replication but forget to update a child
-                        property, you’ll get an immediate build-time error instead of a silent failure.</p>
-                    @case("faq-compilation-order")
-                    <h3>Does compilation order matter for nested models?</h3>
-                    <p>No. KReplica uses a two-pass compilation strategy. It first generates stub files for all <code>@Replicate.Model</code>
-                        declarations to make their types known, then performs the main compilation. This ensures that
-                        nested models resolve correctly regardless of file order.</p>
-                    @case("faq-private-keyword")
-                    <h3>Why do the examples use the <code>private</code> keyword?</h3>
-                    <p>The <code>private</code> keyword is not required, but it's a recommended practice. The source
-                        interfaces are only for KReplica's use; your application code will interact with the generated
-                        DTOs. Making them private prevents them from polluting the global namespace. This is especially
-                        useful for versioned schemas, as it allows you to nest versions (e.g., <code>private interface
-                            V1 : UserAccount</code>) inside a parent scope, avoiding naming collisions.</p>
-                    @endwhen
+                    @if(subsection.id.equals("api-ref-replicate-model"))
+                        <h3><code>@Replicate.Model</code> & <code>@Replicate.Property</code></h3>
+                        <p>These are the primary annotations for controlling code generation.
+                            <code>@Replicate.Model</code> is a class-level annotation that triggers generation and sets
+                            default behavior. <code>@Replicate.Property</code> is a field-level annotation that provides
+                            fine-grained overrides for a specific property.</p>
+                    @elseif(subsection.id.equals("api-ref-versioning"))
+                        <h3>Schema Versioning</h3>
+                        <p>To safely evolve your API, KReplica supports versioned schemas. By creating interfaces that
+                            follow a <code>V&lt;number&gt;</code> naming convention and extend a common base interface,
+                            KReplica will group them into a single, version-aware sealed hierarchy. If you prefer not to
+                            use the naming convention, you can manually specify a version number with <code>@Replicate.SchemaVersion</code>.
+                        </p>
+                    @elseif(subsection.id.equals("api-ref-nominal-typing"))
+                        <h3>Nominal Typing</h3>
+                        <p>Enabling nominal typing wraps primitive properties in inline value classes, preventing common
+                            errors like passing a <code>CustomerId</code> into a <code>ProductId</code> field. While
+                            this adds type-safety at the DTO level, a more robust approach is often to handle this in
+                            your domain model. This feature is provided for those who prefer a "flat model" architecture
+                            where DTOs and domain models are one and the same.</p>
+                    @elseif(subsection.id.equals("api-ref-contextual-nesting"))
+                        <h3>Contextual Nesting</h3>
+                        <p>When nesting one replicated model inside another, KReplica intelligently matches the
+                            variants. A parent model's <code>CreateRequest</code> will automatically use the child's
+                            <code>CreateRequest</code>, eliminating verbose and error-prone manual configuration.</p>
+                    @elseif(subsection.id.equals("api-ref-applying-annotations"))
+                        <h3>Applying External Annotations</h3>
+                        <p>Many standard annotations, like <code>@Deprecated</code>, can be applied directly to your
+                            source interface and will be copied to the generated DTOs. For annotations that cannot be
+                            applied to interfaces (like <code>@Serializable</code>), use <code>@Replicate.Apply</code>
+                            to add them to the generated classes.</p>
+                    @elseif(subsection.id.equals("api-ref-hide-annotation"))
+                        <h3>Disabling Generation with <code>@Replicate.Hide</code></h3>
+                        <p>The <code>@Replicate.Hide</code> annotation tells KReplica to completely skip code generation
+                            for the annotated model. This is useful for temporarily testing the impact of removing a
+                            schema without deleting your interface definition.</p>
+                    @elseif(subsection.id.equals("generated-code-sealed"))
+                        <h4>Sealed Hierarchies for Bulletproof APIs</h4>
+                        <p>The foundation of KReplica's safety is the sealed hierarchy. This structure allows you to use
+                            Kotlin's exhaustive <code>when</code> expressions, forcing you to handle every DTO variant
+                            at compile time. If you add a new version to your API, your code won't compile until you
+                            handle it—no more runtime surprises.</p>
+                    @elseif(subsection.id.equals("generated-code-variants"))
+                        <h4>Local vs. Global Variants</h4>
+                        <p>KReplica generates two categories of interfaces for different use cases:</p>
+                        <ul>
+                            <li><strong>Local Variants</strong> (e.g.,
+                                <code>UserAccountSchema.PatchRequestVariant</code>): Use these when working <em>within a
+                                    single model's world</em>. They are perfect for handling all patch requests, but
+                                only for the <code>UserAccount</code> model.
+                            </li>
+                            <li><strong>Global Variants</strong> (e.g., <code>KReplicaPatchVariant&lt;V&gt;</code>):
+                                This is the key to writing reusable code. Use these to create patterns that work <em>across
+                                    any KReplica model</em>, such as a generic API mapper.
+                            </li>
+                        </ul>
+                    @elseif(subsection.id.equals("patterns-kotlinx-serialization"))
+                        <h3>Integrating with kotlinx.serialization</h3>
+                        <p>Use <code>@Replicate.Apply([Serializable::class])</code> to make all generated DTOs
+                            serializable. For complex types like <code>Instant</code> or generics, KReplica's <code>autoContextual
+                                = ENABLED</code> setting (the default) will automatically add the
+                            <code>@Contextual</code> annotation where needed, preventing common serialization errors.
+                        </p>
+                    @elseif(subsection.id.equals("patterns-api-mappers"))
+                        <h3>Recipe: Type-Safe API Mappers</h3>
+                        <p>Let's use the Global Variant Interfaces to build a completely reusable bridge between your
+                            DTOs and your internal domain models. This pattern allows you to define one generic <code>ApiSchemaMapper</code>
+                            for your entire application, ensuring compile-time safety when converting between layers.
+                        </p>
+                    @elseif(subsection.id.equals("faq-property-scope"))
+                        <h3>Can a <code>@Replicate.Property</code> have a broader scope than its
+                            <code>@Replicate.Model</code>?</h3>
+                        <p>No. The replication of all properties must be a subset of the parent model’s variants. This
+                            rule ensures fail-fast feedback. If you restrict a parent’s replication but forget to update
+                            a child property, you’ll get an immediate build-time error instead of a silent failure.</p>
+                    @elseif(subsection.id.equals("faq-compilation-order"))
+                        <h3>Does compilation order matter for nested models?</h3>
+                        <p>No. KReplica uses a two-pass compilation strategy. It first generates stub files for all
+                            <code>@Replicate.Model</code> declarations to make their types known, then performs the main
+                            compilation. This ensures that nested models resolve correctly regardless of file order.</p>
+                    @elseif(subsection.id.equals("faq-private-keyword"))
+                        <h3>Why do the examples use the <code>private</code> keyword?</h3>
+                        <p>The <code>private</code> keyword is not required, but it's a recommended practice. The source
+                            interfaces are only for KReplica's use; your application code will interact with the
+                            generated DTOs. Making them private prevents them from polluting the global namespace. This
+                            is especially useful for versioned schemas, as it allows you to nest versions (e.g., <code>private
+                                interface V1 : UserAccount</code>) inside a parent scope, avoiding naming collisions.
+                        </p>
+                    @endif
 
                     !{ val example = subsection.example }
                     @if(example != null)
