@@ -55,24 +55,27 @@
     @template.tags.code(language = "kotlin", content = @`${vm.snippets[CodeSnippet.QUICKSTART_BUILD]}`)
 </div>
 
-<div class="final-cta">
-    <h2>Start Building</h2>
-    <div class="hero-cta">
-        <a href="/playground"
-           class="button-primary"
-           hx-get="/playground"
-           hx-target=".main-content"
-           hx-push-url="true"
-           hx-indicator=".page-progress">
-            Try in Playground
+<div>
+    <h2>Important Links:</h2>
+    <div class="link-cards-grid">
+        <a href="/playground" class="link-card link-card--highlight" hx-get="/playground" hx-target=".main-content"
+           hx-push-url="true">
+            <h3>Playground</h3>
+            <p>Run and explore live KReplica code samples.</p>
         </a>
-        <a href="/guide"
-           class="button-secondary"
-           hx-get="/guide"
-           hx-target=".main-content"
-           hx-push-url="/guide"
-           hx-indicator=".page-progress">
-            See the Guide
+        <a href="/guide" class="link-card" hx-get="/guide" hx-target=".main-content" hx-push-url="true">
+            <h3>Guide</h3>
+            <p>API reference and recommended usage patterns.</p>
+        </a>
+        <a href="https://github.com/KReplica/KReplica/blob/master/LICENSE" class="link-card" target="_blank"
+           rel="noopener noreferrer">
+            <h3>License</h3>
+            <p>Apache 2.0 license.</p>
+        </a>
+        <a href="https://github.com/KReplica/KReplica/releases" class="link-card" target="_blank"
+           rel="noopener noreferrer">
+            <h3>Releases</h3>
+            <p>List of all versions; release numbers also match Maven Central artifacts.</p>
         </a>
     </div>
 </div>
