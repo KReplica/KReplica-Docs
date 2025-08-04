@@ -49,12 +49,6 @@
         }
     }
 
-    .examples-section-inactive ul:last-of-type a.active {
-        background: transparent;
-        color: var(--text-color);
-        font-weight: 500;
-    }
-
     @media (min-width: 48.0625rem) {
         .examples-sidebar {
             display: block;

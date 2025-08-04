@@ -43,6 +43,7 @@
         padding: 2.5rem 1.25rem;
         display: flex;
         flex-direction: column;
+        gap: 3.5rem;
     }
 
     .guide-content section + section {
@@ -104,26 +105,6 @@
         inline-size: 100%;
     }
 
-    .nav-item-next {
-        margin-inline-start: auto;
-    }
-
-    .technical-notes {
-        margin-block-start: 3.75rem;
-        padding-block-start: 1.875rem;
-        border-block-start: 1px solid var(--border-color);
-
-        h3 {
-            margin-block-start: 0;
-        }
-    }
-
-    .section-divider {
-        margin-block-start: 2.5rem;
-        border-block-start: 1px solid var(--border-color);
-        padding-block-start: 2.5rem;
-    }
-
     .placeholder-text {
         padding: 2rem;
         text-align: center;
@@ -175,11 +156,6 @@
             font-size: 1rem;
             line-height: 1.6;
         }
-    }
-
-    .tour-cta {
-        text-align: center;
-        margin-block-start: 1.875rem;
     }
 
     .playground-wrapper {
