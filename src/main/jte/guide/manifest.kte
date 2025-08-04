@@ -2,9 +2,9 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
 !{ builder.addSection(
-    id = "top",
-    title = "KReplica Developer Guide",
-    content = @`@template.guide.content.top(vm = vm)`
+    id = "introduction",
+    title = "Introduction",
+    content = @`@template.guide.content.introduction(vm = vm)`
 ) }
 
 !{ builder.startSection(
@@ -16,32 +16,32 @@
 !{ builder.addSubSection(
         id = "api-ref-replicate-model",
         title = "@Replicate.Model & @Property",
-        content = @`@template.guide.content.api_reference_model(vm = vm)`
+        content = @`@template.guide.content.api-reference.api_reference_model(vm = vm)`
     ) }
 !{ builder.addSubSection(
         id = "api-ref-versioning",
         title = "Schema Versioning",
-        content = @`@template.guide.content.api_reference_versioning(vm = vm)`
+        content = @`@template.guide.content.api-reference.api_reference_versioning(vm = vm)`
     ) }
 !{ builder.addSubSection(
         id = "api-ref-nominal-typing",
         title = "Nominal Typing",
-        content = @`@template.guide.content.api_reference_nominal_typing(vm = vm)`
+        content = @`@template.guide.content.api-reference.api_reference_nominal_typing(vm = vm)`
     ) }
 !{ builder.addSubSection(
         id = "api-ref-contextual-nesting",
         title = "Contextual Nesting",
-        content = @`@template.guide.content.api_reference_contextual_nesting(vm = vm)`
+        content = @`@template.guide.content.api-reference.api_reference_contextual_nesting(vm = vm)`
     ) }
 !{ builder.addSubSection(
         id = "api-ref-applying-annotations",
         title = "Applying Annotations",
-        content = @`@template.guide.content.api_reference_applying_annotations(vm = vm)`
+        content = @`@template.guide.content.api-reference.api_reference_applying_annotations(vm = vm)`
     ) }
 !{ builder.addSubSection(
         id = "api-ref-hide-annotation",
         title = "Disabling with @Replicate.Hide",
-        content = @`@template.guide.content.api_reference_hide_annotation(vm = vm)`
+        content = @`@template.guide.content.api-reference.api_reference_hide_annotation(vm = vm)`
     ) }
 !{ builder.endSection() }
 
@@ -54,12 +54,12 @@
 !{ builder.addSubSection(
         id = "generated-code-sealed",
         title = "Sealed Hierarchies",
-        content = @`@template.guide.content.generated_code_sealed(vm = vm)`
+        content = @`@template.guide.content.generated-code.generated_code_sealed(vm = vm)`
     ) }
 !{ builder.addSubSection(
         id = "generated-code-variants",
         title = "Local vs. Global Variants",
-        content = @`@template.guide.content.generated_code_variants(vm = vm)`
+        content = @`@template.guide.content.generated-code.generated_code_variants(vm = vm)`
     ) }
 !{ builder.endSection() }
 
@@ -71,17 +71,33 @@
 !{ builder.addSubSection(
         id = "patterns-kotlinx-serialization",
         title = "kotlinx.serialization",
-        content = @`@template.guide.content.patterns_kotlinx_serialization(vm = vm)`
+        content = @`@template.guide.content.patterns.patterns_kotlinx_serialization(vm = vm)`
     ) }
 !{ builder.addSubSection(
         id = "patterns-api-mappers",
         title = "Type-Safe API Mappers",
-        content = @`@template.guide.content.patterns_api_mappers(vm = vm)`
+        content = @`@template.guide.content.patterns.patterns_api_mappers(vm = vm)`
     ) }
 !{ builder.endSection() }
 
-!{ builder.addSection(
+!{ builder.startSection(
     id = "faq",
     title = "Frequently Asked Questions",
-    content = @`@template.guide.content.faq(vm = vm)`
+    description = @``
 ) }
+!{ builder.addSubSection(
+        id = "faq-broader-replication",
+        title = "Broader Property Replication?",
+        content = @`@template.guide.content.faq.broader-replication(vm = vm)`
+    ) }
+!{ builder.addSubSection(
+        id = "faq-compilation-order",
+        title = "Compilation Order",
+        content = @`@template.guide.content.faq.compilation-order(vm = vm)`
+    ) }
+!{ builder.addSubSection(
+        id = "faq-private-keyword",
+        title = "Use of `private` Keyword",
+        content = @`@template.guide.content.faq.private-keyword(vm = vm)`
+    ) }
+!{ builder.endSection() }

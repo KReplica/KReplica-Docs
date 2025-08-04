@@ -1,0 +1,6 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>No. KReplica uses a two-pass compilation strategy. It first generates stub files for all
+    <code>@Replicate.Model</code>
+    declarations to make their types known, then performs the main compilation. This ensures that nested
+    models resolve correctly regardless of file order.</p>

@@ -1,0 +1,5 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>No. The restriction of all properties must be a subset of the parent model's variants. This ensures
+    fail-fast feedback. If you restrict a parent's replication but forget to update a child property, you'll
+    get an immediate build-time error instead of a silent failure.</p>

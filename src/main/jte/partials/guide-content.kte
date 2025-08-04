@@ -3,7 +3,7 @@
 <div class="guide-content">
     @for(section in vm.guideContent)
         <section id="${section.id}">
-            @if(section.id == "top")
+            @if(section.id == "introduction")
                 <h1>${section.title}</h1>
             @else
                 <h2>${section.title}</h2>
