@@ -36,7 +36,8 @@ data class ProcessedGuideExample(
     val inputCode: String,
     val outputFiles: Map<String, String>?,
     val inputTabLabel: String,
-    val outputTabLabel: String
+    val outputTabLabel: String,
+    val isCompilingPlaceholder: Boolean = false
 )
 
 data class ProcessedGuideSubsection(

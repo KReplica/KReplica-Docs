@@ -106,9 +106,20 @@ class ViewModelFactory(
             ?: error("Snippet ${snippet.name} not found.")
         val cacheKey = sourceCodeNormalizer.getCacheKey(originalSource)
         val response = permanentCache.get(cacheKey, CompileResponse::class.java)
+
+        if (response == null) {
+            return ProcessedGuideExample(
+                inputCode = "",
+                outputFiles = null,
+                inputTabLabel = "",
+                outputTabLabel = "",
+                isCompilingPlaceholder = true
+            )
+        }
+
         return ProcessedGuideExample(
             inputCode = sourceCodeNormalizer.forDisplay(originalSource),
-            outputFiles = response?.generatedFiles,
+            outputFiles = response.generatedFiles,
             inputTabLabel = "Your Interface",
             outputTabLabel = "Generated DTOs"
         )

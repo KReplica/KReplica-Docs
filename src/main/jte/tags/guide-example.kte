@@ -3,24 +3,36 @@
 
 @param example: io.availe.kreplicadocs.model.view.ProcessedGuideExample
 
-!{
-    val tabs = mutableListOf(Tab("input", example.inputTabLabel, null, null))
-    val outputFiles = example.outputFiles
-    if (outputFiles != null && outputFiles.isNotEmpty()) {
-        tabs.add(Tab("output", "Generated Code", null, null))
+@if(example.isCompilingPlaceholder)
+    <div class="workflow-container">
+        <div class="workflow-content">
+            <div class="placeholder-text">
+                <p>Compiling... please wait a moment and refresh.</p>
+            </div>
+        </div>
+    </div>
+@else
+    !{
+        val outputFiles = example.outputFiles
     }
-
-    val contentMap = mutableMapOf<String, Content>()
-
-    contentMap["input"] = @`
-    @template.tags.code(language="kotlin", content=@`${example.inputCode}`)
-`
-
-    if (outputFiles != null) {
-        contentMap["output"] = @`
-    @template.tags.generated-code-viewer(files = outputFiles)
-`
-    }
-}
-
-@template.tags.tabs(tabs = tabs, rawContent = contentMap)
+    <div class="workflow-container" x-data="{ activeTab: 'input' }">
+        <div class="workflow-tabs" role="tablist">
+            <button role="tab" :class="{ 'active': activeTab === 'input' }" @click="activeTab = 'input'">
+                ${example.inputTabLabel}
+            </button>
+            @if (outputFiles != null && outputFiles.isNotEmpty())
+                <button role="tab" :class="{ 'active': activeTab === 'output' }" @click="activeTab = 'output'">
+                    Generated Code
+                </button>
+            @endif
+        </div>
+        <div class="workflow-content" x-show="activeTab === 'input'" x-cloak>
+            @template.tags.code(language="kotlin", content=@`${example.inputCode}`)
+        </div>
+        @if (outputFiles != null && outputFiles.isNotEmpty())
+            <div class="workflow-content" x-show="activeTab === 'output'" x-cloak>
+                @template.tags.generated-code-viewer(files = outputFiles)
+            </div>
+        @endif
+    </div>
+@endif

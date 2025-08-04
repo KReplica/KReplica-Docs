@@ -1,3 +1,8 @@
+package io.availe.demo.playground
+
+import io.availe.Replicate
+import io.availe.models.DtoVariant
+
 private interface UserAccount {
     @Replicate.Model(variants = [DtoVariant.CREATE])
     interface V1 : UserAccount {

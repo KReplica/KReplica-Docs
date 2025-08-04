@@ -1,5 +1,8 @@
-@param tabs: List<io.availe.kreplicadocs.model.view.Tab>
-@param rawContent: Map<String, gg.jte.Content>? = null
+@import io.availe.kreplicadocs.model.view.Tab
+@import gg.jte.Content
+
+@param tabs: List<Tab>
+@param rawContent: Map<String, Content>? = null
 
 @if(tabs.isNotEmpty())
     <div class="workflow-container" x-data="{ activeTab: '${tabs.get(0).id}' }">
@@ -26,9 +29,12 @@
                     @else
                         !{val description = tab.description}
                         @if(description != null && !description.isEmpty())
-                            <p>${description}</p>
+                            <p>!{description}</p>
                         @endif
-                        @template.tags.code(language="kotlin", content=@`${tab.codeSnippet}`)
+                        !{val codeSnippet = tab.codeSnippet}
+                        @if(codeSnippet != null)
+                            @template.tags.code(language="kotlin", content=@`${codeSnippet}`)
+                        @endif
                     @endif
                 @endif
             </div>
