@@ -65,7 +65,7 @@
     .alert {
         padding: 0.9375rem;
         margin: 1.25rem 0;
-        border: 1px solid transparent;
+        border: 1px solid;
         border-radius: 0.25rem;
         background-color: var(--alert-info-bg);
         border-color: var(--alert-info-border);
