@@ -7,40 +7,37 @@
         variants—eliminating boilerplate and runtime surprises.</p>
 </div>
 
-<div class="demo-and-cta-container">
-    @template.tags.tabs(tabs = vm.heroDemoTabs)
-    <div class="hero-cta" style="margin-block-start: 2.5rem;">
-        <a href="/playground" class="button-primary" hx-get="/playground" hx-target=".main-content"
-           hx-push-url="true" hx-indicator=".page-progress">
-            Try in Playground
-        </a>
-        <a href="/guide" class="button-secondary" hx-get="/guide" hx-target=".main-content"
-           hx-push-url="/guide" hx-indicator=".page-progress">
-            See the Guide
-        </a>
-    </div>
+@template.tags.tabs(tabs = vm.heroDemoTabs)
+
+<div class="hero-cta">
+    <a href="/playground" class="button-primary" hx-get="/playground" hx-target=".main-content"
+       hx-push-url="true" hx-indicator=".page-progress">
+        Try in Playground
+    </a>
+    <a href="/guide" class="button-secondary" hx-get="/guide" hx-target=".main-content"
+       hx-push-url="/guide" hx-indicator=".page-progress">
+        See the Guide
+    </a>
 </div>
 
-<div class="differentiators-section">
-    <ul class="feature-list">
-        <li class="feature-item">
-            @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
-            <span>Generates <strong>Create, Data & Patch</strong> variants automatically.</span>
-        </li>
-        <li class="feature-item">
-            @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
-            <span><strong>Sealed hierarchies</strong> force exhaustive <code>when</code> expressions.</span>
-        </li>
-        <li class="feature-item">
-            @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
-            <span><strong>Version-aware</strong>, so your code won't compile until you handle new versions.</span>
-        </li>
-        <li class="feature-item">
-            @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
-            <span>Powered by <strong>KSP</strong> for fast, reflection-free performance.</span>
-        </li>
-    </ul>
-</div>
+<ul class="feature-list">
+    <li class="feature-item">
+        @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
+        <span>Generates <strong>Create, Data & Patch</strong> variants automatically.</span>
+    </li>
+    <li class="feature-item">
+        @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
+        <span><strong>Sealed hierarchies</strong> force exhaustive <code>when</code> expressions.</span>
+    </li>
+    <li class="feature-item">
+        @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
+        <span><strong>Version-aware</strong>, so your code won't compile until you handle new versions.</span>
+    </li>
+    <li class="feature-item">
+        @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
+        <span>Powered by <strong>KSP</strong> for fast, reflection-free performance.</span>
+    </li>
+</ul>
 
 <div class="feature-highlight">
     <h2>Bulletproof Your APIs</h2>
