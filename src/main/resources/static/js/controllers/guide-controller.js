@@ -45,7 +45,6 @@ function bindFabNavClicks() {
     fab.addEventListener("click", e => {
         const anchor = e.target.closest('a[href^="#"]');
         if (!anchor) return;
-        fab.dispatchEvent(new CustomEvent('close'));
         handleNavClick(e, anchor.getAttribute("href").slice(1));
     });
 }

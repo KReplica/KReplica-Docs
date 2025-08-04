@@ -1,156 +1,22 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
 <div class="guide-content">
-    <section id="top">
-        <h1>KReplica Developer Guide</h1>
-        @template.tags.alert(type="info", content=@`
-            <p><strong>New to KReplica?</strong> For a hands-on introduction, we <strong>strongly
-                    recommend</strong> starting with the <a href="/playground" hx-get="/playground"
-                                                            hx-target=".main-content" hx-push-url="true"
-                                                            hx-indicator=".page-progress">Playground</a>. It
-                provides a live, side-by-side view of how your interfaces are transformed into DTOs.</p>
-            <p>This guide serves as a comprehensive deep-dive and API reference, perfect for after you've
-                grasped the core concepts in the playground.</p>
-        `)
-        <p>This guide provides a detailed reference for KReplica's API and features, walking through core
-            concepts and common patterns to help you get the most out of the library. KReplica is a DTO
-            generator that eliminates boilerplate for Create, Read, and Update operations by generating
-            type-safe Kotlin data classes from simple interfaces.</p>
-        <h2>Quick Start</h2>
-        <p>Add the KSP and KReplica plugins to your module's <code>build.gradle.kts</code> file to start
-            generating DTOs automatically.</p>
-        @template.tags.code(language = "kotlin", content = @`${vm.snippets[io.availe.kreplicadocs.common.CodeSnippet.QUICKSTART_BUILD]}`)
-    </section>
+    @for(section in vm.guideContent)
+        <section id="${section.id}">
+            @if(section.id == "top")
+                <h1>${section.title}</h1>
+            @else
+                <h2>${section.title}</h2>
+            @endif
 
-    <section id="api-reference">
-        <h2>API Reference</h2>
-        <p>KReplica is configured using a small set of powerful annotations. This section serves as a
-            dictionary for every available option.</p>
+            ${section.description}
 
-        <div id="api-ref-replicate-model" class="guide-subsection">
-            <h3>@Replicate.Model & @Property</h3>
-            <p>This is the primary annotation that marks an interface for DTO generation. Use
-                <code>@Replicate.Property</code>
-                on individual properties to override these model-level settings.</p>
-            <dl>
-                <dt><code>variants: Array&lt;DtoVariant&gt;</code> (Required)</dt>
-                <dd>Specifies which DTO variants to generate. Possible values are
-                    <code>DtoVariant.DATA</code>, <code>DtoVariant.CREATE</code>, and <code>DtoVariant.PATCH</code>.
-                </dd>
-                <dt><code>nominalTyping: NominalTyping</code> (Default: <code>DISABLED</code>)</dt>
-                <dd>When <code>ENABLED</code>, this wraps primitive properties in type-safe value
-                    classes to prevent accidentally mixing up types like IDs.
-                </dd>
-                <dt><code>autoContextual: AutoContextual</code> (Default: <code>ENABLED</code>)</dt>
-                <dd>Controls automatic integration with <code>kotlinx.serialization</code> by adding
-                    <code>@Contextual</code> to non-primitive property types.
-                </dd>
-            </dl>
-            !{ val modelExample = vm.examples["api-ref-replicate-model"] }
-            @if(modelExample != null)
-                <div class="workflow-container">
-                    @template.tags.guide-example(example = modelExample)
+            @for(subsection in section.subsections)
+                <div id="${subsection.id}" class="guide-subsection">
+                    <h3>${subsection.title}</h3>
+                    ${subsection.content}
                 </div>
-            @endif
-        </div>
-
-        <div id="api-ref-versioning" class="guide-subsection">
-            <h3>Schema Versioning</h3>
-            <p>KReplica uses a simple naming convention (e.g., <code>private interface V1 :
-                    MySchema</code>) to automatically create versioned, sealed hierarchies. If you
-                prefer not to use this convention, you can manually assign a version number with <code>@Replicate.SchemaVersion(number
-                    = ...)</code>.</p>
-            !{ val versioningExample = vm.examples["api-ref-versioning"] }
-            @if(versioningExample != null)
-                <div class="workflow-container">
-                    @template.tags.guide-example(example = versioningExample)
-                </div>
-            @endif
-        </div>
-
-        <div id="api-ref-nominal-typing" class="guide-subsection">
-            <h3>Nominal Typing</h3>
-        </div>
-
-        <div id="api-ref-contextual-nesting" class="guide-subsection">
-            <h3>Contextual Nesting</h3>
-            <p>When nesting one replicated model inside another, KReplica intelligently matches the
-                variants. A parent model's <code>CreateRequest</code> will automatically use the child's
-                <code>CreateRequest</code>. This works for both versioned and unversioned schemas.</p>
-            !{ val nestingTabs = vm.tabs["api-ref-contextual-nesting"] }
-            @if(nestingTabs != null)
-                @template.tags.tabs(tabs = nestingTabs)
-            @endif
-        </div>
-
-        <div id="api-ref-applying-annotations" class="guide-subsection">
-            <h3>Applying Annotations</h3>
-        </div>
-
-        <div id="api-ref-hide-annotation" class="guide-subsection">
-            <h3>Disabling with @Replicate.Hide</h3>
-        </div>
-    </section>
-
-    <section id="generated-code">
-        <h2>Understanding the Generated Code</h2>
-        <p>The code KReplica generates is designed for maximum safety and flexibility. It's built on two key
-            concepts you'll work with: sealed hierarchies and variant interfaces.</p>
-
-        <div id="generated-code-sealed" class="guide-subsection">
-            <h3>Sealed Hierarchies</h3>
-            @template.tags.code(language="kotlin", content=@`${vm.snippets[io.availe.kreplicadocs.common.CodeSnippet.WHEN_EXPRESSION_ALL]}`)
-        </div>
-
-        <div id="generated-code-variants" class="guide-subsection">
-            <h3>Local vs. Global Variants</h3>
-            @template.tags.code(language="kotlin", content=@`${vm.snippets[io.availe.kreplicadocs.common.CodeSnippet.MAPPER_PATTERN_INTERFACE]}`)
-        </div>
-    </section>
-
-    <section id="patterns">
-        <h2>Core Patterns & Use Cases</h2>
-        <p>Learn how to apply KReplica's features to solve common development challenges.</p>
-
-        <div id="patterns-kotlinx-serialization" class="guide-subsection">
-            <h3>kotlinx.serialization</h3>
-        </div>
-
-        <div id="patterns-api-mappers" class="guide-subsection">
-            <h3>Type-Safe API Mappers</h3>
-            !{ val mappersTabs = vm.tabs["patterns-api-mappers"] }
-            @if(mappersTabs != null)
-                @template.tags.tabs(tabs = mappersTabs)
-            @endif
-        </div>
-    </section>
-
-    <section id="faq">
-        <h2>Frequently Asked Questions</h2>
-
-        <div id="faq-broader-replication" class="guide-subsection">
-            <h3>Can a <code>Replication.Property</code> have a broader replication than its
-                <code>Replication.Model</code>?</h3>
-            <p>No. The restriction of all properties must be a subset of the parent model's variants. This ensures
-                fail-fast feedback. If you restrict a parent's replication but forget to update a child property, you'll
-                get an immediate build-time error instead of a silent failure.</p>
-        </div>
-
-        <div id="faq-compilation-order" class="guide-subsection">
-            <h3>If a <code>Replicate.Model</code> has another <code>Replicate.Model</code> as a field, does the order of
-                compilation matter?</h3>
-            <p>No. KReplica uses a two-pass compilation strategy. It first generates stub files for all <code>@Replicate.Model</code>
-                declarations to make their types known, then performs the main compilation. This ensures that nested
-                models resolve correctly regardless of file order.</p>
-        </div>
-
-        <div id="faq-private-keyword" class="guide-subsection">
-            <h3>Why do the examples use the <code>private</code> keyword?</h3>
-            <p>The <code>private</code> keyword is not required, but it's a recommended practice. The source interfaces
-                are only for KReplica's use; your application code will interact with the generated DTOs. Making them
-                private prevents them from polluting the global namespace. This is especially useful for versioned
-                schemas, as it allows you to nest versions (e.g., <code>private interface V1 : UserAccount</code>)
-                inside a parent scope, avoiding naming collisions.</p>
-        </div>
-    </section>
+            @endfor
+        </section>
+    @endfor
 </div>

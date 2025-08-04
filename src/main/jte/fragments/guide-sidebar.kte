@@ -8,7 +8,7 @@
                 <a href="#${section.id}">${section.title}</a>
                 @if(section.subsections.isNotEmpty())
                     <ul>
-                        @template.fragments.guide-subsection-items(section = section, includeOverview = true)
+                        @template.fragments.guide-subsection-items(section = section, includeOverview = false)
                     </ul>
                 @endif
             </li>
