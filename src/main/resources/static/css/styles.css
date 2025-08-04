@@ -38,6 +38,7 @@
     .main-content {
         flex-grow: 1;
         inline-size: 100%;
+        container-type: inline-size;
         max-inline-size: var(--container-max);
         margin-inline: auto;
         padding: 2.5rem 1.25rem;
