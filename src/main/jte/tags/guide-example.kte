@@ -1,0 +1,21 @@
+@import io.availe.kreplicadocs.model.view.Tab
+
+@param example: io.availe.kreplicadocs.model.view.ProcessedGuideExample
+
+!{
+    val tabs = listOf(
+        Tab("input", example.inputTabLabel, null, null),
+        Tab("output", example.outputTabLabel, null, null)
+    )
+
+    val contentMap = mapOf(
+        "input" to @`
+    @template.tags.code(language="kotlin", content=@`${example.inputCode}`)
+`,
+        "output" to @`
+    @template.tags.generated-code-viewer(files = example.outputFiles)
+`
+    )
+}
+
+@template.tags.tabs(tabs = tabs, rawContent = contentMap)

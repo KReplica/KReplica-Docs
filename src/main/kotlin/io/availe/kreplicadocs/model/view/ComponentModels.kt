@@ -4,5 +4,5 @@ data class Tab(
     val id: String,
     val label: String,
     val description: String? = null,
-    val codeSnippet: String
+    val codeSnippet: String?
 )

@@ -1,4 +1,5 @@
 @param tabs: List<io.availe.kreplicadocs.model.view.Tab>
+@param rawContent: Map<String, gg.jte.Content>? = null
 
 @if(tabs.isNotEmpty())
     <div class="workflow-container" x-data="{ activeTab: '${tabs.get(0).id}' }">
@@ -13,11 +14,18 @@
         </div>
         @for(tab in tabs)
             <div class="workflow-content" x-show="activeTab === '${tab.id}'" x-cloak>
-                !{var description = tab.description;}
-                @if(description != null && !description.isEmpty())
-                    <p>${description}</p>
+                @if(rawContent != null && rawContent.containsKey(tab.id))
+                    !{val contentBlock = rawContent.get(tab.id);}
+                    @if(contentBlock != null)
+                        ${contentBlock}
+                    @endif
+                @else
+                    !{val description = tab.description;}
+                    @if(description != null && !description.isEmpty())
+                        <p>${description}</p>
+                    @endif
+                    @template.tags.code(language="kotlin", content=@`${tab.codeSnippet}`)
                 @endif
-                @template.tags.code(language="kotlin", content=@`${tab.codeSnippet}`)
             </div>
         @endfor
     </div>

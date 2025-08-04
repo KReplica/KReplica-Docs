@@ -34,7 +34,9 @@ data class IndexViewModel(
 
 data class ProcessedGuideExample(
     val inputCode: String,
-    val outputFiles: Map<String, String>?
+    val outputFiles: Map<String, String>?,
+    val inputTabLabel: String,
+    val outputTabLabel: String
 )
 
 data class ProcessedGuideSubsection(

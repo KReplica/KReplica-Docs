@@ -3,7 +3,9 @@ package io.availe.kreplicadocs.model.view
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class GuideExampleStub(
-    @param:JsonProperty("templateSlug") val templateSlug: String
+    @param:JsonProperty("templateSlug") val templateSlug: String,
+    @param:JsonProperty("inputTabLabel") val inputTabLabel: String? = null,
+    @param:JsonProperty("outputTabLabel") val outputTabLabel: String? = null
 )
 
 data class GuideSubsectionStub(

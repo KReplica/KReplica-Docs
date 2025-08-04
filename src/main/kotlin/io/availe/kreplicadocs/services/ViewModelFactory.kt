@@ -39,12 +39,17 @@ class ViewModelFactory(
         val processedContent = guideContentStubs.map { sectionStub ->
             val processedSubsections = sectionStub.subsections.map { subsectionStub ->
                 val example = subsectionStub.exampleSlug?.let { slug ->
+                    val exampleStub = guideContentProvider.getGuideContent()
+                        .flatMap { it.subsections }
+                        .find { it.exampleSlug == slug }
                     val originalSource = snippetProvider.getPlaygroundTemplateSource(TemplateSlug(slug))
                     val cacheKey = sourceCodeNormalizer.getCacheKey(originalSource)
                     val response = permanentCache.get(cacheKey, CompileResponse::class.java)
                     ProcessedGuideExample(
                         inputCode = sourceCodeNormalizer.forDisplay(originalSource),
-                        outputFiles = response?.generatedFiles
+                        outputFiles = response?.generatedFiles,
+                        inputTabLabel = exampleStub?.exampleSlug ?: "Your Interface",
+                        outputTabLabel = exampleStub?.exampleSlug ?: "Generated DTOs"
                     )
                 }
                 val tabs = subsectionStub.useTabsKey?.let { tabProvider.getTabs(it) }
