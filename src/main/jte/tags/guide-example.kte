@@ -5,7 +5,7 @@
 !{
     val outputFiles = example.outputFiles
 }
-<div x-data="{ activeTab: 'input' }" x-init="Prism.highlightAllUnder($el)">
+<div x-data="{ activeTab: 'input' }">
     <div class="workflow-tabs" role="tablist">
         <button role="tab"
                 :class="{ 'active': activeTab === 'input' }"

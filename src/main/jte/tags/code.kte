@@ -3,8 +3,9 @@
 @param extraClass: String? = null
 @param plain: Boolean = false
 
-<div class="code-block-wrapper ${extraClass ?: ""}" x-data="{ copied: false }">
+<div class="code-block-wrapper ${extraClass ?: ""}" x-data="{}" x-init="Prism.highlightAllUnder($el)">
     <button type="button" class="copy-code-button"
+            x-data="{ copied: false }"
             :disabled="copied"
             @click="navigator.clipboard.writeText($el.nextElementSibling.textContent); copied = true; setTimeout(() => copied = false, 2000)">
         <span x-text="copied ? 'Copied!' : 'Copy'"></span>
