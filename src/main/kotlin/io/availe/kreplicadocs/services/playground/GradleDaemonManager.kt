@@ -6,7 +6,6 @@ import io.availe.kreplicadocs.model.CompileRequest
 import io.availe.kreplicadocs.model.JobId
 import io.availe.kreplicadocs.model.TemplateSlug
 import io.availe.kreplicadocs.services.CodeSnippetProvider
-import io.availe.kreplicadocs.services.GuideContentProvider
 import io.availe.kreplicadocs.services.SourceCodeNormalizer
 import org.gradle.tooling.GradleConnector
 import org.slf4j.LoggerFactory
@@ -24,7 +23,6 @@ class GradleDaemonManager(
     private val codeSnippetProvider: CodeSnippetProvider,
     private val cacheManager: CacheManager,
     private val sourceCodeNormalizer: SourceCodeNormalizer,
-    private val guideContentProvider: GuideContentProvider
 ) {
 
     private val log = LoggerFactory.getLogger(GradleDaemonManager::class.java)
@@ -38,10 +36,8 @@ class GradleDaemonManager(
 
         val snippetsToCompile = mutableSetOf<CodeSnippet>()
 
-        guideContentProvider.getGuideContent().asSequence()
-            .flatMap { it.subsections }
-            .mapNotNull { it.exampleSnippetKey }
-            .forEach { snippetsToCompile.add(CodeSnippet.valueOf(it)) }
+        snippetsToCompile.add(CodeSnippet.GUIDE_REF_MODEL_VARIANTS)
+        snippetsToCompile.add(CodeSnippet.GUIDE_REF_VERSIONING)
 
         try {
             val tabsJson = codeSnippetProvider.getTabsJson()

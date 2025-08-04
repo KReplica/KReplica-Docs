@@ -39,27 +39,14 @@ data class ProcessedGuideExample(
     val outputTabLabel: String
 )
 
-data class ProcessedGuideSubsection(
-    val id: String,
-    val title: String,
-    val example: ProcessedGuideExample? = null,
-    val tabs: List<Tab>? = null,
-    val referenceSnippet: String? = null
-)
-
-data class ProcessedGuideSection(
-    val id: String,
-    val title: String,
-    val subsections: List<ProcessedGuideSubsection>
-)
-
 data class GuideViewModel(
     override val navLinks: List<NavLink>,
     override val properties: AppProperties,
     override val currentPage: PageId,
     val snippets: Map<CodeSnippet, String>,
     val guideNav: List<GuideNavSection>,
-    val content: List<ProcessedGuideSection>
+    val examples: Map<String, ProcessedGuideExample>,
+    val tabs: Map<String, List<Tab>>
 ) : PageViewModel
 
 data class PlaygroundViewModel(

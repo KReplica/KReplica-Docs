@@ -19,7 +19,6 @@ class ViewModelFactory(
     private val navigationProvider: NavigationProvider,
     private val tabProvider: TabProvider,
     private val sourceCodeNormalizer: SourceCodeNormalizer,
-    private val guideContentProvider: GuideContentProvider,
     private val cacheManager: CacheManager,
     private val templateEngine: TemplateEngine,
 ) {
@@ -84,46 +83,35 @@ class ViewModelFactory(
     }
 
     fun createGuideViewModel(): GuideViewModel {
-        val guideNav = navigationProvider.getGuideNav()
-        val guideContentStubs = guideContentProvider.getGuideContent().associateBy { it.id }
-        val allSnippets = snippetProvider.getSnippets()
+        val examples = mutableMapOf<String, ProcessedGuideExample>()
+        val tabs = mutableMapOf<String, List<Tab>>()
 
-        val processedContent = guideNav.map { sectionNav ->
-            val sectionStub = guideContentStubs[sectionNav.id]
-            val processedSubsections = sectionNav.subsections.map { subsectionNav ->
-                val subsectionStub = sectionStub?.subsections?.find { it.id == subsectionNav.id }
+        val exampleMapping = mapOf(
+            "api-ref-replicate-model" to CodeSnippet.GUIDE_REF_MODEL_VARIANTS,
+            "api-ref-versioning" to CodeSnippet.GUIDE_REF_VERSIONING
+        )
 
-                val example = subsectionStub?.exampleSnippetKey?.let { key ->
-                    processGuideExample(CodeSnippet.valueOf(key))
-                }
+        val tabsMapping = mapOf(
+            "api-ref-contextual-nesting" to "contextualNestingTabs",
+            "patterns-api-mappers" to "apiMapperTabs"
+        )
 
-                val tabs = subsectionStub?.useTabsKey?.let { key -> getTabsForKey(key) }
+        exampleMapping.forEach { (id, snippet) ->
+            examples[id] = processGuideExample(snippet)
+        }
 
-                val referenceSnippet = subsectionStub?.snippetKey?.let { allSnippets[CodeSnippet.valueOf(it)] }
-
-                ProcessedGuideSubsection(
-                    id = subsectionNav.id,
-                    title = subsectionNav.title,
-                    example = example,
-                    tabs = tabs,
-                    referenceSnippet = referenceSnippet
-                )
-            }
-
-            ProcessedGuideSection(
-                id = sectionNav.id,
-                title = sectionNav.title,
-                subsections = processedSubsections
-            )
+        tabsMapping.forEach { (id, key) ->
+            tabs[id] = getTabsForKey(key)
         }
 
         return GuideViewModel(
             navLinks = navigationProvider.getNavLinks(),
             properties = appProperties,
             currentPage = PageId.GUIDE,
-            snippets = allSnippets,
-            guideNav = guideNav,
-            content = processedContent
+            snippets = snippetProvider.getSnippets(),
+            guideNav = navigationProvider.getGuideNav(),
+            examples = examples,
+            tabs = tabs
         )
     }
 
