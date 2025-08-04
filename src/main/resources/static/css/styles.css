@@ -60,6 +60,10 @@
     .guide-main-content {
         min-inline-size: 0;
     }
+
+    .guide-content .guide-subsection + .guide-subsection {
+        margin-block-start: 2rem;
+    }
 }
 
 @layer components {

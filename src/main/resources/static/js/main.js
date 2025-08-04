@@ -1,4 +1,6 @@
 import {themeSwitcher} from './components/theme-switcher.js';
+import {copyButton} from "./components/copy-button.js";
+import {playgroundComponent} from "./components/playground-component.js";
 
 let activeController = null;
 
@@ -31,6 +33,8 @@ window.generateUniqueId = function () {
 
 document.addEventListener('alpine:init', () => {
     Alpine.data('themeSwitcher', themeSwitcher);
+    Alpine.data('copyButton', copyButton);
+    Alpine.data('playgroundComponent', playgroundComponent);
 });
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -2,9 +2,9 @@
 
 <div class="playground-container" data-controller="playground">
     <div class="playground-wrapper"
-         x-data="{ activeTab: 'editor', isOutputReady: false, tabSessionId: generateUniqueId(), isSubmitting: false }"
-         @output-ready.window="isOutputReady = true; if (window.innerWidth < 992) activeTab = 'output'"
-         @clear-output.window="isOutputReady = false; activeTab = 'editor'">
+         x-data="playgroundComponent()"
+         @output-ready.window="onOutputReady()"
+         @clear-output.window="onClearOutput()">
 
         <div class="playground-main-content">
 
