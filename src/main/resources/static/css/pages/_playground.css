@@ -121,7 +121,6 @@
         clip-path: polygon(100% 0%, 0 0%, 50% 100%);
     }
 
-    .tabs,
     .tabs-nav,
     .workflow-tabs {
         display: flex;
@@ -129,7 +128,6 @@
         -webkit-overflow-scrolling: touch;
     }
 
-    .tabs button,
     .tabs-nav button,
     .workflow-tabs button {
         padding: 0.75rem 1.25rem;
@@ -144,16 +142,13 @@
         font-weight: 500;
     }
 
-    .tabs button:hover,
     .tabs-nav button:hover,
     .workflow-tabs button:hover {
         color: var(--primary-color);
     }
 
-    .tabs button.active,
     .tabs-nav button.active,
     .workflow-tabs button.active,
-    .tabs button[aria-selected="true"],
     .tabs-nav button[aria-selected="true"],
     .workflow-tabs button[aria-selected="true"] {
         color: var(--secondary-color);

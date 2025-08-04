@@ -41,13 +41,6 @@
         color: var(--secondary-color);
     }
 
-    .nav-footer {
-        display: flex;
-        margin-block-start: 3.75rem;
-        padding-block-start: 1.25rem;
-        border-block-start: 1px solid var(--border-color);
-    }
-
     @media (max-width: 48rem) {
         .footer-content {
             flex-direction: column;

@@ -121,8 +121,7 @@
     }
 
     .button-primary,
-    .button-secondary,
-    .button-link {
+    .button-secondary {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -149,8 +148,7 @@
     }
 
     .button-primary:focus-visible,
-    .button-secondary:focus-visible,
-    .button-link:focus-visible {
+    .button-secondary:focus-visible {
         box-shadow: 0 0 0 0.2rem color-mix(in oklch, var(--secondary-color), white 70%);
     }
 
@@ -162,18 +160,5 @@
 
     .button-secondary:hover {
         background-color: color-mix(in oklch, var(--secondary-color), white 90%);
-    }
-
-    .button-link {
-        background: transparent;
-        color: var(--primary-color);
-        border-color: transparent;
-        font-weight: 600;
-    }
-
-    .button-group {
-        display: flex;
-        gap: 0.75rem;
-        flex-wrap: wrap;
     }
 }
