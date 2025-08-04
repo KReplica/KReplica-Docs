@@ -54,3 +54,15 @@
         flex: 0 0 auto;
     }
 }
+
+.final-cta {
+    text-align: center;
+    padding: 2.5rem;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-4);
+
+    h2 {
+        margin-block-end: 1.5rem;
+    }
+}

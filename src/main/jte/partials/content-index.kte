@@ -55,18 +55,24 @@
     @template.tags.code(language = "kotlin", content = @`${vm.snippets[CodeSnippet.QUICKSTART_BUILD]}`)
 </div>
 
-<div class="utility-bar">
-    <a href="/playground"
-       class="button-primary"
-       hx-get="/playground"
-       hx-target=".main-content"
-       hx-push-url="true"
-       hx-indicator=".page-progress">
-        Try in Playground
-    </a>
-    <nav class="link-group">
-        <a href="/guide" hx-get="/guide" hx-target=".main-content" hx-push-url="/guide" hx-indicator=".page-progress">Guide</a>
-        <a href="${vm.properties.repoUrl}/releases" target="_blank" rel="noreferrer">Releases</a>
-        <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noreferrer">Apache 2.0</a>
-    </nav>
+<div class="final-cta">
+    <h2>Start Building</h2>
+    <div class="hero-cta">
+        <a href="/playground"
+           class="button-primary"
+           hx-get="/playground"
+           hx-target=".main-content"
+           hx-push-url="true"
+           hx-indicator=".page-progress">
+            Try in Playground
+        </a>
+        <a href="/guide"
+           class="button-secondary"
+           hx-get="/guide"
+           hx-target=".main-content"
+           hx-push-url="/guide"
+           hx-indicator=".page-progress">
+            See the Guide
+        </a>
+    </div>
 </div>
