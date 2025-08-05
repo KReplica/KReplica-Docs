@@ -1,16 +1,21 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
 <p>
-    The <code>kotlinx.serialization</code> library can automatically serialize many primitive types, but it requires
-    help for complex types that are not explicitly marked as <code>@Serializable</code>, such as types from the JDK
-    (e.g., <code>UUID</code>, <code>Instant</code>) or other third-party libraries. The standard solution is to define a
-    custom serializer, register it in a <code>SerializersModule</code>, and mark each property using that type with the
-    <code>@Contextual</code> annotation.
+    The kotlinx.serialization library oftentimes requires the usage of the @Contextual annotation, which
+    tells kotlinx.serialization that a custom serializer is available for said given type. This custom
+    serializer is usually provided by the library's maintainer, meaning no action is needed besides inserting
+    the
+    @Contextual annotation.
 </p>
-<p>
-    KReplica simplifies this workflow. If the <code>kotlinx.serialization</code> plugin is present, KReplica's <strong>Auto-Contextualization</strong>
-    feature will automatically add the <code>@Contextual</code> annotation to any non-primitive, non-collection property
-    for you. This feature is enabled by default.
+<p>Normally, the IDE will help you identify which variables require @Contextual. Unfortunately,
+    kotlinx.serialization's
+    <code>@Serializable</code> annotation cannot be directly applied on interfaces. This thus is why <code>@Replicate.Apply</code>
+    exists in the first place.</p>
+<p>Via <code>@Replicate.Apply</code>, we can still mark our KReplica annotations as <code>@Serializable</code>. However,
+    this mean we no longer get IDE help
+    to determine whether or not a property requires @Contextual.</p>
+<p>To get around this, KReplica automatically applies the @Contextual annotations to properties if it
+    declares that kotlinx serialization is applied to said KReplica declaration. This feature is enabled by default.
 </p>
 <p>
     You can disable this behavior globally by setting <code>autoContextual = AutoContextual.DISABLED</code> in the
