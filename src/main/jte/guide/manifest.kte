@@ -1,11 +1,28 @@
 @param builder: io.availe.kreplicadocs.services.GuideBuilder
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
-!{ builder.addSection(
+!{ builder.startSection(
     id = "introduction",
     title = "Introduction",
-    content = @`@template.guide.content.introduction(vm = vm)`
+    description = @`<p>This guide walks through KReplica's API, codegen output, and common patterns. KReplica is a DTO
+    generator, which lets you define multiple DTO variants from one interface, among other things.</p>`
 ) }
+!{ builder.addSubSection(
+    id = "introduction-preface",
+    title = "Preface",
+    content = @`@template.guide.content.introduction.preface(vm = vm)`
+) }
+!{ builder.addSubSection(
+    id = "introduction-setup",
+    title = "Setup",
+    content = @`@template.guide.content.introduction.setup(vm = vm)`
+) }
+!{ builder.addSubSection(
+    id = "introduction-stability",
+    title = "API Stability",
+    content = @`@template.guide.content.introduction.stability(vm = vm)`
+) }
+!{ builder.endSection() }
 
 !{ builder.startSection(
     id = "api-annotations",
