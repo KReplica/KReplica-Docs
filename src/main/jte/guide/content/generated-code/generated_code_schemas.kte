@@ -9,7 +9,7 @@
     convention, but you can assign custom names as long as a
     version number is provided with <code>@SchemaVersion</code>.</p>
 
-For example, here is how you might access the <code>DATA</code> variant of a UserAccount Schema:
+For example, here is how you might access the <code>DATA</code> variant of a generated <code>UserAccountSchema</code>:
 <ul>
     <li>Unversioned: <code>UserAccountSchema.Data</code></li>
     <li>Versioned: <code>UserAccountSchema.V1.Data</code></li>
