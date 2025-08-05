@@ -22,5 +22,12 @@ enum class CodeSnippet(val path: String) {
     GUIDE_REF_PROPERTY_EXCLUDE("guide-reference/property-exclude.kt"),
     GUIDE_REF_VERSIONING("guide-reference/versioning.kt"),
     GUIDE_REF_NESTING_UNVERSIONED("guide-reference/nesting-unversioned.kt"),
-    GUIDE_REF_NESTING_VERSIONED("guide-reference/nesting-versioned.kt")
+    GUIDE_REF_NESTING_VERSIONED("guide-reference/nesting-versioned.kt"),
+
+    API_REPLICATE_MODEL("guide-reference/api_replicate_model.kt"),
+    API_REPLICATE_PROPERTY("guide-reference/api_replicate_property.kt"),
+    API_REPLICATE_APPLY("guide-reference/api_replicate_apply.kt"),
+    API_REPLICATE_SCHEMA_VERSION("guide-reference/api_replicate_schema_version.kt"),
+    API_REPLICATE_HIDE("guide-reference/api_replicate_hide.kt"),
+    API_AUTO_CONTEXTUAL("guide-reference/api_auto_contextual.kt"),
 }

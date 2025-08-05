@@ -87,7 +87,12 @@ class ViewModelFactory(
         val tabs = mutableMapOf<String, List<Tab>>()
 
         val exampleMapping = mapOf(
-            "api-ref-replicate-model" to CodeSnippet.GUIDE_REF_MODEL_VARIANTS,
+            "api-replicate-model" to CodeSnippet.API_REPLICATE_MODEL,
+            "api-replicate-property" to CodeSnippet.API_REPLICATE_PROPERTY,
+            "api-replicate-apply" to CodeSnippet.API_REPLICATE_APPLY,
+            "api-replicate-schema-version" to CodeSnippet.API_REPLICATE_SCHEMA_VERSION,
+            "api-replicate-hide" to CodeSnippet.API_REPLICATE_HIDE,
+            "api-auto-contextual" to CodeSnippet.API_AUTO_CONTEXTUAL,
             "api-ref-versioning" to CodeSnippet.GUIDE_REF_VERSIONING,
         )
 

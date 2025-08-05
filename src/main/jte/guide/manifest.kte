@@ -8,40 +8,62 @@
 ) }
 
 !{ builder.startSection(
-    id = "api-reference",
-    title = "API Reference",
+    id = "api-annotations",
+    title = "API Annotations",
     description = @`<p>KReplica is configured using a small set of powerful annotations. This section serves as a
-    dictionary for every available option.</p>`
+    quick-reference dictionary for every available option.</p>`
 ) }
 !{ builder.addSubSection(
-        id = "api-ref-replicate-model",
-        title = "@Replicate.Model & @Property",
-        content = @`@template.guide.content.api-reference.api_reference_model(vm = vm)`
+        id = "api-replicate-model",
+        title = "@Replicate.Model",
+        content = @`@template.guide.content.api-annotations.replicate-model(vm = vm)`
     ) }
 !{ builder.addSubSection(
-        id = "api-ref-versioning",
-        title = "Schema Versioning",
-        content = @`@template.guide.content.api-reference.api_reference_versioning(vm = vm)`
+        id = "api-replicate-property",
+        title = "@Replicate.Property",
+        content = @`@template.guide.content.api-annotations.replicate-property(vm = vm)`
     ) }
 !{ builder.addSubSection(
-        id = "api-ref-nominal-typing",
+        id = "api-replicate-apply",
+        title = "@Replicate.Apply",
+        content = @`@template.guide.content.api-annotations.replicate-apply(vm = vm)`
+    ) }
+!{ builder.addSubSection(
+        id = "api-replicate-schema-version",
+        title = "@Replicate.SchemaVersion",
+        content = @`@template.guide.content.api-annotations.replicate-schema-version(vm = vm)`
+    ) }
+!{ builder.addSubSection(
+        id = "api-replicate-hide",
+        title = "@Replicate.Hide",
+        content = @`@template.guide.content.api-annotations.replicate-hide(vm = vm)`
+    ) }
+!{ builder.endSection() }
+
+!{ builder.startSection(
+    id = "api-concepts",
+    title = "API Concepts",
+    description = @`<p>Learn the core concepts behind KReplica's features to use them effectively.</p>`
+) }
+!{ builder.addSubSection(
+        id = "api-dto-versioning",
+        title = "DTO Versioning",
+        content = @`@template.guide.content.api-concepts.dto-versioning(vm = vm)`
+    ) }
+!{ builder.addSubSection(
+        id = "api-nominal-typing",
         title = "Nominal Typing",
-        content = @`@template.guide.content.api-reference.api_reference_nominal_typing(vm = vm)`
+        content = @`@template.guide.content.api-concepts.nominal-typing(vm = vm)`
     ) }
 !{ builder.addSubSection(
-        id = "api-ref-contextual-nesting",
-        title = "Contextual Nesting",
-        content = @`@template.guide.content.api-reference.api_reference_contextual_nesting(vm = vm)`
-    ) }
-!{ builder.addSubSection(
-        id = "api-ref-applying-annotations",
+        id = "api-applying-annotations",
         title = "Applying Annotations",
-        content = @`@template.guide.content.api-reference.api_reference_applying_annotations(vm = vm)`
+        content = @`@template.guide.content.api-concepts.applying-annotations(vm = vm)`
     ) }
 !{ builder.addSubSection(
-        id = "api-ref-hide-annotation",
-        title = "Disabling with @Replicate.Hide",
-        content = @`@template.guide.content.api-reference.api_reference_hide_annotation(vm = vm)`
+        id = "api-auto-contextualization",
+        title = "Auto-Contextualization",
+        content = @`@template.guide.content.api-concepts.auto-contextualization(vm = vm)`
     ) }
 !{ builder.endSection() }
 

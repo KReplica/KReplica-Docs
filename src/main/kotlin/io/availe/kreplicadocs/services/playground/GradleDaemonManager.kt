@@ -96,7 +96,12 @@ class GradleDaemonManager(
             log.error("Could not parse tabs.json for cache priming.", e)
         }
 
-        snippetsToCompile.add(CodeSnippet.GUIDE_REF_MODEL_VARIANTS)
+        snippetsToCompile.add(CodeSnippet.API_REPLICATE_MODEL)
+        snippetsToCompile.add(CodeSnippet.API_REPLICATE_PROPERTY)
+        snippetsToCompile.add(CodeSnippet.API_REPLICATE_APPLY)
+        snippetsToCompile.add(CodeSnippet.API_REPLICATE_SCHEMA_VERSION)
+        snippetsToCompile.add(CodeSnippet.API_REPLICATE_HIDE)
+        snippetsToCompile.add(CodeSnippet.API_AUTO_CONTEXTUAL)
         snippetsToCompile.add(CodeSnippet.GUIDE_REF_VERSIONING)
 
         return snippetsToCompile.mapNotNull { allSnippets[it] }.toSet()
