@@ -28,16 +28,16 @@
         "nominalTyping": {
           "insertText": "nominalTyping = $0",
           "detail": "NominalTyping",
-          "documentation": "Enables/disables value class wrapping for primitive types.",
+          "documentation": "Enables/disables value class wrapping for primitive types. Default: DISABLED.",
           "valueContext": "NominalTyping",
           "sortText": "2"
         },
         "autoContextual": {
           "insertText": "autoContextual = $0",
           "detail": "AutoContextual",
-          "documentation": "Controls automatic @Contextual generation for serialization.",
+          "documentation": "Controls automatic @Contextual generation for serialization. Default: ENABLED.",
           "valueContext": "AutoContextual",
-          "sortText": "2"
+          "sortText": "3"
         }
       }
     },
@@ -48,26 +48,57 @@
         "include": {
           "insertText": "include = [$0]",
           "detail": "Array<DtoVariant>",
+          "documentation": "Explicitly includes this property only in the specified variants, ignoring model-level settings.",
           "valueContext": "DtoVariant",
-          "sortText": "2"
+          "sortText": "1"
         },
         "exclude": {
           "insertText": "exclude = [$0]",
           "detail": "Array<DtoVariant>",
+          "documentation": "Excludes this property from the specified variants.",
           "valueContext": "DtoVariant",
           "sortText": "2"
         },
         "nominalTyping": {
           "insertText": "nominalTyping = $0",
           "detail": "NominalTyping",
+          "documentation": "Overrides the model-level nominal typing setting for this property. Default: INHERIT.",
           "valueContext": "NominalTyping",
-          "sortText": "2"
+          "sortText": "3"
         },
         "autoContextual": {
           "insertText": "autoContextual = $0",
           "detail": "AutoContextual",
+          "documentation": "Overrides the model-level auto-contextual setting for this property. Default: INHERIT.",
           "valueContext": "AutoContextual",
+          "sortText": "4"
+        }
+      }
+    },
+    "Replicate.Apply": {
+      "insertText": "Replicate.Apply(annotations = [$0])",
+      "documentation": "Applies other annotations (like @Serializable) to generated DTOs.",
+      "parameters": {
+        "annotations": {
+          "insertText": "annotations = [$0]",
+          "detail": "Array<KClass<out Annotation>>",
+          "documentation": "Required. The annotation classes to apply.",
+          "valueType": "KClass",
+          "sortText": "1"
+        },
+        "include": {
+          "insertText": "include = [$0]",
+          "detail": "Array<DtoVariant>",
+          "documentation": "Applies the annotations only to the specified variants.",
+          "valueContext": "DtoVariant",
           "sortText": "2"
+        },
+        "exclude": {
+          "insertText": "exclude = [$0]",
+          "detail": "Array<DtoVariant>",
+          "documentation": "Applies the annotations to all variants except the ones specified.",
+          "valueContext": "DtoVariant",
+          "sortText": "3"
         }
       }
     },
@@ -78,18 +109,7 @@
         "number": {
           "insertText": "number = $0",
           "detail": "Int",
-          "sortText": "1"
-        }
-      }
-    },
-    "Replicate.Apply": {
-      "insertText": "Replicate.Apply(annotations = [$0])",
-      "documentation": "Applies other annotations (like @Serializable) to generated DTOs.",
-      "parameters": {
-        "annotations": {
-          "insertText": "annotations = [$0]",
-          "detail": "Array<KClass>",
-          "valueType": "KClass",
+          "documentation": "Required. The version number to assign.",
           "sortText": "1"
         }
       }
@@ -112,14 +132,16 @@
       "documentation": "Controls the nominal typing feature.",
       "members": [
         "ENABLED",
-        "DISABLED"
+        "DISABLED",
+        "INHERIT"
       ]
     },
     "AutoContextual": {
       "documentation": "Controls automatic @Contextual generation.",
       "members": [
         "ENABLED",
-        "DISABLED"
+        "DISABLED",
+        "INHERIT"
       ]
     }
   },
