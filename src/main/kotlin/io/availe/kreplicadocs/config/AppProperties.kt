@@ -7,5 +7,4 @@ data class AppProperties(
     val repoUrl: String,
     val issuesUrl: String,
     val personalUrl: String,
-    val featureExampleSlug: String
 )
