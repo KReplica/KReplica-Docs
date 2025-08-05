@@ -12,6 +12,9 @@
     variants, all properties are wrapped in <code>Patchable&lt;T&gt;</code>, making it
     explicit whether a field should be updated, cleared, or left unchanged.
 </p>
+<p>By default, each property in a <code>PatchRequest</code> is set to <code>Patchable.Unchanged</code>, so you only
+    need to specify the fields you want to update.
+</p>
 !{ val patchableTabs = vm.tabs["generated-code-patchable"] }
 @if(patchableTabs != null)
     @template.tags.tabs(tabs = patchableTabs)
