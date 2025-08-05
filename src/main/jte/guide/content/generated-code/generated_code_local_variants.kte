@@ -1,7 +1,7 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
 <p>
-    For each versioned schema, KReplica generates “local variant” marker interfaces: <code>DataVariant</code>, <code>CreateRequestVariant</code>,
+    For each KRelpica schema, KReplica generates “local variant” marker interfaces: <code>DataVariant</code>, <code>CreateRequestVariant</code>,
     and <code>PatchRequestVariant</code>. Local variants are only generated as needed. For example, if the schema does
     not include a <code>CREATE</code> variant, it will not generate the <code>CreateRequestVariant</code> local variant.
 </p>
