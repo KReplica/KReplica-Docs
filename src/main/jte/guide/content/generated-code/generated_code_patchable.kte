@@ -1,23 +1,30 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
 <p>
-    When handling partial updates with a `PATCH` request, a common problem arises: how do you distinguish between a
-    field that should be set to `null` and a field that was simply not included in the request? Using a nullable type
+    When handling partial updates with a <code>PATCH</code> request, a common problem arises: how do you distinguish
+    between a
+    field that should be set to <code>null</code> and a field that was simply not included in the request? Using a
+    nullable type
     like <code>String?</code> is ambiguous.
 </p>
 <p>
-    KReplica solves this with the `Patchable&lt;T&gt;` sealed class. Instead of using nullable types directly in
-    `PatchRequest` variants, all properties are wrapped in `Patchable&lt;T&gt;`.
+    KReplica solves this with the <code>Patchable&lt;T&gt;</code> sealed class. Instead of using nullable types directly
+    in
+    <code>PatchRequest</code> variants, all properties are wrapped in <code>Patchable&lt;T&gt;</code>.
 </p>
-@template.tags.code(language="kotlin", content=@`${vm.snippets[io.availe.kreplicadocs.common.CodeSnippet.GUIDE_OUTPUT_PATCHABLE]}`)
+!{ val patchableTabs = vm.tabs["generated-code-patchable"] }
+@if(patchableTabs != null)
+    @template.tags.tabs(tabs = patchableTabs)
+@endif
 <p>
     This wrapper provides two explicit states:
 </p>
 <ul>
     <li><strong><code>Patchable.Set(value)</code></strong>: Indicates a clear intent to update the property with a new
-        value. The `value` itself can be `null` if the property type is nullable (e.g., `Patchable.Set&lt;String?&gt;(null)`).
+        value. The <code>value</code> itself can be <code>null</code> if the property type is nullable (e.g., <code>Patchable.Set&lt;String?&gt;(null)</code>).
     </li>
-    <li><strong><code>Patchable.Unchanged</code></strong>: The default value for all properties in a `PatchRequest`. It
+    <li><strong><code>Patchable.Unchanged</code></strong>: The default value for all properties in a
+        <code>PatchRequest</code>. It
         signifies that the property was not sent and should be ignored during the update.
     </li>
 </ul>

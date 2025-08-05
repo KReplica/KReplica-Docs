@@ -100,6 +100,10 @@ class ViewModelFactory(
         val tabsMapping = mapOf(
             "api-ref-contextual-nesting" to "contextualNestingTabs",
             "patterns-api-mappers" to "apiMapperTabs",
+            "generated-code-schemas" to "generatedCodeSchemasTabs",
+            "generated-code-patchable" to "patchableWrapperTabs",
+            "generated-code-local-variants" to "localVariantsTabs",
+            "generated-code-global-variants" to "globalVariantsTabs",
         )
 
         exampleMapping.forEach { (id, snippet) ->

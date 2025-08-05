@@ -80,5 +80,53 @@
       "codeSnippetKey": "MAPPER_PATTERN_IMPLEMENTATION",
       "requiresCompilation": false
     }
+  ],
+  "generatedCodeSchemasTabs": [
+    {
+      "id": "unversioned",
+      "label": "Unversioned Schema (Structure)",
+      "codeSnippetKey": "GUIDE_OUTPUT_UNVERSIONED_SCHEMA"
+    },
+    {
+      "id": "versioned",
+      "label": "Versioned Schema (Structure)",
+      "codeSnippetKey": "GUIDE_OUTPUT_VERSIONED_SCHEMA"
+    }
+  ],
+  "patchableWrapperTabs": [
+    {
+      "id": "standard",
+      "label": "Patchable<T>",
+      "codeSnippetKey": "GUIDE_OUTPUT_PATCHABLE"
+    },
+    {
+      "id": "serializable",
+      "label": "SerializablePatchable<T>",
+      "codeSnippetKey": "GUIDE_OUTPUT_PATCHABLE_SERIALIZABLE"
+    }
+  ],
+  "localVariantsTabs": [
+    {
+      "id": "unversioned",
+      "label": "Unversioned",
+      "codeSnippetKey": "GUIDE_OUTPUT_LOCAL_VARIANTS_UNVERSIONED"
+    },
+    {
+      "id": "versioned",
+      "label": "Versioned",
+      "codeSnippetKey": "GUIDE_OUTPUT_LOCAL_VARIANTS_VERSIONED"
+    }
+  ],
+  "globalVariantsTabs": [
+    {
+      "id": "unversioned",
+      "label": "Unversioned",
+      "codeSnippetKey": "GUIDE_OUTPUT_GLOBAL_VARIANTS_UNVERSIONED"
+    },
+    {
+      "id": "versioned",
+      "label": "Versioned",
+      "codeSnippetKey": "GUIDE_OUTPUT_GLOBAL_VARIANTS_VERSIONED"
+    }
   ]
 }

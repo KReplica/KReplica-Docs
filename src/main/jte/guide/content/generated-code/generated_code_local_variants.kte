@@ -9,7 +9,10 @@
     Their purpose is to group DTOs of the same <em>kind</em> across all <em>versions</em>. For example, `V1.Data` and
     `V2.Data` will both implement the `DataVariant` interface.
 </p>
-@template.tags.code(language="kotlin", content=@`${vm.snippets[io.availe.kreplicadocs.common.CodeSnippet.GUIDE_OUTPUT_LOCAL_VARIANTS]}`)
+!{ val localVariantsTabs = vm.tabs["generated-code-local-variants"] }
+@if(localVariantsTabs != null)
+    @template.tags.tabs(tabs = localVariantsTabs)
+@endif
 <p>
     This powerful structure allows you to work "horizontally" across your API versions. You can write a single function
     that accepts <code>MySchema.DataVariant</code> and use an exhaustive <code>when</code> expression to handle the
