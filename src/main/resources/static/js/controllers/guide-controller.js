@@ -2,7 +2,6 @@ import {destroyScrollSpy, initScrollSpy, pauseScrollSpy, resumeScrollSpy} from "
 import {destroyGuideNavigation, initGuideNavigation} from "../components/guide-navigation.js";
 
 const HEADER_OFFSET_PX = 80;
-let scrollSpyTimeoutId;
 
 function applyHighlight(targetElement) {
     if (!targetElement) return;
@@ -19,8 +18,7 @@ function smoothScrollToSection(section) {
     window.scrollTo({top: offsetPosition, behavior: "smooth"});
     applyHighlight(section);
     document.body.dispatchEvent(new CustomEvent("section-active", {detail: {sectionId: section.id}}));
-    clearTimeout(scrollSpyTimeoutId);
-    scrollSpyTimeoutId = setTimeout(resumeScrollSpy, 1000);
+    window.addEventListener('scrollend', resumeScrollSpy, {once: true});
 }
 
 function handleNavClick(event, sectionId) {
