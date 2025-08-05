@@ -12,7 +12,8 @@ data class TabDefinition(
     val description: String? = null,
     val codeSnippetKey: String? = null,
     val generatedFrom: String? = null,
-    val exampleSnippetKey: String? = null
+    val exampleSnippetKey: String? = null,
+    val requiresCompilation: Boolean? = null
 )
 
 @Service

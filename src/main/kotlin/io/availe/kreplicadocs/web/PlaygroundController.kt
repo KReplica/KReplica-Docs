@@ -208,7 +208,7 @@ class PlaygroundController(
         if (response != null && response.success) {
             val cacheKey = sourceCodeNormalizer.getCacheKey(response.sourceCode)
             completedJobsCache.put(response.jobId, response)
-            completedJobsCache.put(cacheKey, response)
+            permanentCache.put(cacheKey, response)
         }
     }
 
