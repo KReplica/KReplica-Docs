@@ -14,18 +14,48 @@ function applyHighlight(targetElement) {
 
 function smoothScrollToSection(section) {
     pauseScrollSpy();
+
+    let scrollEndHandler;
+    let wheelHandler;
+    let touchStartHandler;
+    let keyDownHandler;
+
+    const resumeAndCleanup = () => {
+        window.removeEventListener('scrollend', scrollEndHandler);
+        window.removeEventListener('wheel', wheelHandler);
+        window.removeEventListener('touchstart', touchStartHandler);
+        window.removeEventListener('keydown', keyDownHandler);
+        resumeScrollSpy();
+    };
+
+    const scrollKeys = ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '];
+
+    scrollEndHandler = resumeAndCleanup;
+    wheelHandler = resumeAndCleanup;
+    touchStartHandler = resumeAndCleanup;
+    keyDownHandler = (e) => {
+        if (scrollKeys.includes(e.key)) {
+            resumeAndCleanup();
+        }
+    };
+
+    window.addEventListener('scrollend', scrollEndHandler, {once: true});
+    window.addEventListener('wheel', wheelHandler, {once: true, passive: true});
+    window.addEventListener('touchstart', touchStartHandler, {once: true, passive: true});
+    window.addEventListener('keydown', keyDownHandler, {once: true});
+
     const offsetPosition = section.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET_PX;
     window.scrollTo({top: offsetPosition, behavior: "smooth"});
     applyHighlight(section);
     document.body.dispatchEvent(new CustomEvent("section-active", {detail: {sectionId: section.id}}));
-    window.addEventListener('scrollend', resumeScrollSpy, {once: true});
 }
 
 function handleNavClick(event, sectionId) {
     event.preventDefault();
     const targetSection = document.getElementById(sectionId);
-    if (targetSection) smoothScrollToSection(targetSection);
-    else resumeScrollSpy();
+    if (targetSection) {
+        smoothScrollToSection(targetSection);
+    }
 }
 
 function bindSidebarNavClicks() {
