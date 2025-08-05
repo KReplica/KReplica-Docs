@@ -1,16 +1,16 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
 <p>
-    When handling partial updates with a <code>PATCH</code> request, a common problem arises: how do you distinguish
-    between a
-    field that should be set to <code>null</code> and a field that was simply not included in the request? Using a
-    nullable type
-    like <code>String?</code> is ambiguous.
+    When handling PATCH or update requests, a common challenge is distinguishing between fields that were omitted (and
+    should remain unchanged) and fields that were explicitly set to <code>null</code>. For example, if your DTO includes
+    a property like <code>description</code>, how can you tell whether the client wanted to update it, clear it, or
+    leave it as is? Making the property nullable introduces ambiguity: does <code>null</code> mean “clear this field” or
+    “don’t change it”?
 </p>
 <p>
-    KReplica solves this with the <code>Patchable&lt;T&gt;</code> sealed class. Instead of using nullable types directly
-    in
-    <code>PatchRequest</code> variants, all properties are wrapped in <code>Patchable&lt;T&gt;</code>.
+    KReplica solves this with the <code>Patchable&lt;T&gt;</code> sealed class. In KReplica <code>PatchRequest</code>
+    variants, all properties are wrapped in <code>Patchable&lt;T&gt;</code>, making it
+    explicit whether a field should be updated, cleared, or left unchanged.
 </p>
 !{ val patchableTabs = vm.tabs["generated-code-patchable"] }
 @if(patchableTabs != null)
@@ -20,15 +20,15 @@
     This wrapper provides two explicit states:
 </p>
 <ul>
-    <li><strong><code>Patchable.Set(value)</code></strong>: Indicates a clear intent to update the property with a new
-        value. The <code>value</code> itself can be <code>null</code> if the property type is nullable (e.g., <code>Patchable.Set&lt;String?&gt;(null)</code>).
+    <li>
+        <strong><code>Patchable.Set(value)</code></strong>
+        Use this to update a property with a new value. For example, if you have <code>val email: Patchable&lt;String&gt;</code>
+        you can set it null with <code>Patchable.Set(null)</code>.
     </li>
-    <li><strong><code>Patchable.Unchanged</code></strong>: The default value for all properties in a
-        <code>PatchRequest</code>. It
-        signifies that the property was not sent and should be ignored during the update.
+    <li>
+        <strong><code>Patchable.Unchanged</code></strong>
+        Use this to leave a property unchanged. This is the default for all properties in a
+        <code>PatchRequest</code>
+        and signifies the property was not sent and should be ignored during the update.
     </li>
 </ul>
-<p>
-    This design eliminates ambiguity, making your server-side patch logic safer and more predictable. For schemas that
-    require serialization, KReplica will automatically use a serializable version of this wrapper.
-</p>
