@@ -93,27 +93,27 @@
 ) }
 !{ builder.addSubSection(
         id = "generated-code-unversioned",
-        title = "Unversioned Schemas: The Foundation",
+        title = "Unversioned Schemas",
         content = @`@template.guide.content.generated-code.generated_code_unversioned(vm = vm)`
     ) }
 !{ builder.addSubSection(
         id = "generated-code-versioned",
-        title = "Versioned Schemas: Scaling Your API",
+        title = "Versioned Schemas",
         content = @`@template.guide.content.generated-code.generated_code_versioned(vm = vm)`
     ) }
 !{ builder.addSubSection(
         id = "generated-code-patchable",
-        title = "The `Patchable<T>` Wrapper: Unambiguous Updates",
+        title = "The Patchable Wrapper",
         content = @`@template.guide.content.generated-code.generated_code_patchable(vm = vm)`
     ) }
 !{ builder.addSubSection(
         id = "generated-code-local-variants",
-        title = "Local Variant Interfaces: Working Across Versions",
+        title = "Local Variants",
         content = @`@template.guide.content.generated-code.generated_code_local_variants(vm = vm)`
     ) }
 !{ builder.addSubSection(
         id = "generated-code-global-variants",
-        title = "Global Variant Interfaces: A Hook for Abstraction",
+        title = "Global Variants",
         content = @`@template.guide.content.generated-code.generated_code_global_variants(vm = vm)`
     ) }
 !{ builder.endSection() }
