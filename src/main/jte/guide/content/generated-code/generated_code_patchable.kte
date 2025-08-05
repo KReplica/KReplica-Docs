@@ -35,3 +35,6 @@
         and signifies the property was not sent and should be ignored during the update.
     </li>
 </ul>
+
+<p>If a schema is marked as serializable, KReplica will automatically utilize the serializable version of this
+    wrapper.</p>
