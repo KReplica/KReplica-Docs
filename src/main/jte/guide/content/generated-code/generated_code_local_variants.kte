@@ -1,0 +1,18 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>
+    When you generate a versioned schema, KReplica includes an extra set of "local" variant interfaces. You'll see
+    `DataVariant`, `CreateRequestVariant`, and `PatchRequestVariant` declared directly inside the top-level sealed
+    interface.
+</p>
+<p>
+    Their purpose is to group DTOs of the same <em>kind</em> across all <em>versions</em>. For example, `V1.Data` and
+    `V2.Data` will both implement the `DataVariant` interface.
+</p>
+@template.tags.code(language="kotlin", content=@`${vm.snippets[io.availe.kreplicadocs.common.CodeSnippet.GUIDE_OUTPUT_LOCAL_VARIANTS]}`)
+<p>
+    This powerful structure allows you to work "horizontally" across your API versions. You can write a single function
+    that accepts <code>MySchema.DataVariant</code> and use an exhaustive <code>when</code> expression to handle the
+    `Data` DTO from any version. This provides a clean way to manage logic that is common to a specific DTO type,
+    regardless of its version.
+</p>

@@ -31,4 +31,12 @@ enum class CodeSnippet(val path: String) {
     API_REPLICATE_SCHEMA_VERSION("guide-reference/api_replicate_schema_version.kt"),
     API_REPLICATE_HIDE("guide-reference/api_replicate_hide.kt"),
     API_AUTO_CONTEXTUAL("guide-reference/api_auto_contextual.kt"),
+
+    GUIDE_OUTPUT_UNVERSIONED_INPUT("guide-output/unversioned_schema_input.kt"),
+    GUIDE_OUTPUT_UNVERSIONED_OUTPUT("guide-output/unversioned_schema_output.kt"),
+    GUIDE_OUTPUT_VERSIONED_INPUT("guide-output/versioned_schema_input.kt"),
+    GUIDE_OUTPUT_VERSIONED_OUTPUT("guide-output/versioned_schema_output.kt"),
+    GUIDE_OUTPUT_PATCHABLE("guide-output/patchable_definition.kt"),
+    GUIDE_OUTPUT_LOCAL_VARIANTS("guide-output/local_variants_output.kt"),
+    GUIDE_OUTPUT_GLOBAL_VARIANTS("guide-output/global_variants_output.kt"),
 }

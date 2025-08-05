@@ -1,0 +1,15 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>
+    As your API evolves, you'll need to manage different versions of your DTOs. KReplica is designed for this. By
+    nesting interfaces that follow the `V&lt;number&gt;` convention inside a parent interface, you instruct KReplica to
+    generate a version-aware hierarchy.
+</p>
+@template.tags.code(language="kotlin", content=@`${vm.snippets[io.availe.kreplicadocs.common.CodeSnippet.GUIDE_OUTPUT_VERSIONED_INPUT]}`)
+<p>
+    The generated output now has an additional layer. The top-level `sealed interface` remains, but it now contains
+    nested sealed interfaces for each version (`V1`, `V2`, etc.). This creates a clean namespace for each version's
+    variants and allows you to write functions that operate exclusively on a specific version's DTOs (e.g., <code>fun
+        processV1(dto: MySchema.V1)</code>).
+</p>
+@template.tags.code(language="kotlin", content=@`${vm.snippets[io.availe.kreplicadocs.common.CodeSnippet.GUIDE_OUTPUT_VERSIONED_OUTPUT]}`)

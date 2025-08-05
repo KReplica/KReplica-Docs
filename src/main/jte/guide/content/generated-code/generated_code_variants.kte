@@ -1,3 +1,0 @@
-@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
-
-@template.tags.code(language="kotlin", content=@`${vm.snippets[io.availe.kreplicadocs.common.CodeSnippet.MAPPER_PATTERN_INTERFACE]}`)
