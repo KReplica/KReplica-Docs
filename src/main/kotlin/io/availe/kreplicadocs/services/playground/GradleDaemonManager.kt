@@ -83,7 +83,8 @@ class GradleDaemonManager(
 
         try {
             val tabsJson = codeSnippetProvider.getTabsJson()
-            tabsJson.fields().forEach { (_, tabGroupNode) ->
+            tabsJson.properties().forEach { entry ->
+                val tabGroupNode = entry.value
                 tabGroupNode.forEach { tabNode ->
                     if (tabNode.path("requiresCompilation").asBoolean(false)) {
                         addSnippetKeyFromNode(tabNode, "exampleSnippetKey", snippetsToCompile)
