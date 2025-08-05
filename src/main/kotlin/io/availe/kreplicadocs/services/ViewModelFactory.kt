@@ -164,9 +164,10 @@ class ViewModelFactory(
         )
     }
 
-    fun createPlaygroundViewModel(): PlaygroundViewModel {
+    fun createPlaygroundViewModel(templateSlugValue: String? = null): PlaygroundViewModel {
         val templates = snippetProvider.getPlaygroundTemplates()
-        val activeTemplate = templates.firstOrNull()
+        val activeTemplate = templates.find { it.slug == templateSlugValue }
+            ?: templates.firstOrNull()
             ?: throw IllegalStateException("No playground templates found")
 
         val activeTemplateSlug = TemplateSlug(activeTemplate.slug)
@@ -175,7 +176,7 @@ class ViewModelFactory(
             SelectOption(
                 value = it.slug,
                 label = it.name,
-                selected = it.slug == activeTemplate.slug,
+                selected = it.slug == activeTemplateSlug.value,
             )
         }
 

@@ -66,8 +66,12 @@ class PlaygroundController(
     }
 
     @GetMapping(WebApp.Endpoints.Pages.PLAYGROUND)
-    fun playground(model: Model, @RequestHeader(name = "HX-Request", required = false) hxRequest: String?): Any {
-        model.addAttribute("vm", viewModelFactory.createPlaygroundViewModel())
+    fun playground(
+        model: Model,
+        @RequestParam(name = "template", required = false) templateSlug: String?,
+        @RequestHeader(name = "HX-Request", required = false) hxRequest: String?,
+    ): Any {
+        model.addAttribute("vm", viewModelFactory.createPlaygroundViewModel(templateSlug))
         return if (hxRequest != null) {
             FragmentsRendering.with(PartialTemplate.CONTENT_PLAYGROUND.path)
                 .fragment(FragmentTemplate.NAV_UPDATE_OOB.path)
