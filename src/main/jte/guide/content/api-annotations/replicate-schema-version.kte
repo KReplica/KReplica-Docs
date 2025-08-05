@@ -1,0 +1,18 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>
+    Manually specifies a version number for a DTO schema. This is only needed if you choose not to follow the <code>V&lt;number&gt;</code>
+    naming convention for versioned interfaces.
+</p>
+<ul>
+    <li>
+        <strong><code>number: Int</code></strong> (Required)
+        <div>The integer to assign as the version number for the schema.</div>
+    </li>
+</ul>
+!{ val example = vm.examples["api-replicate-schema-version"] }
+@if(example != null)
+    <div class="workflow-container">
+        @template.tags.guide-example(example = example)
+    </div>
+@endif

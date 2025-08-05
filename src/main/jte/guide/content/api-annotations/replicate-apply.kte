@@ -1,0 +1,27 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>
+    Applies other annotations (like <code>@Serializable</code>) to the generated DTO classes. This is useful for
+    annotations that cannot be applied to interfaces or for applying an annotation to only a subset of generated
+    variants.
+</p>
+<ul>
+    <li>
+        <strong><code>annotations: Array&lt;KClass&lt;out Annotation&gt;&gt;</code></strong> (Required)
+        <div>Specifies the annotation classes to apply to the generated DTOs.</div>
+    </li>
+    <li>
+        <strong><code>include: Array&lt;DtoVariant&gt;</code></strong> (Default: empty array)
+        <div>If provided, the annotations will only be applied to the DTO variants listed in this array.</div>
+    </li>
+    <li>
+        <strong><code>exclude: Array&lt;DtoVariant&gt;</code></strong> (Default: empty array)
+        <div>The annotations will be applied to all generated variants except for those listed in this array.</div>
+    </li>
+</ul>
+!{ val example = vm.examples["api-replicate-apply"] }
+@if(example != null)
+    <div class="workflow-container">
+        @template.tags.guide-example(example = example)
+    </div>
+@endif

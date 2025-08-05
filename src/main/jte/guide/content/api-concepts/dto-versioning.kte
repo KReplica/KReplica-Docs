@@ -1,0 +1,22 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>
+    KReplica makes API evolution safer and more explicit through its versioning system. By nesting interfaces that
+    follow a simple <code>V&lt;number&gt;</code> naming convention (e.g., <code>private interface V1 : MySchema</code>),
+    KReplica automatically groups them into a single, version-aware sealed hierarchy.
+</p>
+<p>
+    This generated sealed interface ensures that when you handle different DTOs, your <code>when</code> expressions can
+    be exhaustive. If you introduce a new version (e.g., <code>V2</code>), the Kotlin compiler will produce an error
+    until you explicitly handle the new version's variants, preventing runtime errors from forgotten migration paths.
+</p>
+<p>
+    If you prefer not to use the naming convention, you can achieve the same result by manually assigning a version
+    number with the <code>@Replicate.SchemaVersion(number = ...)</code> annotation.
+</p>
+!{ val example = vm.examples["api-ref-versioning"] }
+@if(example != null)
+    <div class="workflow-container">
+        @template.tags.guide-example(example = example)
+    </div>
+@endif

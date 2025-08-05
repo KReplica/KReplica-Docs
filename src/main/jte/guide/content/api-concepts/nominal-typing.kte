@@ -1,0 +1,18 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>
+    A common source of bugs in software is the accidental misuse of simple types. For example, a function signature like
+    <code>fun process(orderId: Long, customerId: Long)</code> offers no protection against swapping the two IDs, as both
+    are structurally just <code>Long</code> values.
+</p>
+<p>
+    <strong>Nominal typing</strong> solves this by creating distinct types that are not interchangeable, even if they
+    have the same underlying structure. KReplica implements this using Kotlin's <code>value class</code>. When enabled,
+    a property like <code>val customerId: Long</code> will be generated as <code>val customerId: CustomerId</code>,
+    where <code>CustomerId</code> is a new <code>@JvmInline value class CustomerId(val value: Long)</code>.
+</p>
+<p>
+    This provides compile-time safety, ensuring that a <code>CustomerId</code> can never be assigned where an <code>OrderId</code>
+    is expected. You can enable this feature globally on <code>@Replicate.Model</code> and then disable it for specific
+    properties where it's not needed.
+</p>
