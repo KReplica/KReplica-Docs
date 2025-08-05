@@ -47,12 +47,27 @@ function bindFabNavClicks() {
     });
 }
 
+function bindContentNavClicks() {
+    const contentArea = document.querySelector('.guide-main-content');
+    if (!contentArea) return;
+    contentArea.addEventListener('click', e => {
+        const anchor = e.target.closest('a[href^="#"]');
+        if (anchor) {
+            const href = anchor.getAttribute('href');
+            if (href.length > 1) {
+                handleNavClick(e, href.slice(1));
+            }
+        }
+    });
+}
+
 export default {
     init() {
         initGuideNavigation();
         initScrollSpy();
         bindSidebarNavClicks();
         bindFabNavClicks();
+        bindContentNavClicks();
     },
     destroy() {
         destroyScrollSpy();
