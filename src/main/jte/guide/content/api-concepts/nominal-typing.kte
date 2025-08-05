@@ -1,18 +1,37 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
-<p>
-    A common source of bugs in software is the accidental misuse of simple types. For example, a function signature like
+<p>This feature's name is actually a bit of a misnomer, a more accurate name would be "auto nominally typed primitives."
+    What it does is that it lets you type in primitively typed (Int, Double, String, etc.) variables in your KReplica
+    declarations, and in the
+    codegen output, they're automatically converted to inline value classes in the codegen output.</p>
+<p>The benefit of this is that it prevents the accidental misuse of primitive types. For example, a function signature
+    like
     <code>fun process(orderId: Long, customerId: Long)</code> offers no protection against swapping the two IDs, as both
     are structurally just <code>Long</code> values.
 </p>
 <p>
-    <strong>Nominal typing</strong> solves this by creating distinct types that are not interchangeable, even if they
-    have the same underlying structure. KReplica implements this using Kotlin's <code>value class</code>. When enabled,
-    a property like <code>val customerId: Long</code> will be generated as <code>val customerId: CustomerId</code>,
-    where <code>CustomerId</code> is a new <code>@JvmInline value class CustomerId(val value: Long)</code>.
+    Nominal typing solves this by creating distinct types that are not interchangeable. When enabled, a property like
+    <code>val customerId: Long</code> becomes <code>val customerId: CustomerId</code>, where <code>CustomerId</code> is
+    a
+    new <code>@JvmInline value class CustomerId(val value: Long)</code>. This provides compile-time safety, ensuring a
+    <code>CustomerId</code> can never be used where an <code>OrderId</code> is expected.
 </p>
-<p>
-    This provides compile-time safety, ensuring that a <code>CustomerId</code> can never be assigned where an <code>OrderId</code>
-    is expected. You can enable this feature globally on <code>@Replicate.Model</code> and then disable it for specific
-    properties where it's not needed.
-</p>
+@template.tags.alert(type="info", content=@`
+    <p><strong>Author's Note & Status: Beta</strong></p>
+    <p>While this feature provides type safety directly within DTOs, I have come to view it as a potential antipattern.
+        I believe that domain models, not DTOs, should own such business-specific types. For robust applications, I
+        strongly recommend the <a href="#patterns-api-mappers">Type-Safe API Mappers</a> pattern instead, as it promotes
+        better separation of concerns.</p>
+    <p>This feature is kept for teams that prefer a "flat model" where DTOs and domain models are one and the same.
+        However, it is under consideration for removal in a future version. Feedback on its usefulness is welcome.</p>
+    <p>Furthermore, there are a number of edge cases this feature can handle. For more information, check the template
+        dubbed "4.
+        Nominal
+        Typing Part II: Edge Case Examples" on the Playground page.</p>
+`)
+!{ val example = vm.examples["api-nominal-typing"] }
+@if(example != null)
+    <div class="workflow-container">
+        @template.tags.guide-example(example = example)
+    </div>
+@endif

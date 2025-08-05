@@ -94,6 +94,7 @@ class ViewModelFactory(
             "api-replicate-hide" to CodeSnippet.API_REPLICATE_HIDE,
             "api-auto-contextual" to CodeSnippet.API_AUTO_CONTEXTUAL,
             "api-ref-versioning" to CodeSnippet.GUIDE_REF_VERSIONING,
+            "api-nominal-typing" to CodeSnippet.GUIDE_REF_NOMINAL_TYPING,
         )
 
         val tabsMapping = mapOf(
