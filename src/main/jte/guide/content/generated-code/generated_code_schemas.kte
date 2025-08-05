@@ -1,11 +1,19 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
-<p>In KReplica, a schema is a sealed interface that defines all possible DTO shapes (such as Data, Patch, and Create)
-    for a given model. In unversioned schemas, all DTO variants are declared directly within the schema interface. In
-    versioned schemas, the root schema acts as a container for version-specific sealed interfaces. Each version (e.g.,
-    V1, V2, or a custom name) is nested inside the root and defines its own DTO variants, each including a schemaVersion
-    field that indicates its version. Version interfaces are typically named according to their version, but you can
-    assign custom names as long as a version number is provided.</p>
+<p>In KReplica, an unversioned schema is a sealed interface that defines all possible DTO shapes (such as Data, Patch,
+    and Create)
+    for a given model.</p>
+
+<p>Meanwhile, a version schema uses a two-layer nested model. The outer layer contains all the inner schemas, with each
+    inner schema being a separate version. By convention, each inner schema follows a a V&lt;number&gt; naming
+    convention, but you can assign custom names as long as a
+    version number is provided with <code>@SchemaVersion</code>.</p>
+
+For example, here is how you might access the DATA variant of a UserAccount Schema:
+<ul>
+    <li>Unversioned: <code>UserAccountSchema.Data</code></li>
+    <li>Versioned: <code>UserAccountSchema.V1.Data</code></li>
+</ul>
 
 !{ val schemasTabs = vm.tabs["generated-code-schemas"] }
 @if(schemasTabs != null)
