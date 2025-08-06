@@ -13,7 +13,9 @@
 
             @for(subsection in section.subsections)
                 <div id="${subsection.id}" class="guide-subsection">
-                    <h3>${subsection.title}</h3>
+                    @if(section.id != "faq")
+                        <h3>${subsection.title}</h3>
+                    @endif
                     ${subsection.content}
                 </div>
             @endfor
