@@ -119,13 +119,23 @@
     description = @`<p>Learn how to apply KReplica's features to solve common development challenges.</p>`
 ) }
 !{ builder.addSubSection(
+        id = "patterns-exhaustive-when",
+        title = "Exhaustive `when` Statements",
+        content = @`@template.guide.content.patterns.exhaustive_when_statements(vm = vm)`
+    ) }
+!{ builder.addSubSection(
         id = "patterns-kotlinx-serialization",
-        title = "kotlinx.serialization",
+        title = "kotlinx.serialization Integration",
         content = @`@template.guide.content.patterns.patterns_kotlinx_serialization(vm = vm)`
     ) }
 !{ builder.addSubSection(
+        id = "patterns-advanced-serialization",
+        title = "Advanced Serialization Features",
+        content = @`@template.guide.content.patterns.advanced_serialization(vm = vm)`
+    ) }
+!{ builder.addSubSection(
         id = "patterns-api-mappers",
-        title = "Type-Safe API Mappers",
+        title = "Compile-Safe DTO Mapper",
         content = @`@template.guide.content.patterns.patterns_api_mappers(vm = vm)`
     ) }
 !{ builder.endSection() }

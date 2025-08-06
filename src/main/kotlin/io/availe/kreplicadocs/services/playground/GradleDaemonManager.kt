@@ -104,6 +104,7 @@ class GradleDaemonManager(
         snippetsToCompile.add(CodeSnippet.API_REPLICATE_HIDE)
         snippetsToCompile.add(CodeSnippet.API_AUTO_CONTEXTUAL)
         snippetsToCompile.add(CodeSnippet.GUIDE_REF_VERSIONING)
+        snippetsToCompile.add(CodeSnippet.GUIDE_REF_SERIALIZATION_BASIC)
 
         return snippetsToCompile.mapNotNull { allSnippets[it] }.toSet()
     }

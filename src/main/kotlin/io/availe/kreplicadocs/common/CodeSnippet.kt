@@ -24,6 +24,8 @@ enum class CodeSnippet(val path: String) {
     GUIDE_REF_NESTING_UNVERSIONED("guide-reference/nesting-unversioned.kt"),
     GUIDE_REF_NESTING_VERSIONED("guide-reference/nesting-versioned.kt"),
     GUIDE_REF_NOMINAL_TYPING("guide-reference/nominal-typing.kt"),
+    GUIDE_REF_SERIALIZATION_BASIC("guide-reference/serialization-basic.kt"),
+
 
     API_REPLICATE_MODEL("guide-reference/api_replicate_model.kt"),
     API_REPLICATE_PROPERTY("guide-reference/api_replicate_property.kt"),

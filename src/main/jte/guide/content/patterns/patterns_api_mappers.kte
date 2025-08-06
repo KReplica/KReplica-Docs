@@ -1,5 +1,28 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
+<p>
+    While KReplica can generate DTOs that are ready for immediate use, a more robust and scalable approach for many
+    applications is to separate your API data contracts (DTOs) from your internal domain models. This pattern uses
+    KReplica's generated types to create compile-safe mappers that bridge this gap.
+</p>
+<p>
+    This approach provides several key benefits:
+</p>
+<ul>
+    <li><strong>Decoupling:</strong> Your internal business logic is not tied to the structure of your API. You can
+        change one without breaking the other.
+    </li>
+    <li><strong>Type Safety:</strong> The mappers use KReplica's specific variant types, making it impossible to, for
+        example, map a <code>CreateRequest</code> DTO to a domain model that requires an ID.
+    </li>
+    <li><strong>Explicitness:</strong> All data transformations are explicit and centralized, making the codebase easier
+        to understand and maintain.
+    </li>
+</ul>
+<p>
+    The following tabs walk through the four key components of this pattern.
+</p>
+
 !{ val mappersTabs = vm.tabs["patterns-api-mappers"] }
 @if(mappersTabs != null)
     @template.tags.tabs(tabs = mappersTabs)

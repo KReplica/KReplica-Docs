@@ -1,3 +1,22 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
-<p>Content for this section is forthcoming.</p>
+<p>
+    Integrating KReplica with <code>kotlinx.serialization</code> is straightforward, but it requires a specific approach
+    because the <code>@Serializable</code> annotation cannot be applied directly to interfaces.
+</p>
+<p>
+    The solution is to use the <code>@Replicate.Apply</code> annotation. This instructs KReplica to add <code>@Serializable</code>
+    to the data classes it generates. By default, it applies the annotation to all generated variants (<code>DATA</code>,
+    <code>CREATE</code>, <code>PATCH</code>).
+</p>
+!{ val example = vm.examples["patterns-serialization-basic"] }
+@if(example != null)
+    <div class="workflow-container">
+        @template.tags.guide-example(example = example)
+    </div>
+@endif
+<p>
+    You can also apply annotations to specific variants by using the <code>include</code> or <code>exclude</code>
+    parameters in <code>@Replicate.Apply</code>. This is useful if you only want to expose certain DTOs, like the <code>DATA</code>
+    variant, in your public API.
+</p>

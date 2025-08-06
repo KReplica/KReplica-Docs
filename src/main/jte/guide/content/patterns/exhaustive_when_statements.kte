@@ -1,0 +1,17 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>
+    One of the primary safety features KReplica provides is compile-time validation through sealed hierarchies. When you
+    define multiple versions or variants of a DTO, KReplica generates them as members of a <code>sealed interface</code>.
+</p>
+<p>
+    This structure allows you to use Kotlin's exhaustive <code>when</code> expressions. If you add a new version or
+    variant to your schema, any code that uses a <code>when</code> expression on the top-level schema will fail to
+    compile until you explicitly handle the new case. This prevents entire classes of runtime errors caused by
+    forgetting to update consuming code.
+</p>
+
+!{ val whenTabs = vm.tabs["whenTabs"] }
+@if(whenTabs != null)
+    @template.tags.tabs(tabs = whenTabs)
+@endif

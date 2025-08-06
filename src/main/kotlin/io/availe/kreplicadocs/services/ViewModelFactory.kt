@@ -95,6 +95,7 @@ class ViewModelFactory(
             "api-auto-contextual" to CodeSnippet.API_AUTO_CONTEXTUAL,
             "api-ref-versioning" to CodeSnippet.GUIDE_REF_VERSIONING,
             "api-nominal-typing" to CodeSnippet.GUIDE_REF_NOMINAL_TYPING,
+            "patterns-serialization-basic" to CodeSnippet.GUIDE_REF_SERIALIZATION_BASIC,
         )
 
         val tabsMapping = mapOf(
@@ -104,6 +105,7 @@ class ViewModelFactory(
             "generated-code-patchable" to "patchableWrapperTabs",
             "generated-code-local-variants" to "localVariantsTabs",
             "generated-code-global-variants" to "globalVariantsTabs",
+            "whenTabs" to "whenTabs",
         )
 
         exampleMapping.forEach { (id, snippet) ->
