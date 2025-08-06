@@ -58,7 +58,7 @@
 <div>
     <h2>Important Links:</h2>
     <div class="link-cards-grid">
-        <a href="/playground" class="link-card link-card--highlight" hx-get="/playground" hx-target=".main-content"
+        <a href="/playground" class="link-card" hx-get="/playground" hx-target=".main-content"
            hx-push-url="true">
             <h3>Playground</h3>
             <p>Run and explore live KReplica code samples.</p>

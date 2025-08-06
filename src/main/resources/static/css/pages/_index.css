@@ -93,10 +93,6 @@
     }
 }
 
-.link-card--highlight {
-    background-color: var(--alert-info-bg);
-}
-
-.link-card--highlight:hover {
-    background-color: color-mix(in oklch, var(--alert-info-bg), black 5%);
+.link-card:hover {
+    background-color: color-mix(in oklch, var(--surface-color), black 5%);
 }

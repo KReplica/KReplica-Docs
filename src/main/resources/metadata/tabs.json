@@ -14,10 +14,10 @@
   ],
   "whenTabs": [
     {
-      "id": "all",
-      "label": "Handle Everything",
-      "description": "By using the top-level schema interface, your `when` expression must exhaustively handle every version and variant.",
-      "codeSnippetKey": "WHEN_EXPRESSION_ALL",
+      "id": "variant",
+      "label": "Handle by Variant",
+      "description": "By using a local variant interface (e.g., `UserAccountSchema.DataVariant`), you can handle all DTOs of a specific kind, across all versions.",
+      "codeSnippetKey": "WHEN_EXPRESSION_BY_VARIANT",
       "requiresCompilation": false
     },
     {
@@ -28,10 +28,10 @@
       "requiresCompilation": false
     },
     {
-      "id": "variant",
-      "label": "Handle by Variant",
-      "description": "By using a local variant interface (e.g., `UserAccountSchema.DataVariant`), you can handle all DTOs of a specific kind, across all versions.",
-      "codeSnippetKey": "WHEN_EXPRESSION_BY_VARIANT",
+      "id": "all",
+      "label": "Handle Everything",
+      "description": "By using the top-level schema interface, your `when` expression must exhaustively handle every version and variant.",
+      "codeSnippetKey": "WHEN_EXPRESSION_ALL",
       "requiresCompilation": false
     }
   ],
