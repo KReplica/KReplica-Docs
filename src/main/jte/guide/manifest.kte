@@ -129,11 +129,6 @@
         content = @`@template.guide.content.patterns.patterns_kotlinx_serialization(vm = vm)`
     ) }
 !{ builder.addSubSection(
-        id = "patterns-advanced-serialization",
-        title = "Advanced Serialization Features",
-        content = @`@template.guide.content.patterns.advanced_serialization(vm = vm)`
-    ) }
-!{ builder.addSubSection(
         id = "patterns-api-mappers",
         title = "Compile-Safe DTO Mapper",
         content = @`@template.guide.content.patterns.patterns_api_mappers(vm = vm)`
