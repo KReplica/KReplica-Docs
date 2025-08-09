@@ -47,3 +47,9 @@
 @if(mappersTabs != null)
     @template.tags.tabs(tabs = mappersTabs)
 @endif
+
+<p>If it helps, the 1st tab ("The Reusable Pattern") is the generic interface that is the actual pattern. Tabs 2 and 3
+    are provided for context, but are not that important (they show a mock domain model and mock KReplica
+    declaration). The 4th tab ("The Implementation") shows an example of how you can actually apply the pattern shown in
+    the 1st
+    tab.</p>
