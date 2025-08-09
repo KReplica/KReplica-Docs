@@ -26,7 +26,7 @@ data class CompileResponse(
     val jobId: JobId,
     val sourceCode: String,
     val success: Boolean,
-    val generatedFiles: Map<String, String>? = null,
+    val generatedFiles: Map<FileName, String>? = null,
     val message: String
 )
 

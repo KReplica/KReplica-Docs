@@ -5,6 +5,7 @@ import io.availe.kreplicadocs.common.CodeSnippet
 import io.availe.kreplicadocs.common.GuideContentTemplate
 import io.availe.kreplicadocs.common.PageId
 import io.availe.kreplicadocs.config.AppProperties
+import io.availe.kreplicadocs.model.FileName
 import io.availe.kreplicadocs.model.NavLink
 import io.availe.kreplicadocs.model.TemplateSlug
 
@@ -64,7 +65,7 @@ data class IndexViewModel(
 
 data class ProcessedGuideExample(
     val inputCode: String,
-    val outputFiles: Map<String, String>?,
+    val outputFiles: Map<FileName, String>?,
     val inputTabLabel: String,
     val outputTabLabel: String,
 )

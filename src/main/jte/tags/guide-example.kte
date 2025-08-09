@@ -1,4 +1,6 @@
 @import gg.jte.Content
+@import io.availe.kreplicadocs.model.view.ProcessedGuideExample
+@import io.availe.kreplicadocs.model.FileName
 
 @param example: io.availe.kreplicadocs.model.view.ProcessedGuideExample
 
@@ -15,9 +17,9 @@
         @if (outputFiles != null && !outputFiles.isEmpty())
             @for ((filename, _) in outputFiles)
                 <button role="tab"
-                        :class="{ 'active': activeTab === '${filename}' }"
-                        @click="activeTab = '${filename}'">
-                    ${filename}
+                        :class="{ 'active': activeTab === '${filename.value}' }"
+                        @click="activeTab = '${filename.value}'">
+                    ${filename.value}
                 </button>
             @endfor
         @else
@@ -35,7 +37,7 @@
 
     @if (outputFiles != null && !outputFiles.isEmpty())
         @for ((filename, code) in outputFiles)
-            <div class="workflow-content" x-show="activeTab === '${filename}'" x-cloak>
+            <div class="workflow-content" x-show="activeTab === '${filename.value}'" x-cloak>
                 @template.tags.code(language="kotlin", content=@`${code}`)
             </div>
         @endfor

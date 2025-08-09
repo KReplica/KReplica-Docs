@@ -2,6 +2,7 @@ package io.availe.kreplicadocs.services.playground
 
 import io.availe.kreplicadocs.model.CompileRequest
 import io.availe.kreplicadocs.model.CompileResponse
+import io.availe.kreplicadocs.model.FileName
 import org.gradle.tooling.CancellationTokenSource
 import org.gradle.tooling.GradleConnector
 import org.slf4j.LoggerFactory
@@ -44,7 +45,7 @@ class GradleCompiler {
                 val generatedFiles = if (outputDir.exists()) {
                     outputDir.walk()
                         .filter { it.isFile && it.extension == "kt" }
-                        .associate { it.name to it.readText() }
+                        .associate { FileName(it.name) to it.readText() }
                 } else {
                     emptyMap()
                 }
