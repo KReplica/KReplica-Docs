@@ -37,8 +37,10 @@
 <p>This is because in this example, the Kotlin compiler forces you to map required properties, but allows you to skip
     nullable
     properties. And forgetting to map a field can lead to inadvertent data loss. If you need to model a field which may
-    not be present, I'd recommend using an option type instead of a nullable. Kotlin/KReplica does not have an option
-    type built in, but it's rather trivial to make one yourself.
+    or may not be present, I'd recommend using an option type instead of a nullable. Note Kotlin/KReplica does not have
+    an
+    option
+    type built in — as, although I recommend this pattern, this is outside the immediate scope of the library.
 </p>
 
 !{ val mappersTabs = vm.tabs["patterns-api-mappers"] }
