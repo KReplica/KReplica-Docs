@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-themes@1.9.0/themes/prism-darcula.min.css">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="prefetch" href="https://unpkg.com/monaco-editor@0.52.2/min/vs/loader.js" as="script">
-    <link rel="prefetch" href="/api/completions" as="fetch" crossorigin>
     <script>
         (function () {
             try {
@@ -22,9 +21,9 @@
             }
         })();
     </script>
-    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
-    <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/preload.js" defer></script>
-    <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/sse.js" defer></script>
+    <script src="https://unpkg.com/htmx.org@2.0.6" defer></script>
+    <script src="https://unpkg.com/htmx-ext-preload@2.1.1" defer></script>
+    <script src="https://unpkg.com/htmx-ext-sse@2.2.3" defer></script>
     <script src="/js/main.js" type="module"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -98,6 +97,11 @@
 
 <script src="https://unpkg.com/monaco-editor@0.52.2/min/vs/loader.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" defer></script>
+<script defer>
+    Prism.plugins = Prism.plugins || {};
+    Prism.plugins.autoloader = Prism.plugins.autoloader || {};
+    Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"
         defer></script>
 </body>
