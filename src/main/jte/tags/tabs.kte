@@ -5,18 +5,18 @@
 @param rawContent: Map<String, Content>? = null
 
 @if(tabs.isNotEmpty())
-    <div class="workflow-container" x-data="{ activeTab: '${tabs.get(0).id}' }">
+    <div class="workflow-container" x-data="tabs('${tabs.get(0).id}')">
         <div class="workflow-tabs" role="tablist">
             @for(tab in tabs)
                 <button role="tab"
-                        :class="{ 'active': activeTab === '${tab.id}' }"
-                        @click="activeTab = '${tab.id}'">
+                        :class="{ 'active': isActive('${tab.id}') }"
+                        @click="activate('${tab.id}')">
                     ${tab.label}
                 </button>
             @endfor
         </div>
         @for(tab in tabs)
-            <template x-if="activeTab === '${tab.id}'">
+            <template x-if="isActive('${tab.id}')">
                 <div class="workflow-content" x-cloak>
                     @if(rawContent != null && rawContent.containsKey(tab.id))
                         !{val contentBlock = rawContent.get(tab.id);}

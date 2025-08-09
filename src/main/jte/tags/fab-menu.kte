@@ -2,12 +2,12 @@
 
 <div class="fab-container"
      data-js-id="fab-container"
-     x-data="{ isOpen: false, openSection: null }"
-     x-init="$watch('isOpen', value => { if (!value) openSection = null; })"
+     x-data="fabMenu()"
+     x-init="init()"
      :class="{ 'is-open': isOpen }"
-     @keydown.escape.window="isOpen = false"
-     @click.outside="isOpen = false"
-     @close.stop="isOpen = false"
+     @keydown.escape.window="close()"
+     @click.outside="close()"
+     @close.stop="close()"
      x-cloak>
 
     <div class="fab-menu" data-js-id="fab-menu">
@@ -20,7 +20,7 @@
                         <button type="button" class="fab-parent-item"
                                 data-section-id="${section.id}"
                                 :class="{ 'is-open': openSection === '${section.id}' }"
-                                @click="openSection = openSection === '${section.id}' ? null : '${section.id}'">
+                                @click="toggleSection('${section.id}')">
                             <span class="fab-parent-link">${section.title}</span>
                             @template.icons.chevron-down(cssClass="fab-toggle-icon", width="20", height="20")
                         </button>

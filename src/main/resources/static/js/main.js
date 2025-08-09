@@ -1,6 +1,10 @@
 import {themeSwitcher} from './components/theme-switcher.js';
 import {copyButton} from "./components/copy-button.js";
 import {playgroundComponent} from "./components/playground-component.js";
+import {navMenu} from './components/nav-menu.js';
+import {fabMenu} from './components/fab-menu.js';
+import {tabs} from './components/tabs.js';
+import {splitButton} from './components/split-button.js';
 
 let activeController = null;
 
@@ -35,6 +39,10 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('themeSwitcher', themeSwitcher);
     Alpine.data('copyButton', copyButton);
     Alpine.data('playgroundComponent', playgroundComponent);
+    Alpine.data('navMenu', navMenu);
+    Alpine.data('fabMenu', fabMenu);
+    Alpine.data('tabs', tabs);
+    Alpine.data('splitButton', splitButton);
 });
 
 document.addEventListener('DOMContentLoaded', () => {
