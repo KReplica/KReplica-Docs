@@ -1,5 +1,7 @@
+@import io.availe.kreplicadocs.common.GuideContentTemplate
+@import io.availe.kreplicadocs.common.CodeSnippet
 @param builder: io.availe.kreplicadocs.services.GuideBuilder
-@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+@param vm: io.availe.kreplicadocs.model.view.PageViewModel
 
 !{ builder.startSection(
     id = "introduction",
@@ -7,21 +9,9 @@
     description = @`<p>This guide walks through KReplica's API, codegen output, and common patterns. KReplica is a DTO
     generator, which lets you define multiple DTO variants from one interface, among other things.</p>`
 ) }
-!{ builder.addSubSection(
-    id = "introduction-preface",
-    title = "Preface",
-    content = @`@template.guide.content.introduction.preface(vm = vm)`
-) }
-!{ builder.addSubSection(
-    id = "introduction-setup",
-    title = "Setup",
-    content = @`@template.guide.content.introduction.setup(vm = vm)`
-) }
-!{ builder.addSubSection(
-    id = "introduction-stability",
-    title = "API Stability",
-    content = @`@template.guide.content.introduction.stability(vm = vm)`
-) }
+!{ builder.addSubSection(id = "introduction-preface", title = "Preface", contentTemplate = GuideContentTemplate.INTRODUCTION_PREFACE) }
+!{ builder.addSubSection(id = "introduction-setup", title = "Setup", contentTemplate = GuideContentTemplate.INTRODUCTION_SETUP) }
+!{ builder.addSubSection(id = "introduction-stability", title = "API Stability", contentTemplate = GuideContentTemplate.INTRODUCTION_STABILITY) }
 !{ builder.endSection() }
 
 !{ builder.startSection(
@@ -30,31 +20,11 @@
     description = @`<p>KReplica is configured using a small set of powerful annotations. This section serves as a
     quick-reference dictionary for every available option.</p>`
 ) }
-!{ builder.addSubSection(
-        id = "api-replicate-model",
-        title = "@Replicate.Model",
-        content = @`@template.guide.content.api-annotations.replicate-model(vm = vm)`
-    ) }
-!{ builder.addSubSection(
-        id = "api-replicate-property",
-        title = "@Replicate.Property",
-        content = @`@template.guide.content.api-annotations.replicate-property(vm = vm)`
-    ) }
-!{ builder.addSubSection(
-        id = "api-replicate-apply",
-        title = "@Replicate.Apply",
-        content = @`@template.guide.content.api-annotations.replicate-apply(vm = vm)`
-    ) }
-!{ builder.addSubSection(
-        id = "api-replicate-schema-version",
-        title = "@Replicate.SchemaVersion",
-        content = @`@template.guide.content.api-annotations.replicate-schema-version(vm = vm)`
-    ) }
-!{ builder.addSubSection(
-        id = "api-replicate-hide",
-        title = "@Replicate.Hide",
-        content = @`@template.guide.content.api-annotations.replicate-hide(vm = vm)`
-    ) }
+!{ builder.addSubSection(id = "api-replicate-model", title = "@Replicate.Model", contentTemplate = GuideContentTemplate.API_ANNOTATIONS_REPLICATE_MODEL, exampleSnippet = CodeSnippet.API_REPLICATE_MODEL) }
+!{ builder.addSubSection(id = "api-replicate-property", title = "@Replicate.Property", contentTemplate = GuideContentTemplate.API_ANNOTATIONS_REPLICATE_PROPERTY, exampleSnippet = CodeSnippet.API_REPLICATE_PROPERTY) }
+!{ builder.addSubSection(id = "api-replicate-apply", title = "@Replicate.Apply", contentTemplate = GuideContentTemplate.API_ANNOTATIONS_REPLICATE_APPLY, exampleSnippet = CodeSnippet.API_REPLICATE_APPLY) }
+!{ builder.addSubSection(id = "api-replicate-schema-version", title = "@Replicate.SchemaVersion", contentTemplate = GuideContentTemplate.API_ANNOTATIONS_REPLICATE_SCHEMA_VERSION, exampleSnippet = CodeSnippet.API_REPLICATE_SCHEMA_VERSION) }
+!{ builder.addSubSection(id = "api-replicate-hide", title = "@Replicate.Hide", contentTemplate = GuideContentTemplate.API_ANNOTATIONS_REPLICATE_HIDE, exampleSnippet = CodeSnippet.API_REPLICATE_HIDE) }
 !{ builder.endSection() }
 
 !{ builder.startSection(
@@ -62,26 +32,10 @@
     title = "API Concepts",
     description = @`<p>Learn the core concepts behind KReplica's features to use them effectively.</p>`
 ) }
-!{ builder.addSubSection(
-        id = "api-dto-versioning",
-        title = "DTO Versioning",
-        content = @`@template.guide.content.api-concepts.dto-versioning(vm = vm)`
-    ) }
-!{ builder.addSubSection(
-        id = "api-nominal-typing",
-        title = "Nominal Typing",
-        content = @`@template.guide.content.api-concepts.nominal-typing(vm = vm)`
-    ) }
-!{ builder.addSubSection(
-        id = "api-applying-annotations",
-        title = "Applying Annotations",
-        content = @`@template.guide.content.api-concepts.applying-annotations(vm = vm)`
-    ) }
-!{ builder.addSubSection(
-        id = "api-auto-contextualization",
-        title = "Auto-Contextualization",
-        content = @`@template.guide.content.api-concepts.auto-contextualization(vm = vm)`
-    ) }
+!{ builder.addSubSection(id = "api-dto-versioning", title = "DTO Versioning", contentTemplate = GuideContentTemplate.API_CONCEPTS_DTO_VERSIONING, exampleSnippet = CodeSnippet.GUIDE_REF_VERSIONING) }
+!{ builder.addSubSection(id = "api-nominal-typing", title = "Nominal Typing", contentTemplate = GuideContentTemplate.API_CONCEPTS_NOMINAL_TYPING, exampleSnippet = CodeSnippet.GUIDE_REF_NOMINAL_TYPING) }
+!{ builder.addSubSection(id = "api-applying-annotations", title = "Applying Annotations", contentTemplate = GuideContentTemplate.API_CONCEPTS_APPLYING_ANNOTATIONS) }
+!{ builder.addSubSection(id = "api-auto-contextualization", title = "Auto-Contextualization", contentTemplate = GuideContentTemplate.API_CONCEPTS_AUTO_CONTEXTUALIZATION, exampleSnippet = CodeSnippet.API_AUTO_CONTEXTUAL) }
 !{ builder.endSection() }
 
 !{ builder.startSection(
@@ -91,26 +45,10 @@
     hierarchy of sealed interfaces that enable powerful, type-safe patterns. This section breaks down that structure
     layer by layer.</p>`
 ) }
-!{ builder.addSubSection(
-        id = "generated-code-schemas",
-        title = "Schemas",
-        content = @`@template.guide.content.generated-code.generated_code_schemas(vm = vm)`
-    ) }
-!{ builder.addSubSection(
-        id = "generated-code-patchable",
-        title = "The Patchable Wrapper",
-        content = @`@template.guide.content.generated-code.generated_code_patchable(vm = vm)`
-    ) }
-!{ builder.addSubSection(
-        id = "generated-code-local-variants",
-        title = "Local Variants",
-        content = @`@template.guide.content.generated-code.generated_code_local_variants(vm = vm)`
-    ) }
-!{ builder.addSubSection(
-        id = "generated-code-global-variants",
-        title = "Global Variants",
-        content = @`@template.guide.content.generated-code.generated_code_global_variants(vm = vm)`
-    ) }
+!{ builder.addSubSection(id = "generated-code-schemas", title = "Schemas", contentTemplate = GuideContentTemplate.GENERATED_CODE_SCHEMAS, tabsKey = "generatedCodeSchemasTabs") }
+!{ builder.addSubSection(id = "generated-code-patchable", title = "The Patchable Wrapper", contentTemplate = GuideContentTemplate.GENERATED_CODE_PATCHABLE, tabsKey = "patchableWrapperTabs") }
+!{ builder.addSubSection(id = "generated-code-local-variants", title = "Local Variants", contentTemplate = GuideContentTemplate.GENERATED_CODE_LOCAL_VARIANTS, tabsKey = "localVariantsTabs") }
+!{ builder.addSubSection(id = "generated-code-global-variants", title = "Global Variants", contentTemplate = GuideContentTemplate.GENERATED_CODE_GLOBAL_VARIANTS, tabsKey = "globalVariantsTabs") }
 !{ builder.endSection() }
 
 !{ builder.startSection(
@@ -118,21 +56,9 @@
     title = "Core Patterns & Use Cases",
     description = @`<p>Learn how to apply KReplica's features to solve common development challenges.</p>`
 ) }
-!{ builder.addSubSection(
-        id = "patterns-exhaustive-when",
-        title = "Exhaustive `when` Statements",
-        content = @`@template.guide.content.patterns.exhaustive_when_statements(vm = vm)`
-    ) }
-!{ builder.addSubSection(
-        id = "patterns-kotlinx-serialization",
-        title = "kotlinx.serialization Integration",
-        content = @`@template.guide.content.patterns.patterns_kotlinx_serialization(vm = vm)`
-    ) }
-!{ builder.addSubSection(
-        id = "patterns-api-mappers",
-        title = "Compile-Safe DTO Mapper",
-        content = @`@template.guide.content.patterns.patterns_api_mappers(vm = vm)`
-    ) }
+!{ builder.addSubSection(id = "patterns-exhaustive-when", title = "Exhaustive `when` Statements", contentTemplate = GuideContentTemplate.PATTERNS_EXHAUSTIVE_WHEN_STATEMENTS, tabsKey = "whenTabs") }
+!{ builder.addSubSection(id = "patterns-kotlinx-serialization", title = "kotlinx.serialization Integration", contentTemplate = GuideContentTemplate.PATTERNS_KOTLINX_SERIALIZATION, exampleSnippet = CodeSnippet.GUIDE_REF_SERIALIZATION_BASIC) }
+!{ builder.addSubSection(id = "patterns-api-mappers", title = "Compile-Safe DTO Mapper", contentTemplate = GuideContentTemplate.PATTERNS_API_MAPPERS, tabsKey = "apiMapperTabs") }
 !{ builder.endSection() }
 
 !{ builder.startSection(
@@ -140,19 +66,7 @@
     title = "Frequently Asked Questions",
     description = @``
 ) }
-!{ builder.addSubSection(
-        id = "faq-broader-replication",
-        title = "Broader Property Replication?",
-        content = @`@template.guide.content.faq.broader-replication(vm = vm)`
-    ) }
-!{ builder.addSubSection(
-        id = "faq-compilation-order",
-        title = "Compilation Order",
-        content = @`@template.guide.content.faq.compilation-order(vm = vm)`
-    ) }
-!{ builder.addSubSection(
-        id = "faq-private-keyword",
-        title = "Use of `private` Keyword",
-        content = @`@template.guide.content.faq.private-keyword(vm = vm)`
-    ) }
+!{ builder.addSubSection(id = "faq-broader-replication", title = "Broader Property Replication?", contentTemplate = GuideContentTemplate.FAQ_BROADER_REPLICATION) }
+!{ builder.addSubSection(id = "faq-compilation-order", title = "Compilation Order", contentTemplate = GuideContentTemplate.FAQ_COMPILATION_ORDER) }
+!{ builder.addSubSection(id = "faq-private-keyword", title = "Use of `private` Keyword", contentTemplate = GuideContentTemplate.FAQ_PRIVATE_KEYWORD) }
 !{ builder.endSection() }

@@ -1,54 +1,65 @@
 package io.availe.kreplicadocs.services
 
 import gg.jte.Content
-import io.availe.kreplicadocs.model.view.GuideContentSection
-import io.availe.kreplicadocs.model.view.GuideContentSubSection
+import io.availe.kreplicadocs.common.CodeSnippet
+import io.availe.kreplicadocs.common.GuideContentTemplate
+import io.availe.kreplicadocs.model.view.SectionRequest
+import io.availe.kreplicadocs.model.view.SubSectionRequest
 
 class GuideBuilder {
-    private val sections = mutableListOf<GuideContentSection>()
-    private var currentSectionBuilder: GuideContentSectionBuilder? = null
+    private val sectionRequests = mutableListOf<SectionRequest>()
+    private var currentSectionBuilder: SectionRequestBuilder? = null
 
     fun startSection(id: String, title: String, description: Content) {
         if (currentSectionBuilder != null) {
             throw IllegalStateException("Previous section '${currentSectionBuilder?.title}' was not ended.")
         }
-        currentSectionBuilder = GuideContentSectionBuilder(id, title, description)
+        currentSectionBuilder = SectionRequestBuilder(id, title, description)
     }
 
-    fun addSubSection(id: String, title: String, content: Content) {
-        currentSectionBuilder?.addSubSection(GuideContentSubSection(id, title, content))
+    fun addSubSection(
+        id: String,
+        title: String,
+        contentTemplate: GuideContentTemplate,
+        exampleSnippet: CodeSnippet? = null,
+        tabsKey: String? = null
+    ) {
+        val request = SubSectionRequest(
+            id = id,
+            title = title,
+            contentTemplate = contentTemplate,
+            exampleSnippet = exampleSnippet,
+            tabsKey = tabsKey
+        )
+        currentSectionBuilder?.addSubSection(request)
             ?: throw IllegalStateException("Cannot add a subsection outside of a section context.")
     }
 
     fun endSection() {
         currentSectionBuilder?.let {
-            sections.add(it.build())
+            sectionRequests.add(it.build())
             currentSectionBuilder = null
         } ?: throw IllegalStateException("endSection called without a starting section.")
     }
 
-    fun addSection(id: String, title: String, content: Content) {
-        sections.add(GuideContentSection(id, title, content, emptyList()))
-    }
-
-    fun build(): List<GuideContentSection> {
+    fun getSectionRequests(): List<SectionRequest> {
         if (currentSectionBuilder != null) {
             throw IllegalStateException("A section was started but never ended.")
         }
-        return sections
+        return sectionRequests
     }
 
-    private class GuideContentSectionBuilder(
+    private class SectionRequestBuilder(
         private val id: String,
         val title: String,
         private val description: Content
     ) {
-        private val subsections = mutableListOf<GuideContentSubSection>()
+        private val subsections = mutableListOf<SubSectionRequest>()
 
-        fun addSubSection(subsection: GuideContentSubSection) {
+        fun addSubSection(subsection: SubSectionRequest) {
             subsections.add(subsection)
         }
 
-        fun build(): GuideContentSection = GuideContentSection(id, title, description, subsections)
+        fun build(): SectionRequest = SectionRequest(id, title, description, subsections)
     }
 }

@@ -1,11 +1,15 @@
 package io.availe.kreplicadocs.services
 
+import gg.jte.Content
 import gg.jte.TemplateEngine
+import gg.jte.TemplateOutput
+import gg.jte.output.StringOutput
 import io.availe.kreplicadocs.common.CodeSnippet
 import io.availe.kreplicadocs.common.PageId
 import io.availe.kreplicadocs.config.AppProperties
 import io.availe.kreplicadocs.config.CacheNames
 import io.availe.kreplicadocs.model.CompileResponse
+import io.availe.kreplicadocs.model.NavLink
 import io.availe.kreplicadocs.model.TemplateSlug
 import io.availe.kreplicadocs.model.view.*
 import org.springframework.cache.Cache
@@ -83,56 +87,56 @@ class ViewModelFactory(
     }
 
     fun createGuideViewModel(): GuideViewModel {
-        val examples = mutableMapOf<String, ProcessedGuideExample>()
-        val tabs = mutableMapOf<String, List<Tab>>()
+        val builder = GuideBuilder()
+        val tempVm = object : PageViewModel {
+            override val navLinks: List<NavLink> = emptyList()
+            override val properties = appProperties
+            override val currentPage = PageId.GUIDE
+        }
+        templateEngine.render("guide/manifest.kte", mapOf("vm" to tempVm, "builder" to builder), StringOutput())
 
-        val exampleMapping = mapOf(
-            "api-replicate-model" to CodeSnippet.API_REPLICATE_MODEL,
-            "api-replicate-property" to CodeSnippet.API_REPLICATE_PROPERTY,
-            "api-replicate-apply" to CodeSnippet.API_REPLICATE_APPLY,
-            "api-replicate-schema-version" to CodeSnippet.API_REPLICATE_SCHEMA_VERSION,
-            "api-replicate-hide" to CodeSnippet.API_REPLICATE_HIDE,
-            "api-auto-contextual" to CodeSnippet.API_AUTO_CONTEXTUAL,
-            "api-ref-versioning" to CodeSnippet.GUIDE_REF_VERSIONING,
-            "api-nominal-typing" to CodeSnippet.GUIDE_REF_NOMINAL_TYPING,
-            "patterns-serialization-basic" to CodeSnippet.GUIDE_REF_SERIALIZATION_BASIC,
-        )
+        val sectionRequests = builder.getSectionRequests()
+        val allSubSectionRequests = sectionRequests.flatMap { it.subsections }
 
-        val tabsMapping = mapOf(
-            "api-ref-contextual-nesting" to "contextualNestingTabs",
-            "patterns-api-mappers" to "apiMapperTabs",
-            "generated-code-schemas" to "generatedCodeSchemasTabs",
-            "generated-code-patchable" to "patchableWrapperTabs",
-            "generated-code-local-variants" to "localVariantsTabs",
-            "generated-code-global-variants" to "globalVariantsTabs",
-            "whenTabs" to "whenTabs",
-        )
+        val finalExamples = mutableMapOf<String, ProcessedGuideExample>()
+        val finalTabs = mutableMapOf<String, List<Tab>>()
 
-        exampleMapping.forEach { (id, snippet) ->
-            examples[id] = processGuideExample(snippet)
+        allSubSectionRequests.forEach { request ->
+            request.exampleSnippet?.let { snippet ->
+                finalExamples[request.id] = processGuideExample(snippet)
+            }
+            request.tabsKey?.let { key ->
+                finalTabs[request.id] = getTabsForKey(key)
+            }
         }
 
-        tabsMapping.forEach { (id, key) ->
-            tabs[id] = getTabsForKey(key)
-        }
-
-        val tempVmForBuilder = GuideViewModel(
-            navLinks = emptyList(),
+        val finalVm = GuideViewModel(
+            navLinks = navigationProvider.getNavLinks(),
             properties = appProperties,
             currentPage = PageId.GUIDE,
             snippets = snippetProvider.getSnippets(),
             guideNav = emptyList(),
-            examples = examples,
-            tabs = tabs,
-            guideContent = emptyList(),
+            examples = finalExamples,
+            tabs = finalTabs,
+            guideContent = emptyList()
         )
 
-        val builder = GuideBuilder()
-        val model = mapOf("vm" to tempVmForBuilder, "builder" to builder)
-
-        templateEngine.render("guide/manifest.kte", model, gg.jte.output.StringOutput())
-
-        val guideContent = builder.build()
+        val guideContent = sectionRequests.map { sectionRequest ->
+            GuideContentSection(
+                id = sectionRequest.id,
+                title = sectionRequest.title,
+                description = sectionRequest.description,
+                subsections = sectionRequest.subsections.map { subSectionRequest ->
+                    val content = object : Content {
+                        override fun writeTo(templateOutput: TemplateOutput) {
+                            val model = mapOf("vm" to finalVm)
+                            templateEngine.render(subSectionRequest.contentTemplate.path, model, templateOutput)
+                        }
+                    }
+                    GuideContentSubSection(subSectionRequest.id, subSectionRequest.title, content)
+                }
+            )
+        }
 
         val guideNav = guideContent.map { section ->
             GuideNavSection(
@@ -144,16 +148,7 @@ class ViewModelFactory(
             )
         }
 
-        return GuideViewModel(
-            navLinks = navigationProvider.getNavLinks(),
-            properties = appProperties,
-            currentPage = PageId.GUIDE,
-            snippets = snippetProvider.getSnippets(),
-            guideNav = guideNav,
-            examples = examples,
-            tabs = tabs,
-            guideContent = guideContent,
-        )
+        return finalVm.copy(guideContent = guideContent, guideNav = guideNav)
     }
 
     private fun processGuideExample(snippet: CodeSnippet): ProcessedGuideExample {

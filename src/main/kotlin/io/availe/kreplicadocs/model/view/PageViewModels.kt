@@ -2,10 +2,26 @@ package io.availe.kreplicadocs.model.view
 
 import gg.jte.Content
 import io.availe.kreplicadocs.common.CodeSnippet
+import io.availe.kreplicadocs.common.GuideContentTemplate
 import io.availe.kreplicadocs.common.PageId
 import io.availe.kreplicadocs.config.AppProperties
 import io.availe.kreplicadocs.model.NavLink
 import io.availe.kreplicadocs.model.TemplateSlug
+
+data class SubSectionRequest(
+    val id: String,
+    val title: String,
+    val contentTemplate: GuideContentTemplate,
+    val exampleSnippet: CodeSnippet? = null,
+    val tabsKey: String? = null
+)
+
+data class SectionRequest(
+    val id: String,
+    val title: String,
+    val description: Content,
+    val subsections: List<SubSectionRequest>
+)
 
 data class GuideNavSubSection(
     val id: String,
