@@ -1,26 +1,44 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
 <p>
-    While KReplica can generate DTOs that are ready for immediate use, a more robust and scalable approach for many
-    applications is to separate your API data contracts (DTOs) from your internal domain models. This pattern uses
-    KReplica's generated types to create compile-safe mappers that bridge this gap.
+    KReplica only generates DTOs, so how you implement mapping is left up to you. However, here is a mapping pattern
+    which I'm keen to. The point is to ensure compile-time guarantees in this specific scenario: You utilized Kreplica
+    to generate the 3 DTO variants (data, create, patch) for a CRUD API. Furthermore, there is a specific `id` which can
+    be used for mapping.
 </p>
+
 <p>
-    This approach provides several key benefits:
+    Now, the entire point of the generic interface below (check "The Reusable Example" in the code snippet below) is to
+    create a systematized approach that implements three methods:
 </p>
+
 <ul>
-    <li><strong>Decoupling:</strong> Your internal business logic is not tied to the structure of your API. You can
-        change one without breaking the other.
-    </li>
-    <li><strong>Type Safety:</strong> The mappers use KReplica's specific variant types, making it impossible to, for
-        example, map a <code>CreateRequest</code> DTO to a domain model that requires an ID.
-    </li>
-    <li><strong>Explicitness:</strong> All data transformations are explicit and centralized, making the codebase easier
-        to understand and maintain.
-    </li>
+    <li><b>toDataDto</b>: Maps domain object -> the DATA variant</li>
+    <li><b>toDomain</b>: Maps the DATA variant -> Domain object</li>
+    <li><b>applyPatch</b>: Maps the PATCH variant -> Domain object</li>
 </ul>
+
 <p>
-    The following tabs walk through the four key components of this pattern.
+    Note that in the example below, the <code>V</code> type parameter prevents mixing DTOs from different schema
+    versions at compile time. For versioned
+    schemas, use something like <code>UserAccountSchema.V1</code> or <code>UserAccountSchema.V2</code>. For unversioned
+    schemas, use the schema type itself, such as <code>UserAccountSchema</code>. This keeps variants aligned and blocks
+    from occurring.
+</p>
+
+<p>
+    For this pattern, I strongly discourage nullable properties. KReplica’s three variants are meant to reduce the need
+    for nullables by
+    including only the fields relevant to each operation. For example, say that you have an immutable `id` that's
+    created by a database, but not directly by your program. Only the DATA variant should have access to the `id` field,
+    not the CREATE or PATCH variants.
+</p>
+
+<p>This is because in this example, the Kotlin compiler forces you to map required properties, but allows you to skip
+    nullable
+    properties. And forgetting to map a field can lead to inadvertent data loss. If you need to model a field which may
+    not be present, I'd recommend using an option type instead of a nullable. Kotlin/KReplica does not have an option
+    type built in, but it's rather trivial to make one yourself.
 </p>
 
 !{ val mappersTabs = vm.tabs["patterns-api-mappers"] }
