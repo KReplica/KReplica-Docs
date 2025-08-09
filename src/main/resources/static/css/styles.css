@@ -74,7 +74,7 @@
         border-radius: 0.25rem;
         background-color: var(--alert-info-bg);
         border-color: var(--alert-info-border);
-        color: #0c5460;
+        color: var(--alert-info-text);
     }
 
     .htmx-indicator {
