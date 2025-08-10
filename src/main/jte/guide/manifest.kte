@@ -17,8 +17,8 @@
 !{ builder.startSection(
     id = "api-annotations",
     title = "API Annotations",
-    description = @`<p>KReplica is configured using a small set of powerful annotations. This section serves as a
-    quick-reference dictionary for every available option.</p>`
+    description = @`<p>This section covers the 5 annotations present in KReplica. Note the first 3 annotations are the
+    important ones, with the latter two being more niche, if not entirely optional, in nature.</p>`
 ) }
 !{ builder.addSubSection(id = "api-replicate-model", title = "@Replicate.Model", contentTemplate = GuideContentTemplate.API_ANNOTATIONS_REPLICATE_MODEL, exampleSnippet = CodeSnippet.API_REPLICATE_MODEL) }
 !{ builder.addSubSection(id = "api-replicate-property", title = "@Replicate.Property", contentTemplate = GuideContentTemplate.API_ANNOTATIONS_REPLICATE_PROPERTY, exampleSnippet = CodeSnippet.API_REPLICATE_PROPERTY) }
@@ -30,7 +30,8 @@
 !{ builder.startSection(
     id = "api-concepts",
     title = "API Concepts",
-    description = @`<p>Learn the core concepts behind KReplica's features to use them effectively.</p>`
+    description = @`<p>This section covers the same topics as “API Annotations,” but instead of focusing on syntax and
+    parameters, it explores the underlying concepts and rationale.</p>`
 ) }
 !{ builder.addSubSection(id = "api-dto-versioning", title = "DTO Versioning", contentTemplate = GuideContentTemplate.API_CONCEPTS_DTO_VERSIONING, exampleSnippet = CodeSnippet.GUIDE_REF_VERSIONING) }
 !{ builder.addSubSection(id = "api-nominal-typing", title = "Nominal Typing", contentTemplate = GuideContentTemplate.API_CONCEPTS_NOMINAL_TYPING, exampleSnippet = CodeSnippet.GUIDE_REF_NOMINAL_TYPING) }
@@ -41,9 +42,7 @@
 !{ builder.startSection(
     id = "generated-code",
     title = "Understanding the Generated Code",
-    description = @`<p>The code KReplica generates is designed for maximum safety and flexibility. It's built on a clear
-    hierarchy of sealed interfaces that enable powerful, type-safe patterns. This section breaks down that structure
-    layer by layer.</p>`
+    description = @`<p>This section covers the codegen output of KReplica, and how to understand it.</p>`
 ) }
 !{ builder.addSubSection(id = "generated-code-schemas", title = "Schemas", contentTemplate = GuideContentTemplate.GENERATED_CODE_SCHEMAS, tabsKey = "generatedCodeSchemasTabs") }
 !{ builder.addSubSection(id = "generated-code-patchable", title = "The Patchable Wrapper", contentTemplate = GuideContentTemplate.GENERATED_CODE_PATCHABLE, tabsKey = "patchableWrapperTabs") }
@@ -54,7 +53,8 @@
 !{ builder.startSection(
     id = "patterns",
     title = "Core Patterns & Use Cases",
-    description = @`<p>Learn how to apply KReplica's features to solve common development challenges.</p>`
+    description = @`<p>These are some recommended patterns. "Patterns" are not part of KReplica directly, but instead
+    show how you can use Kotlin features with KReplica.</p>`
 ) }
 !{ builder.addSubSection(id = "patterns-exhaustive-when", title = "Exhaustive `when` Statements", contentTemplate = GuideContentTemplate.PATTERNS_EXHAUSTIVE_WHEN_STATEMENTS, tabsKey = "whenTabs") }
 !{ builder.addSubSection(id = "patterns-kotlinx-serialization", title = "kotlinx.serialization Integration", contentTemplate = GuideContentTemplate.PATTERNS_KOTLINX_SERIALIZATION, exampleSnippet = CodeSnippet.GUIDE_REF_SERIALIZATION_BASIC) }
