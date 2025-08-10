@@ -1,0 +1,47 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<div class="fab-container"
+     data-js-id="fab-container"
+     x-data="fabMenu()"
+     x-init="init()"
+     :class="{ 'is-open': isOpen }"
+     @keydown.escape.window="close()"
+     @click.outside="close()"
+     @close.stop="close()"
+     x-cloak>
+
+    <div class="fab-menu" data-js-id="fab-menu">
+        <ul>
+            @for ((index, section) in vm.guideNav.withIndex())
+                <li style="--stagger-delay: ${index * 30}ms;">
+                    @if(section.subsections.isEmpty())
+                        <a href="#${section.id}">${section.title}</a>
+                    @else
+                        <button type="button" class="fab-parent-item"
+                                data-section-id="${section.id}"
+                                :class="{ 'is-open': openSection === '${section.id}' }"
+                                @click="toggleSection('${section.id}')">
+                            <span class="fab-parent-link">${section.title}</span>
+                            @template.icons.chevron-down(cssClass="fab-toggle-icon", width="20", height="20")
+                        </button>
+                        <ul x-show="openSection === '${section.id}'"
+                            x-collapse
+                            class="fab-submenu">
+                            @template.fragments.guide-subsection-items(section = section, includeOverview = true)
+                        </ul>
+                    @endif
+                </li>
+            @endfor
+        </ul>
+    </div>
+
+    <button type="button"
+            class="fab-button"
+            @click="isOpen = !isOpen"
+            aria-label="Toggle Table of Contents">
+        <div class="fab-icon-wrapper">
+            @template.icons.list(cssClass="fab-icon-menu", width="28", height="28")
+            @template.icons.close(cssClass="fab-icon-close", width="28", height="28")
+        </div>
+    </button>
+</div>

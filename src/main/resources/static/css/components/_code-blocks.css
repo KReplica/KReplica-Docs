@@ -1,0 +1,76 @@
+@layer components {
+    .code-block-wrapper {
+        position: relative;
+    }
+
+    pre[class*="language-"] {
+        padding: 1.25rem;
+        border-radius: var(--radius-3);
+        overflow-x: auto;
+        font-family: var(--font-mono, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace), serif;
+        font-size: 0.75rem;
+        max-inline-size: 100%;
+        margin: 0;
+    }
+
+    :not(pre) > code {
+        background: var(--inline-code-bg);
+        color: var(--inline-code-text);
+        padding: 0.2em 0.4em;
+        border-radius: 0.1875rem;
+        font-family: var(--font-mono, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace), serif;
+        overflow-wrap: break-word;
+    }
+
+    .copy-code-button {
+        position: absolute;
+        inset-block-start: 0.625rem;
+        inset-inline-end: 0.625rem;
+        background-color: #4a4a4a;
+        color: #cccccc;
+        border: 1px solid #666666;
+        border-radius: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"), serif;
+        font-size: 0.8rem;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s ease-in-out;
+        z-index: 2;
+    }
+
+    .copy-code-button:hover {
+        opacity: 1;
+    }
+
+    .copy-code-button:disabled {
+        opacity: 1;
+        cursor: default;
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+        color: #ffffff;
+    }
+
+    .code-block-wrapper.is-plain pre.plain {
+        padding: 1.25rem;
+        border-radius: var(--radius-3);
+        overflow: auto;
+        font-family: var(--font-mono, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace), serif;
+        font-size: 0.75rem;
+        max-inline-size: 100%;
+        margin: 0;
+        background: transparent;
+        color: inherit;
+        white-space: pre;
+    }
+
+    .code-block-wrapper.is-plain code.plain {
+        font-family: var(--font-mono, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace), serif;
+    }
+
+    .code-block-wrapper.alert .copy-code-button {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+        color: #ffffff;
+    }
+}

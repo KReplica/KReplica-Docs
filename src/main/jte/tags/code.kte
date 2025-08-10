@@ -1,0 +1,18 @@
+@param language: String
+@param content: gg.jte.Content
+@param extraClass: String? = null
+@param plain: Boolean = false
+
+<div class="code-block-wrapper ${extraClass ?: ""}" x-data="{}" x-init="Prism.highlightAllUnder($el)">
+    <button type="button" class="copy-code-button"
+            x-data="copyButton()"
+            :disabled="copied"
+            @click="copy($el.nextElementSibling)">
+        <span x-text="buttonText"></span>
+    </button>
+    @if(plain)
+        <pre class="plain"><code class="plain">${content}</code></pre>
+    @else
+        <pre class="language-${language}"><code class="language-${language}">${content}</code></pre>
+    @endif
+</div>

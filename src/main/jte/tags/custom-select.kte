@@ -1,0 +1,23 @@
+@param label: String
+@param id: String
+@param options: List<io.availe.kreplicadocs.model.view.SelectOption>
+@param hxGet: String
+@param hxTarget: String
+@param hxPushUrl: String? = null
+@param hxIndicator: String
+@param hxSwap: String = "innerHTML"
+
+<div class="custom-select-wrapper">
+    <label for="${id}">${label}</label>
+    <select id="${id}"
+            name="${id}"
+            hx-get="${hxGet}"
+            hx-target="${hxTarget}"
+            hx-push-url="${hxPushUrl}"
+            hx-indicator="${hxIndicator}"
+            hx-swap="${hxSwap}">
+        @for(option in options)
+            <option value="${option.value}" selected="${option.selected}">${option.label}</option>
+        @endfor
+    </select>
+</div>

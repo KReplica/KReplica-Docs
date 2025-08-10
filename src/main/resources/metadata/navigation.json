@@ -1,0 +1,19 @@
+{
+  "mainNav": [
+    {
+      "href": "/",
+      "pageId": "INDEX",
+      "label": "Home"
+    },
+    {
+      "href": "/playground",
+      "pageId": "PLAYGROUND",
+      "label": "Playground"
+    },
+    {
+      "href": "/guide",
+      "pageId": "GUIDE",
+      "label": "Guide"
+    }
+  ]
+}

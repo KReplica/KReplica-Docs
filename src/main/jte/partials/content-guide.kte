@@ -1,0 +1,10 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<div class="examples-container" data-controller="guide">
+    <aside class="examples-sidebar">
+        @template.fragments.guide-sidebar(vm = vm)
+    </aside>
+    <div class="guide-main-content">
+        @template.partials.guide-content(vm = vm)
+    </div>
+</div>

@@ -1,0 +1,23 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>
+    Integrating KReplica with <code>kotlinx.serialization</code> is straightforward, but it requires the <code>@Replicate.Apply</code>
+    annotation as <code>@Serializable</code> cannot be applied directly to interfaces.
+</p>
+<p>
+    You can tell KReplica to serialize a DTO by simply typing: <code>@Replicate.Apply([Serializable::class])</code>.
+</p>
+!{ val example = vm.examples["patterns-serialization-basic"] }
+@if(example != null)
+    <div class="workflow-container">
+        @template.tags.guide-example(example = example)
+    </div>
+@endif
+
+<p>
+    Note KReplica has auto-contextualization enabled by default. You can disable this model-wide or on a per-property
+    basis if
+    needed. Disabling it is likely the best practice if you intend to use <code>@Serializable(with = ...)</code> instead
+    of
+    <code>@Contextual</code>.
+</p>

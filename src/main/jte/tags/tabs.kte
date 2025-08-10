@@ -1,0 +1,45 @@
+@import io.availe.kreplicadocs.model.view.Tab
+@import gg.jte.Content
+
+@param tabs: List<Tab>
+@param rawContent: Map<String, Content>? = null
+
+@if(tabs.isNotEmpty())
+    <div class="workflow-container" x-data="tabs('${tabs.get(0).id}')">
+        <div class="workflow-tabs" role="tablist">
+            @for(tab in tabs)
+                <button role="tab"
+                        :class="{ 'active': isActive('${tab.id}') }"
+                        @click="activate('${tab.id}')">
+                    ${tab.label}
+                </button>
+            @endfor
+        </div>
+        @for(tab in tabs)
+            <template x-if="isActive('${tab.id}')">
+                <div class="workflow-content" x-cloak>
+                    @if(rawContent != null && rawContent.containsKey(tab.id))
+                        !{val contentBlock = rawContent.get(tab.id);}
+                        @if(contentBlock != null)
+                            ${contentBlock}
+                        @endif
+                    @else
+                        !{val example = tab.example}
+                        @if(example != null)
+                            @template.tags.guide-example(example = example)
+                        @else
+                            !{val description = tab.description}
+                            @if(description != null && !description.isEmpty())
+                                <p>!{description}</p>
+                            @endif
+                            !{val codeSnippet = tab.codeSnippet}
+                            @if(codeSnippet != null)
+                                @template.tags.code(language="kotlin", content=@`${codeSnippet}`)
+                            @endif
+                        @endif
+                    @endif
+                </div>
+            </template>
+        @endfor
+    </div>
+@endif

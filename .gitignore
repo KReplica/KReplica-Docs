@@ -38,3 +38,9 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+### JTE ###
+jte-classes/
+
+### Node/JS ###
+/node_modules

@@ -1,0 +1,7 @@
+@param vm: io.availe.kreplicadocs.model.view.PageViewModel
+
+<div hx-swap-oob="innerHTML:#fab-slot">
+    @if(vm is io.availe.kreplicadocs.model.view.GuideViewModel)
+        @template.tags.fab-menu(vm = vm)
+    @endif
+</div>

@@ -1,0 +1,29 @@
+@layer components {
+    .theme-switcher {
+        display: flex;
+        align-items: center;
+        position: relative;
+        z-index: 31;
+    }
+
+    .theme-switcher button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 50%;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        color: var(--text-light);
+        touch-action: manipulation;
+    }
+
+    @media (hover: hover) {
+        .theme-switcher button:hover {
+            background-color: var(--bg-color);
+        }
+    }
+}

@@ -1,0 +1,173 @@
+{
+  "commonAnnotations": {
+    "Deprecated": {
+      "insertText": "Deprecated(message = \"$0\")",
+      "documentation": "Marks a declaration as deprecated."
+    },
+    "OptIn": {
+      "insertText": "OptIn($0::class)",
+      "documentation": "Allows using an API that requires explicit opt-in."
+    },
+    "Serializable": {
+      "insertText": "Serializable",
+      "documentation": "From kotlinx.serialization. Marks a class as serializable."
+    }
+  },
+  "annotations": {
+    "Replicate.Model": {
+      "insertText": "Replicate.Model(variants = [$0])",
+      "documentation": "Primary annotation to mark an interface for DTO generation.",
+      "parameters": {
+        "variants": {
+          "insertText": "variants = [$0]",
+          "detail": "Array<DtoVariant>",
+          "documentation": "Required. Specifies which DTOs to generate.",
+          "valueContext": "DtoVariant",
+          "sortText": "1"
+        },
+        "nominalTyping": {
+          "insertText": "nominalTyping = $0",
+          "detail": "NominalTyping",
+          "documentation": "Enables/disables value class wrapping for primitive types. Default: DISABLED.",
+          "valueContext": "NominalTyping",
+          "sortText": "2"
+        },
+        "autoContextual": {
+          "insertText": "autoContextual = $0",
+          "detail": "AutoContextual",
+          "documentation": "Controls automatic @Contextual generation for serialization. Default: ENABLED.",
+          "valueContext": "AutoContextual",
+          "sortText": "3"
+        }
+      }
+    },
+    "Replicate.Property": {
+      "insertText": "Replicate.Property($0)",
+      "documentation": "Provides fine-grained control over a single property.",
+      "parameters": {
+        "include": {
+          "insertText": "include = [$0]",
+          "detail": "Array<DtoVariant>",
+          "documentation": "Explicitly includes this property only in the specified variants, ignoring model-level settings.",
+          "valueContext": "DtoVariant",
+          "sortText": "1"
+        },
+        "exclude": {
+          "insertText": "exclude = [$0]",
+          "detail": "Array<DtoVariant>",
+          "documentation": "Excludes this property from the specified variants.",
+          "valueContext": "DtoVariant",
+          "sortText": "2"
+        },
+        "nominalTyping": {
+          "insertText": "nominalTyping = $0",
+          "detail": "NominalTyping",
+          "documentation": "Overrides the model-level nominal typing setting for this property. Default: INHERIT.",
+          "valueContext": "NominalTyping",
+          "sortText": "3"
+        },
+        "autoContextual": {
+          "insertText": "autoContextual = $0",
+          "detail": "AutoContextual",
+          "documentation": "Overrides the model-level auto-contextual setting for this property. Default: INHERIT.",
+          "valueContext": "AutoContextual",
+          "sortText": "4"
+        }
+      }
+    },
+    "Replicate.Apply": {
+      "insertText": "Replicate.Apply(annotations = [$0])",
+      "documentation": "Applies other annotations (like @Serializable) to generated DTOs.",
+      "parameters": {
+        "annotations": {
+          "insertText": "annotations = [$0]",
+          "detail": "Array<KClass<out Annotation>>",
+          "documentation": "Required. The annotation classes to apply.",
+          "valueType": "KClass",
+          "sortText": "1"
+        },
+        "include": {
+          "insertText": "include = [$0]",
+          "detail": "Array<DtoVariant>",
+          "documentation": "Applies the annotations only to the specified variants.",
+          "valueContext": "DtoVariant",
+          "sortText": "2"
+        },
+        "exclude": {
+          "insertText": "exclude = [$0]",
+          "detail": "Array<DtoVariant>",
+          "documentation": "Applies the annotations to all variants except the ones specified.",
+          "valueContext": "DtoVariant",
+          "sortText": "3"
+        }
+      }
+    },
+    "Replicate.SchemaVersion": {
+      "insertText": "Replicate.SchemaVersion(number = $0)",
+      "documentation": "Manually specifies a version number if not using the V<number> convention.",
+      "parameters": {
+        "number": {
+          "insertText": "number = $0",
+          "detail": "Int",
+          "documentation": "Required. The version number to assign.",
+          "sortText": "1"
+        }
+      }
+    },
+    "Replicate.Hide": {
+      "insertText": "Replicate.Hide",
+      "documentation": "Disables code generation for the annotated model."
+    }
+  },
+  "enums": {
+    "DtoVariant": {
+      "documentation": "Specifies a DTO variant type.",
+      "members": [
+        "DATA",
+        "CREATE",
+        "PATCH"
+      ]
+    },
+    "NominalTyping": {
+      "documentation": "Controls the nominal typing feature.",
+      "members": [
+        "ENABLED",
+        "DISABLED",
+        "INHERIT"
+      ]
+    },
+    "AutoContextual": {
+      "documentation": "Controls automatic @Contextual generation.",
+      "members": [
+        "ENABLED",
+        "DISABLED",
+        "INHERIT"
+      ]
+    }
+  },
+  "kclasses": {
+    "Serializable": {
+      "insertText": "Serializable::class",
+      "documentation": "From kotlinx.serialization. Marks a class as serializable."
+    }
+  },
+  "types": {
+    "Patchable": {
+      "documentation": "A wrapper for properties in PATCH variants.",
+      "members": [
+        {
+          "name": "Unchanged",
+          "insertText": "Unchanged",
+          "detail": "Object",
+          "documentation": "Indicates the property is not being changed."
+        },
+        {
+          "name": "Set",
+          "insertText": "Set($0)",
+          "detail": "data class Set<T>(value: T)",
+          "documentation": "Sets a new value for the property."
+        }
+      ]
+    }
+  }
+}

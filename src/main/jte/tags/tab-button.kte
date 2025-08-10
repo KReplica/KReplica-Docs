@@ -1,0 +1,18 @@
+@param label: String
+@param isActive: Boolean = false
+@param hxGet: String
+@param hxTarget: String
+@param hxPushUrl: String? = null
+@param hxIndicator: String? = null
+@param hxSwap: String = "innerHTML"
+
+<button role="tab"
+        aria-selected="${isActive}"
+        class="${if (isActive) "active" else ""}"
+        hx-get="${hxGet}"
+        hx-target="${hxTarget}"
+        hx-push-url="${hxPushUrl}"
+        hx-indicator="${hxIndicator}"
+        hx-swap="${hxSwap}">
+    ${label}
+</button>

@@ -1,0 +1,40 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>
+    When handling PATCH or update requests, a common challenge is distinguishing between fields that were omitted (and
+    should remain unchanged) and fields that were explicitly set to <code>null</code>. For example, if your DTO includes
+    a property like <code>description</code>, how can you tell whether the client wanted to update it, clear it, or
+    leave it as is? Making the property nullable introduces ambiguity: does <code>null</code> mean “clear this field” or
+    “don’t change it”?
+</p>
+<p>
+    KReplica solves this with the <code>Patchable&lt;T&gt;</code> sealed class. In KReplica <code>PatchRequest</code>
+    variants, all properties are wrapped in <code>Patchable&lt;T&gt;</code>, making it
+    explicit whether a field should be updated, cleared, or left unchanged.
+</p>
+<p>By default, each property in a <code>PatchRequest</code> is set to <code>Patchable.Unchanged</code>, so you only
+    need to specify the fields you want to update.
+</p>
+!{ val patchableTabs = vm.tabs["generated-code-patchable"] }
+@if(patchableTabs != null)
+    @template.tags.tabs(tabs = patchableTabs)
+@endif
+<p>
+    This wrapper provides two explicit states:
+</p>
+<ul>
+    <li>
+        <strong><code>Patchable.Set(value)</code></strong>
+        Use this to update a property with a new value. For example, if you have <code>val email: Patchable&lt;String&gt;</code>
+        you can set it null with <code>Patchable.Set(null)</code>.
+    </li>
+    <li>
+        <strong><code>Patchable.Unchanged</code></strong>
+        Use this to leave a property unchanged. This is the default for all properties in a
+        <code>PatchRequest</code>
+        and signifies the property was not sent and should be ignored during the update.
+    </li>
+</ul>
+
+<p>If a schema is marked as serializable, KReplica will automatically utilize the serializable version of this
+    wrapper.</p>

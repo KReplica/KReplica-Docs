@@ -1,0 +1,8 @@
+@param vm: io.availe.kreplicadocs.model.view.IndexViewModel
+
+@template.layout.main(
+vm = vm,
+content = @`
+    @template.partials.content-index(vm = vm)
+`
+)

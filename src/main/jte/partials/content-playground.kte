@@ -1,0 +1,76 @@
+@param vm: io.availe.kreplicadocs.model.view.PlaygroundViewModel
+
+<div class="playground-container" data-controller="playground">
+    <div class="playground-wrapper"
+         x-data="playgroundComponent()"
+         @output-ready.window="onOutputReady()"
+         @clear-output.window="onClearOutput()">
+
+        <div class="playground-main-content">
+
+            <div class="playground-controls">
+                @template.tags.custom-select(
+                label = "Starter Template:",
+                id = "template-select",
+                options = vm.availableTemplates,
+                hxGet = "/playground/templates",
+                hxTarget = "#editor-source-container",
+                hxPushUrl = "false",
+                hxIndicator = ".htmx-indicator",
+                hxSwap = "innerHTML"
+                )
+            </div>
+
+            <div class="tabs-nav playground-tabs-mobile" role="tablist">
+                <button role="tab"
+                        :aria-selected="activeTab === 'editor'"
+                        @click="activeTab = 'editor'"
+                        :class="{ 'active': activeTab === 'editor' }">
+                    Editor
+                </button>
+                <button role="tab"
+                        :aria-selected="activeTab === 'output'"
+                        @click="activeTab = 'output'"
+                        :disabled="!isOutputReady"
+                        :class="{ 'active': activeTab === 'output', 'disabled': !isOutputReady }">
+                    Output
+                </button>
+            </div>
+
+            <div class="playground-actions-desktop">
+                @template.fragments.playground-actions()
+            </div>
+
+            <form class="playground-io-container" id="playground-form"
+                  hx-post="/playground/compile"
+                  hx-target="#playground-output"
+                  hx-on::before-request="isSubmitting = true"
+                  hx-on::after-request="isSubmitting = false">
+
+                <input type="hidden" name="tabSessionId" :value="tabSessionId">
+
+                <div class="playground-input-column" x-show="activeTab === 'editor'" x-cloak>
+                    <div class="playground-editor-area" data-template-slug="${vm.activeTemplateSlug.value}">
+                        <div id="editor-source-container">
+                            <div data-template-slug="${vm.activeTemplateSlug.value}">
+                                <textarea name="source" hidden>${vm.initialSourceCode}</textarea>
+                            </div>
+                        </div>
+                        <div id="kreplica-editor"></div>
+                    </div>
+                </div>
+
+                <div class="playground-output-column" x-show="activeTab === 'output'" x-cloak>
+                    <div id="playground-output" class="playground-output-content">
+                        <div class="placeholder-text">Click "Run" to see the generated code.</div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="playground-actions-mobile">
+                <span class="actions-spacer"></span>
+                @template.fragments.playground-actions()
+            </div>
+        </div>
+    </div>
+</div>

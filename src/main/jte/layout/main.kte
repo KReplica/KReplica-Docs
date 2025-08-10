@@ -1,0 +1,107 @@
+@param content: gg.jte.Content
+@param vm: io.availe.kreplicadocs.model.view.PageViewModel
+@param title: String = "KReplica Docs"
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-themes@1.9.0/themes/prism-darcula.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="prefetch" href="https://unpkg.com/monaco-editor@0.52.2/min/vs/loader.js" as="script">
+    <script>
+        (function () {
+            try {
+                const theme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+            }
+        })();
+    </script>
+    <script src="https://unpkg.com/htmx.org@2.0.6" defer></script>
+    <script src="https://unpkg.com/htmx-ext-preload@2.1.1" defer></script>
+    <script src="https://unpkg.com/htmx-ext-sse@2.2.3" defer></script>
+    <script src="/js/main.js" type="module"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body x-data="navMenu()" @keydown.escape.window="close()">
+<div class="page-wrapper">
+    <header class="main-header">
+        <div class="nav-container">
+            <a href="/" class="nav-logo"
+               hx-get="/"
+               hx-target=".main-content"
+               hx-push-url="true"
+               hx-indicator=".page-progress">KReplica</a>
+
+            <div class="mobile-header-controls">
+                @template.fragments.theme-switcher()
+                <button type="button" class="hamburger-button" @click="toggle()" aria-label="Toggle Menu">
+                    <div x-show="!isNavOpen">
+                        @template.icons.hamburger(cssClass="hamburger-icon")
+                    </div>
+                    <div x-show="isNavOpen" x-cloak>
+                        @template.icons.close(cssClass="hamburger-icon")
+                    </div>
+                </button>
+            </div>
+
+            <div class="nav-menu-container"
+                 x-show="isNavOpen"
+                 x-transition
+                 @click.outside="close()"
+                 x-cloak>
+                <nav class="main-nav" id="mobile-nav-links">
+                    @template.fragments.nav-links(vm = vm, isMobile = true)
+                </nav>
+            </div>
+
+            <div class="desktop-nav-container">
+                <nav class="desktop-nav" id="desktop-nav-links">
+                    @template.fragments.nav-links(vm = vm, isMobile = false)
+                </nav>
+                @template.fragments.theme-switcher()
+            </div>
+        </div>
+        <div class="page-progress htmx-indicator"></div>
+    </header>
+
+    <main class="main-content">
+        ${content}
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="/" class="nav-logo">KReplica</a>
+                <p>&copy; ${java.time.Year.now().value} KReplica Project. All rights reserved.</p>
+            </div>
+            <div class="footer-links">
+                <a href="${vm.properties.repoUrl}" target="_blank" rel="noreferrer">GitHub</a>
+                <a href="${vm.properties.issuesUrl}" target="_blank" rel="noreferrer">Report an Issue</a>
+                <a href="${vm.properties.personalUrl}" target="_blank" rel="noreferrer">Personal Website</a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<div id="fab-slot" x-show="!isNavOpen">
+    @if(vm is io.availe.kreplicadocs.model.view.GuideViewModel)
+        @template.tags.fab-menu(vm = vm)
+    @endif
+</div>
+
+<script src="https://unpkg.com/monaco-editor@0.52.2/min/vs/loader.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+<script>
+    Prism.plugins = Prism.plugins || {};
+    Prism.plugins.autoloader = Prism.plugins.autoloader || {};
+    Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>

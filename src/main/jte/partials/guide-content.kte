@@ -1,0 +1,24 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<div class="guide-content">
+    @for(section in vm.guideContent)
+        <section id="${section.id}">
+            @if(section.id == "introduction")
+                <h1>${section.title}</h1>
+            @else
+                <h2>${section.title}</h2>
+            @endif
+
+            ${section.description}
+
+            @for(subsection in section.subsections)
+                <div id="${subsection.id}" class="guide-subsection">
+                    @if(section.id != "faq")
+                        <h3>${subsection.title}</h3>
+                    @endif
+                    ${subsection.content}
+                </div>
+            @endfor
+        </section>
+    @endfor
+</div>

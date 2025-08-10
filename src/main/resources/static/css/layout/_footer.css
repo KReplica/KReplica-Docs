@@ -1,0 +1,51 @@
+@layer layout {
+    .main-footer {
+        background-color: var(--surface-color);
+        border-block-start: 1px solid var(--border-color);
+        color: var(--text-color);
+        padding: 1.875rem 1.25rem;
+        margin-block-start: auto;
+    }
+
+    .footer-content {
+        max-inline-size: var(--container-max);
+        margin-inline: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .footer-brand .nav-logo {
+        display: inline-block;
+        margin-block-end: 0.3125rem;
+    }
+
+    .footer-brand p {
+        margin: 0;
+        color: var(--text-light);
+        font-size: 0.9rem;
+    }
+
+    .footer-links {
+        display: flex;
+        gap: 1.25rem;
+    }
+
+    .footer-links a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .footer-links a:hover {
+        color: var(--secondary-color);
+    }
+
+    @media (max-width: 48rem) {
+        .footer-content {
+            flex-direction: column;
+            align-items: center;
+            gap: 1.25rem;
+        }
+    }
+}

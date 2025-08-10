@@ -1,0 +1,14 @@
+<div class="theme-switcher" x-data="themeSwitcher">
+    <button type="button" @click="cycleTheme()" :aria-label="'Switch to ' + nextTheme + ' theme'"
+            :title="'Switch to ' + nextTheme + ' theme'">
+        <span x-show="theme === 'light'">
+            @template.icons.sun()
+        </span>
+        <span x-show="theme === 'blue'" x-cloak>
+            @template.icons.water-drop()
+        </span>
+        <span x-show="theme === 'dark'" x-cloak>
+            @template.icons.moon()
+        </span>
+    </button>
+</div>

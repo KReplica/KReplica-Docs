@@ -1,0 +1,13 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>
+    In some cases, you need to add annotations to the DTO classes that KReplica generates. For example, the <code>@Serializable</code>
+    annotation from <code>kotlinx.serialization</code> must be applied to a class, not an interface. Additionally, you
+    might want to apply an annotation like <code>@Deprecated</code> to only the <code>CREATE</code> variant of a DTO,
+    but not the <code>DATA</code> variant.
+</p>
+<p>
+    The <code>@Replicate.Apply</code> annotation solves these problems. It instructs KReplica to add specified
+    annotations directly to the generated data classes. You can apply annotations to all variants by default or target
+    specific variants using its <code>include</code> and <code>exclude</code> parameters.
+</p>

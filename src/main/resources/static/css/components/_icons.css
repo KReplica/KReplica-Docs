@@ -1,0 +1,27 @@
+@layer components {
+    .hamburger-icon {
+        fill: var(--primary-color);
+    }
+
+    .fab-toggle-icon {
+        fill: var(--text-light);
+        transition: fill 0.2s ease-in-out, transform 0.2s ease-in-out;
+    }
+
+    .fab-icon-wrapper svg {
+        fill: var(--on-primary);
+    }
+
+    .theme-switcher button svg {
+        fill: var(--text-light);
+        transition: fill 0.2s ease-in-out;
+    }
+
+    .theme-switcher button:hover svg {
+        fill: var(--primary-color);
+    }
+
+    .fab-parent-item.active .fab-toggle-icon {
+        fill: var(--on-secondary);
+    }
+}

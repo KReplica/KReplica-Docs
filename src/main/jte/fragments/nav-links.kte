@@ -1,0 +1,8 @@
+@param vm: io.availe.kreplicadocs.model.view.PageViewModel
+@param isMobile: Boolean = false
+
+<ul class="nav-links" hx-ext="preload">
+    @for(link in vm.navLinks)
+        @template.tags.nav-link(link = link, currentPage = vm.currentPage, isMobile = isMobile)
+    @endfor
+</ul>

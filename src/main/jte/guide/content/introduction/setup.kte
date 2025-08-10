@@ -1,0 +1,4 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>To start, simply add the KSP and KReplica plugins to your module's <code>build.gradle.kts</code> file.</p>
+@template.tags.code(language = "kotlin", content = @`${vm.snippets[io.availe.kreplicadocs.common.CodeSnippet.QUICKSTART_BUILD]}`)

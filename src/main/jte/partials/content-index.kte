@@ -1,0 +1,86 @@
+@import io.availe.kreplicadocs.common.CodeSnippet
+@param vm: io.availe.kreplicadocs.model.view.IndexViewModel
+
+<div class="hero-section">
+    <h1>Generate Kotlin DTOs from one interface</h1>
+    <p>KReplica is a KSP plugin that creates type-safe sealed hierarchies for Create, Data, and Patch
+        variants—eliminating boilerplate and runtime surprises.</p>
+</div>
+
+@template.tags.tabs(tabs = vm.heroDemoTabs)
+
+<div class="hero-cta">
+    <a href="/playground" class="button-primary" hx-get="/playground" hx-target=".main-content"
+       hx-push-url="true" hx-indicator=".page-progress">
+        Try in Playground
+    </a>
+    <a href="/guide" class="button-secondary" hx-get="/guide" hx-target=".main-content"
+       hx-push-url="/guide" hx-indicator=".page-progress">
+        See the Guide
+    </a>
+</div>
+
+<ul class="feature-list">
+    <li class="feature-item">
+        @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
+        <span>Generates <strong>Create, Data & Patch</strong> from one interface.</span>
+    </li>
+    <li class="feature-item">
+        @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
+        <span><strong>Sealed hierarchies</strong> allow exhaustive <code>when</code> expressions.</span>
+    </li>
+    <li class="feature-item">
+        @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
+        <span>Generate <strong>versioned DTOs</strong> with ease.</span>
+    </li>
+    <li class="feature-item">
+        @template.icons.checkmark(width="20", height="20", cssClass="feature-icon")
+        <span>Compile-time codegen powered via <strong>KSP</strong> and <strong>Kotlin Poet</strong>.</span>
+    </li>
+</ul>
+
+<div class="feature-highlight">
+    <h2>Bulletproof Your APIs</h2>
+    <p>KReplica uses sealed hierarchies to enable exhaustive <code>when</code> expressions. If you add a new API
+        version, your code won't compile until you handle it—no more runtime surprises.</p>
+
+    @template.tags.tabs(tabs = vm.whenTabs)
+</div>
+
+<div class="get-started-section">
+    <h2>Setup</h2>
+    <p>Add the KSP and KReplica plugins to your module's <code>build.gradle.kts</code> file to start generating DTOs
+        automatically.</p>
+
+    @template.tags.code(language = "kotlin", content = @`${vm.snippets[CodeSnippet.QUICKSTART_BUILD]}`)
+</div>
+
+<div>
+    <h2>Important Links:</h2>
+    <div class="link-cards-grid">
+        <a href="/playground" class="link-card" hx-get="/playground" hx-target=".main-content"
+           hx-push-url="true">
+            <h3>Playground</h3>
+            <p>Run and explore live KReplica code samples.</p>
+        </a>
+        <a href="/guide" class="link-card" hx-get="/guide" hx-target=".main-content" hx-push-url="true">
+            <h3>Guide</h3>
+            <p>API reference and recommended usage patterns.</p>
+        </a>
+        <a href="https://github.com/KReplica/KReplica/blob/master/LICENSE" class="link-card" target="_blank"
+           rel="noopener noreferrer">
+            <h3>License</h3>
+            <p>Apache 2.0 license.</p>
+        </a>
+        <a href="https://github.com/KReplica/KReplica/releases" class="link-card" target="_blank"
+           rel="noopener noreferrer">
+            <h3>Releases</h3>
+            <p>List of all versions; release numbers also match Maven Central artifacts.</p>
+        </a>
+        <a href="https://github.com/KReplica/KReplica" class="link-card" target="_blank"
+           rel="noopener noreferrer">
+            <h3>Repository</h3>
+            <p>View the project's repository and its source code.</p>
+        </a>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+@param vm: io.availe.kreplicadocs.model.view.PlaygroundViewModel
+
+@template.layout.main(
+title = "Playground | KReplica Docs",
+vm = vm,
+content = @`
+    @template.partials.content-playground(
+    vm = vm
+    )
+`
+)

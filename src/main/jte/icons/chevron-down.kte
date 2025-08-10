@@ -1,0 +1,7 @@
+@param width: String = "24"
+@param height: String = "24"
+@param cssClass: String? = null
+
+<svg class="${cssClass}" xmlns="http://www.w3.org/2000/svg" height="${height}px" viewBox="0 0 24 24" width="${width}px">
+    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+</svg>

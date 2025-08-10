@@ -1,0 +1,173 @@
+@layer reset, base, layout, components, pages, utilities;
+
+@import "base/_variables.css" layer(base);
+@import "base/_typography.css" layer(base);
+@import "components/_icons.css" layer(components);
+@import "components/_buttons.css" layer(components);
+@import "components/_code-blocks.css" layer(components);
+@import "components/_animations.css" layer(components);
+@import "components/_fab.css" layer(components);
+@import "components/_theme-switcher.css" layer(components);
+@import "layout/_header.css" layer(layout);
+@import "layout/_footer.css" layer(layout);
+@import "layout/_sidebar.css" layer(layout);
+@import "pages/_playground.css" layer(pages);
+@import "pages/_index.css" layer(pages);
+
+@layer reset {
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+
+    html {
+        color-scheme: light dark;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+@layer layout {
+    .page-wrapper {
+        display: flex;
+        flex-direction: column;
+        min-block-size: 100svh;
+    }
+
+    .main-content {
+        flex-grow: 1;
+        inline-size: 100%;
+        container-type: inline-size;
+        max-inline-size: var(--container-max);
+        margin-inline: auto;
+        padding: 2.5rem 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 3.5rem;
+    }
+
+    .guide-content section + section {
+        margin-block-start: 2.5rem;
+    }
+
+    .examples-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .guide-main-content {
+        min-inline-size: 0;
+    }
+
+    .guide-content .guide-subsection + .guide-subsection {
+        margin-block-start: 2rem;
+    }
+}
+
+@layer components {
+    .alert {
+        padding: 0.9375rem;
+        margin: 1.25rem 0;
+        border: 1px solid;
+        border-radius: 0.25rem;
+        background-color: var(--alert-info-bg);
+        border-color: var(--alert-info-border);
+        color: var(--alert-info-text);
+    }
+
+    .htmx-indicator {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+    }
+
+    .htmx-request .htmx-indicator,
+    .htmx-request.htmx-indicator {
+        opacity: 1;
+    }
+
+    .htmx-request .page-progress {
+        inline-size: 100%;
+    }
+
+    .placeholder-text {
+        padding: 2rem;
+        text-align: center;
+        color: var(--text-light);
+    }
+
+    .workflow-container {
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 0.75rem;
+        box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .workflow-tabs {
+        display: flex;
+        padding-inline: 1rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-block-end: 1px solid var(--border-color);
+    }
+
+    .workflow-tabs button {
+        padding: 0.85rem 1.25rem;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: var(--text-light);
+        border-block-end: 0.1875rem solid transparent;
+        transition: all 0.2s ease;
+        font-weight: 600;
+    }
+
+    .workflow-tabs button:hover {
+        color: var(--primary-color);
+    }
+
+    .workflow-tabs button.active {
+        color: var(--secondary-color);
+        border-block-end-color: var(--secondary-color);
+    }
+
+    .workflow-content {
+        padding: 1.5rem 1.5rem 0.5rem;
+    }
+
+    .workflow-content p {
+        margin-block-start: 0;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .playground-wrapper {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        min-height: 0;
+    }
+}
+
+@layer utilities {
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            transition: none;
+        }
+    }
+
+    @media (min-width: 48.0625rem) {
+        .examples-container {
+            grid-template-columns: var(--sidebar-width) 1fr;
+        }
+    }
+
+    @media (max-width: 30rem) {
+        .main-content {
+            padding: 1.875rem 0.9375rem;
+        }
+    }
+}

@@ -1,0 +1,14 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>
+    For each KReplica schema, KReplica generates “local variant” marker interfaces: <code>DataVariant</code>, <code>CreateRequestVariant</code>,
+    and <code>PatchRequestVariant</code>. Local variants are only generated as needed. For example, if the schema does
+    not include a <code>CREATE</code> variant, it will not generate the <code>CreateRequestVariant</code> local variant.
+</p>
+!{ val localVariantsTabs = vm.tabs["generated-code-local-variants"] }
+@if(localVariantsTabs != null)
+    @template.tags.tabs(tabs = localVariantsTabs)
+@endif
+<p>
+    This allows for exhaustive <code>when</code> expressions in your code.
+</p>

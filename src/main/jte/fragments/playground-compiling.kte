@@ -1,0 +1,8 @@
+@param jobId: String
+
+<div hx-ext="sse" sse-connect="/playground/status/${jobId}" sse-reconnect="none" sse-swap="compile-result"
+     sse-target="#playground-output" id="job-status-${jobId}">
+    <div class="placeholder-text" id="status-text-${jobId}">
+        <p>Compiling... your request is being processed.</p>
+    </div>
+</div>

@@ -1,0 +1,132 @@
+{
+  "heroDemoTabs": [
+    {
+      "id": "interface",
+      "label": "Your Interface",
+      "codeSnippetKey": "HOMEPAGE_DEMO_SOURCE"
+    },
+    {
+      "id": "generated",
+      "label": "Generated DTOs",
+      "generatedFrom": "HOMEPAGE_DEMO_SOURCE",
+      "requiresCompilation": true
+    }
+  ],
+  "whenTabs": [
+    {
+      "id": "variant",
+      "label": "Handle by Variant",
+      "description": "By using a local variant interface (e.g., `UserAccountSchema.DataVariant`), you can handle all DTOs of a specific kind, across all versions.",
+      "codeSnippetKey": "WHEN_EXPRESSION_BY_VARIANT",
+      "requiresCompilation": false
+    },
+    {
+      "id": "version",
+      "label": "Handle by Version",
+      "description": "By typing a parameter as a specific version (e.g., `UserAccountSchema.V2`), the compiler ensures you handle all variants within that version only.",
+      "codeSnippetKey": "WHEN_EXPRESSION_BY_VERSION",
+      "requiresCompilation": false
+    },
+    {
+      "id": "all",
+      "label": "Handle Everything",
+      "description": "By using the top-level schema interface, your `when` expression must exhaustively handle every version and variant.",
+      "codeSnippetKey": "WHEN_EXPRESSION_ALL",
+      "requiresCompilation": false
+    }
+  ],
+  "contextualNestingTabs": [
+    {
+      "id": "unversioned",
+      "label": "Unversioned Nesting",
+      "description": "KReplica automatically matches variants when you nest an unversioned schema. A parent's `CreateRequest` will use the child's `CreateRequest`.",
+      "exampleSnippetKey": "GUIDE_REF_NESTING_UNVERSIONED",
+      "requiresCompilation": true
+    },
+    {
+      "id": "versioned",
+      "label": "Versioned Nesting",
+      "description": "The same automatic matching applies to specific versions of a schema. Nesting `UserAccountSchema.V1` will correctly use the variants from that version.",
+      "exampleSnippetKey": "GUIDE_REF_NESTING_VERSIONED",
+      "requiresCompilation": true
+    }
+  ],
+  "apiMapperTabs": [
+    {
+      "id": "pattern",
+      "label": "1. The Reusable Pattern",
+      "description": "Define this generic interface once in your project. It uses KReplica's <strong>Global Variant Interfaces</strong> (e.g., `KReplicaDataVariant`) as generic constraints, making it compatible with any model KReplica generates.",
+      "codeSnippetKey": "MAPPER_PATTERN_INTERFACE",
+      "requiresCompilation": false
+    },
+    {
+      "id": "domain",
+      "label": "2. The Domain Model",
+      "description": "This is your internal domain model. It contains business logic, validation, and is completely decoupled from the API layer.",
+      "codeSnippetKey": "MAPPER_PATTERN_DOMAIN_MODEL",
+      "requiresCompilation": false
+    },
+    {
+      "id": "interface",
+      "label": "3. The KReplica Interface",
+      "description": "This is the simple KReplica interface you write. It defines the data contract for the `UserAccount`.",
+      "codeSnippetKey": "MAPPER_PATTERN_KREPLICA_INTERFACE",
+      "requiresCompilation": true
+    },
+    {
+      "id": "mapper",
+      "label": "4. The Implementation",
+      "description": "Finally, implement the generic mapper for your specific model. The Kotlin compiler, guided by the generic constraints, ensures you correctly map between the domain model and the specific DTO variants (<code>Data</code>, <code>CreateRequest</code>, <code>PatchRequest</code>).",
+      "codeSnippetKey": "MAPPER_PATTERN_IMPLEMENTATION",
+      "requiresCompilation": false
+    }
+  ],
+  "generatedCodeSchemasTabs": [
+    {
+      "id": "unversioned",
+      "label": "Unversioned Schema (Structure)",
+      "codeSnippetKey": "GUIDE_OUTPUT_UNVERSIONED_SCHEMA"
+    },
+    {
+      "id": "versioned",
+      "label": "Versioned Schema (Structure)",
+      "codeSnippetKey": "GUIDE_OUTPUT_VERSIONED_SCHEMA"
+    }
+  ],
+  "patchableWrapperTabs": [
+    {
+      "id": "standard",
+      "label": "Patchable<T>",
+      "codeSnippetKey": "GUIDE_OUTPUT_PATCHABLE"
+    },
+    {
+      "id": "serializable",
+      "label": "SerializablePatchable<T>",
+      "codeSnippetKey": "GUIDE_OUTPUT_PATCHABLE_SERIALIZABLE"
+    }
+  ],
+  "localVariantsTabs": [
+    {
+      "id": "unversioned",
+      "label": "Unversioned",
+      "codeSnippetKey": "GUIDE_OUTPUT_LOCAL_VARIANTS_UNVERSIONED"
+    },
+    {
+      "id": "versioned",
+      "label": "Versioned",
+      "codeSnippetKey": "GUIDE_OUTPUT_LOCAL_VARIANTS_VERSIONED"
+    }
+  ],
+  "globalVariantsTabs": [
+    {
+      "id": "unversioned",
+      "label": "Unversioned",
+      "codeSnippetKey": "GUIDE_OUTPUT_GLOBAL_VARIANTS_UNVERSIONED"
+    },
+    {
+      "id": "versioned",
+      "label": "Versioned",
+      "codeSnippetKey": "GUIDE_OUTPUT_GLOBAL_VARIANTS_VERSIONED"
+    }
+  ]
+}

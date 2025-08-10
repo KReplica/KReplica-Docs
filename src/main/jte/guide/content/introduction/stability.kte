@@ -1,0 +1,20 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<ul>
+    <li><strong>Overall:</strong> Beta</li>
+    <li><strong>API Annotations:</strong> Stable*</li>
+    <li><strong>Codegen Output:</strong> Beta**</li>
+</ul>
+<p><em>*It’s under consideration whether auto nominal typing should be removed. Please let me know if you found it
+        useful.</em></p>
+<p><em>**The core codegen output itself (sealed interface hierarchy to create DATA, PATCH, and CREATE variants) is
+        stable. The 'local and global' variants concept, however, is considered beta. I'm currently satisfied with them,
+        but they can
+        be subject to change if need be.</em></p>
+<p>In retrospect, KReplica should've stayed longer as a pre-1.0.0 library — and in many ways it should be considered as
+    one. That said, the core design has stabilized by now, even if the peripheries change.</p>
+<p>KReplica follows SemVer strictly. As such, a v6.0.0 is already planned, even though it's only the removal of an
+    undocumented public API (it's not listed in the docs).</p>
+<p>If fully expect KReplica to stabilize with v6.0.0 or v7.0.0, with the latter being the potential removal of the
+    nominal typing feature. But I will hold up on marking the library as stable
+    until it's actually tested in additional projects.</p>

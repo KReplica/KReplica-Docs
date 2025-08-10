@@ -1,0 +1,20 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>A neat feature of Kotlin is its exhaustive <code>when</code> expressions: when you use a sealed class or sealed
+    interface, the compiler forces you to handle every possible subtype.</p>
+<p>KReplica takes advantage of this by generating DTOs like:</p>
+<pre><code>public sealed interface &lt;SchemaName&gt;Schema
+</code></pre>
+<p>This design is especially helpful when making use of versioned DTOs.</p>
+<p>You can write <code>when</code> statements that are:</p>
+<ul>
+    <li><strong>Version-specific</strong> &ndash; handle all variants for a single version (e.g., all V2 DTOs).</li>
+    <li><strong>Variant-specific</strong> &ndash; handle the same variant type across all versions (e.g., all Data
+        types).
+    </li>
+    <li><strong>Schema-wide</strong> &ndash; handle every possible DTO in the schema.</li>
+</ul>
+!{ val whenTabs = vm.tabs["whenTabs"] }
+@if(whenTabs != null)
+    @template.tags.tabs(tabs = whenTabs)
+@endif

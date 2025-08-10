@@ -1,0 +1,98 @@
+@layer base {
+    :root {
+        --primary-color: oklch(34.21% 0.04 256.05);
+        --secondary-color: oklch(62.75% 0.16 238.24);
+        --nav-active-color: var(--secondary-color);
+        --text-color: oklch(29.23% 0 0);
+        --text-light: oklch(59.57% 0.02 216.59);
+        --bg-color: oklch(97.7% 0 0);
+        --surface-color: oklch(100% 0 0);
+        --border-color: oklch(93.63% 0.01 257.7);
+        --sidebar-active-bg: var(--secondary-color);
+        --sidebar-active-text: #ffffff;
+        --code-bg: oklch(26.6% 0 0);
+        --code-text: oklch(97.14% 0.01 110.36);
+        --inline-code-bg: oklch(91.4% 0 0);
+        --inline-code-text: var(--primary-color);
+        --alert-info-bg: oklch(95.04% 0.04 246.59);
+        --alert-info-border: oklch(85.74% 0.07 248.1);
+        --alert-info-text: var(--primary-color);
+        --success-color: oklch(70.92% 0.19 160.29);
+        --danger-color: oklch(62.36% 0.2 29.35);
+        --shadow-light: rgba(255, 255, 255, 0.9);
+        --shadow-dark: rgba(0, 0, 0, 0.12);
+        --retro-shadow-color: oklch(69.8% 0 0);
+        --fab-bg: var(--primary-color);
+        --on-primary: oklch(100% 0 0);
+        --on-secondary: oklch(100% 0 0);
+        --highlight-bg: rgba(231, 243, 254, 0.9);
+        --highlight-outline: var(--alert-info-border);
+
+        --header-height: 3.75rem;
+        --sidebar-width: 15rem;
+        --container-max: 75rem;
+        --space-1: 0.25rem;
+        --space-2: 0.5rem;
+        --space-3: 0.75rem;
+        --space-4: 1rem;
+        --space-5: 1.25rem;
+        --space-6: 1.5rem;
+        --space-7: 2rem;
+        --space-8: 2.5rem;
+        --radius-1: 0.25rem;
+        --radius-2: 0.375rem;
+        --radius-3: 0.5rem;
+        --radius-4: 0.75rem;
+        --outline-1: 0.0625rem;
+    }
+
+    [data-theme="blue"] {
+        --primary-color: oklch(46% 0.14 258);
+        --secondary-color: oklch(56% 0.18 262);
+        --nav-active-color: oklch(30% 0.07 262);
+        --text-color: oklch(29% 0 0);
+        --text-light: oklch(55% 0.01 250);
+        --bg-color: oklch(98.8% 0.008 255);
+        --surface-color: oklch(100% 0 0);
+        --border-color: oklch(92% 0.012 255);
+        --sidebar-active-bg: oklch(94% 0.02 255);
+        --sidebar-active-text: oklch(30% 0 0);
+        --retro-shadow-color: oklch(88% 0.01 250);
+        --inline-code-bg: oklch(94% 0.01 255);
+        --inline-code-text: oklch(40% 0.08 262);
+        --highlight-bg: oklch(94% 0.02 260 / 0.7);
+        --highlight-outline: var(--secondary-color);
+        --alert-info-bg: oklch(94% 0.03 260);
+        --alert-info-border: oklch(85% 0.06 260);
+        --alert-info-text: oklch(30% 0.07 262);
+    }
+
+    [data-theme="dark"] {
+        --primary-color: oklch(72% 0.14 265);
+        --secondary-color: oklch(78% 0.12 265);
+        --nav-active-color: oklch(98% 0 0);
+        --text-color: oklch(95% 0.005 240);
+        --text-light: oklch(70% 0.01 240);
+        --bg-color: oklch(18% 0.02 255);
+        --surface-color: oklch(23% 0.02 255);
+        --border-color: oklch(33% 0.02 255);
+        --sidebar-active-bg: oklch(33% 0.03 255);
+        --sidebar-active-text: oklch(85% 0.1 260);
+        --code-bg: oklch(20% 0.02 255);
+        --inline-code-bg: oklch(28% 0.02 255);
+        --inline-code-text: oklch(80% 0.01 240);
+        --alert-info-bg: oklch(28% 0.04 246);
+        --alert-info-border: oklch(45% 0.07 248);
+        --alert-info-text: var(--text-color);
+        --success-color: oklch(68% 0.18 155);
+        --danger-color: oklch(68% 0.19 35);
+        --shadow-light: rgba(255, 255, 255, 0.1);
+        --shadow-dark: rgba(0, 0, 0, 0.5);
+        --retro-shadow-color: oklch(10% 0.01 250);
+        --fab-bg: oklch(35% 0.05 255);
+        --on-primary: oklch(18% 0.02 250);
+        --on-secondary: oklch(23% 0.02 255);
+        --highlight-bg: oklch(50% 0.1 265 / 0.5);
+        --highlight-outline: var(--primary-color);
+    }
+}

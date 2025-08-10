@@ -1,0 +1,21 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>In KReplica, an unversioned schema is a sealed interface that defines all possible DTO shapes (such as Data, Patch,
+    and Create)
+    for a given model.</p>
+
+<p>Meanwhile, a version schema uses a two-layer nested model. The outer layer contains all the inner schemas, with each
+    inner schema being a separate version. By convention, each inner schema follows a a V&lt;number&gt; naming
+    convention, but you can assign custom names as long as a
+    version number is provided with <code>@SchemaVersion</code>.</p>
+
+For example, here is how you might access the <code>DATA</code> variant of a generated <code>UserAccountSchema</code>:
+<ul>
+    <li>Unversioned: <code>UserAccountSchema.Data</code></li>
+    <li>Versioned: <code>UserAccountSchema.V1.Data</code></li>
+</ul>
+
+!{ val schemasTabs = vm.tabs["generated-code-schemas"] }
+@if(schemasTabs != null)
+    @template.tags.tabs(tabs = schemasTabs)
+@endif

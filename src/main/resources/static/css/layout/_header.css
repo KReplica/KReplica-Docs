@@ -1,0 +1,130 @@
+@layer layout {
+    .main-header {
+        background-color: var(--surface-color);
+        border-block-end: 1px solid var(--border-color);
+        position: sticky;
+        inset-block-start: 0;
+        z-index: 10;
+    }
+
+    .nav-container {
+        display: flex;
+        align-items: center;
+        max-inline-size: var(--container-max);
+        margin-inline: auto;
+        block-size: var(--header-height);
+        padding-inline: 1.25rem;
+    }
+
+    .nav-logo {
+        font-weight: bold;
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        text-decoration: none;
+        z-index: 31;
+    }
+
+    .nav-links {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+
+        a {
+            display: block;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            transition: color 0.2s ease-in-out;
+
+            &:hover {
+                color: var(--secondary-color);
+            }
+
+            &.active {
+                color: var(--nav-active-color);
+            }
+        }
+    }
+
+    .mobile-header-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-left: auto;
+    }
+
+    .desktop-nav-container {
+        display: none;
+        align-items: center;
+        gap: 1rem;
+        margin-left: auto;
+    }
+
+    .desktop-nav {
+        display: flex;
+        align-items: center;
+    }
+
+    .hamburger-button {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        z-index: 31;
+        touch-action: manipulation;
+    }
+
+    .nav-menu-container {
+        position: fixed;
+        inset: 0;
+        background-color: var(--surface-color);
+        backdrop-filter: blur(5px);
+        z-index: 30;
+        padding-block-start: 5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 2rem;
+        transition: opacity 0.2s ease-in-out;
+
+        .nav-links {
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+
+            a {
+                font-size: 1.2rem;
+                padding: 0.625rem 1.25rem;
+                font-weight: 600;
+            }
+        }
+    }
+
+    .page-progress {
+        block-size: 0.1875rem;
+        background-color: var(--secondary-color);
+        inline-size: 0;
+        transition: inline-size 0.3s ease-out;
+    }
+
+    @media (min-width: 48.0625rem) {
+        .mobile-header-controls {
+            display: none;
+        }
+
+        .desktop-nav-container {
+            display: flex;
+        }
+
+        .desktop-nav .nav-links a {
+            padding-inline: 0.9375rem;
+            font-size: 1rem;
+        }
+
+        .nav-menu-container {
+            display: none;
+        }
+    }
+}

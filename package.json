@@ -1,0 +1,29 @@
+{
+  "name": "kreplica-docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KReplica/KReplica-Docs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/KReplica/KReplica-Docs/issues"
+  },
+  "homepage": "https://github.com/KReplica/KReplica-Docs#readme",
+  "devDependencies": {
+    "@alpinejs/collapse": "^3.14.9",
+    "@types/node": "^24.1.0",
+    "@types/prismjs": "^1.26.5",
+    "alpinejs": "^3.14.9",
+    "htmx.org": "^2.0.6",
+    "monaco-editor": "^0.52.2"
+  }
+}

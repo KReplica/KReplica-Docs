@@ -1,0 +1,55 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>
+    KReplica only generates DTOs, so how you implement mapping is left up to you. However, here is a mapping pattern
+    which I'm keen to. The point is to ensure compile-time guarantees in this specific scenario: You utilized Kreplica
+    to generate the 3 DTO variants (data, create, patch) for a CRUD API. Furthermore, there is a specific `id` which can
+    be used for mapping.
+</p>
+
+<p>
+    Now, the entire point of the generic interface below (check "The Reusable Example" in the code snippet below) is to
+    create a systematized approach that implements three methods:
+</p>
+
+<ul>
+    <li><b>toDataDto</b>: Maps domain object -> the DATA variant</li>
+    <li><b>toDomain</b>: Maps the DATA variant -> Domain object</li>
+    <li><b>applyPatch</b>: Maps the PATCH variant -> Domain object</li>
+</ul>
+
+<p>
+    Note that in the example below, the <code>V</code> type parameter prevents mixing DTOs from different schema
+    versions at compile time. For versioned
+    schemas, use something like <code>UserAccountSchema.V1</code> or <code>UserAccountSchema.V2</code>. For unversioned
+    schemas, use the schema type itself, such as <code>UserAccountSchema</code>. This keeps variants aligned and blocks
+    from occurring.
+</p>
+
+<p>
+    For this pattern, I strongly discourage nullable properties. KReplica’s three variants are meant to reduce the need
+    for nullables by
+    including only the fields relevant to each operation. For example, say that you have an immutable `id` that's
+    created by a database, but not directly by your program. Only the DATA variant should have access to the `id` field,
+    not the CREATE or PATCH variants.
+</p>
+
+<p>This is because in this example, the Kotlin compiler forces you to map required properties, but allows you to skip
+    nullable
+    properties. And forgetting to map a field can lead to inadvertent data loss. If you need to model a field which may
+    or may not be present, I'd recommend using an option type instead of a nullable. Note Kotlin/KReplica does not have
+    an
+    option
+    type built in — as, although I recommend this pattern, this is outside the immediate scope of the library.
+</p>
+
+!{ val mappersTabs = vm.tabs["patterns-api-mappers"] }
+@if(mappersTabs != null)
+    @template.tags.tabs(tabs = mappersTabs)
+@endif
+
+<p>If it helps, the 1st tab ("The Reusable Pattern") is the generic interface that is the actual pattern. Tabs 2 and 3
+    are provided for context, but are not that important (they show a mock domain model and mock KReplica
+    declaration). The 4th tab ("The Implementation") shows an example of how you can actually apply the pattern shown in
+    the 1st
+    tab.</p>

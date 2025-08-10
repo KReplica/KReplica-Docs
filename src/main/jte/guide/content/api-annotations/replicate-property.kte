@@ -1,0 +1,32 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>
+    Provides fine-grained control over a single property, allowing you to override the settings defined in the
+    model-level <code>@Replicate.Model</code> annotation.
+</p>
+<ul>
+    <li>
+        <strong><code>include: Array&lt;DtoVariant&gt;</code></strong> (Default: empty array)
+        <div>Explicitly includes the property <strong>only</strong> in the specified variants. If used, the model-level
+            <code>variants</code> are ignored for this property.
+        </div>
+    </li>
+    <li>
+        <strong><code>exclude: Array&lt;DtoVariant&gt;</code></strong> (Default: empty array)
+        <div>Excludes the property from the specified variants.</div>
+    </li>
+    <li>
+        <strong><code>nominalTyping: NominalTyping</code></strong> (Default: <code>NominalTyping.INHERIT</code>)
+        <div>Overrides the model-level <code>nominalTyping</code> setting for this specific property.</div>
+    </li>
+    <li>
+        <strong><code>autoContextual: AutoContextual</code></strong> (Default: <code>AutoContextual.INHERIT</code>)
+        <div>Overrides the model-level <code>autoContextual</code> setting for this specific property.</div>
+    </li>
+</ul>
+!{ val example = vm.examples["api-replicate-property"] }
+@if(example != null)
+    <div class="workflow-container">
+        @template.tags.guide-example(example = example)
+    </div>
+@endif

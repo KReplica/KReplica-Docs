@@ -1,0 +1,29 @@
+@param files: Map<io.availe.kreplicadocs.model.FileName, String>
+
+@if(files.isNotEmpty())
+    <div x-data="{ activeTab: '${files.keys.first().value}' }">
+        <div class="tabs-nav playground-tabs ${if(files.size == 1) "is-single" else ""}" role="tablist">
+            @for((filename, _) in files)
+                <button type="button"
+                        role="tab"
+                        :class="activeTab === '${filename.value}' ? 'active' : ''"
+                        @click="activeTab = '${filename.value}'">
+                    ${filename.value}
+                </button>
+            @endfor
+        </div>
+
+        <div class="playground-content">
+            @for((filename, code) in files)
+                <div x-show="activeTab === '${filename.value}'" x-cloak>
+                    @template.tags.code(language="kotlin", content=@`${code}`)
+                </div>
+            @endfor
+        </div>
+    </div>
+@else
+    <div class="placeholder-text">
+        <p>Compilation was successful, but no files were generated.</p>
+        <p>This can happen if no interfaces are annotated for replication.</p>
+    </div>
+@endif

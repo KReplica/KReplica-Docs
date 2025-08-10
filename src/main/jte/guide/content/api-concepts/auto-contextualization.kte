@@ -1,0 +1,30 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>
+    The kotlinx.serialization library oftentimes requires the usage of the @Contextual annotation, which
+    tells kotlinx.serialization that a custom serializer is available for said given type. This custom
+    serializer is usually provided by the library's maintainer, meaning no action is needed besides inserting
+    the
+    @Contextual annotation.
+</p>
+<p>Normally, the IDE will help you identify which variables require @Contextual. Unfortunately,
+    kotlinx.serialization's
+    <code>@Serializable</code> annotation cannot be directly applied on interfaces. This thus is why <code>@Replicate.Apply</code>
+    exists in the first place.</p>
+<p>Via <code>@Replicate.Apply</code>, we can still mark our KReplica annotations as <code>@Serializable</code>. However,
+    this mean we no longer get IDE help
+    to determine whether or not a property requires @Contextual.</p>
+<p>To get around this, KReplica automatically applies the @Contextual annotations to properties if it
+    declares that kotlinx serialization is applied to said KReplica declaration. This feature is enabled by default.
+</p>
+<p>
+    You can disable this behavior globally by setting <code>autoContextual = AutoContextual.DISABLED</code> in the
+    <code>@Replicate.Model</code> annotation, or control it on a per-property basis using
+    <code>@Replicate.Property</code>.
+</p>
+!{ val example = vm.examples["api-auto-contextual"] }
+@if(example != null)
+    <div class="workflow-container">
+        @template.tags.guide-example(example = example)
+    </div>
+@endif

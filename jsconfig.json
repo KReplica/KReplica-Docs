@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "checkJs": true
+  },
+  "include": [
+    "resources/static/js/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

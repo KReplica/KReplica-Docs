@@ -1,0 +1,5 @@
+@param message: String
+
+<div class="playground-content">
+    @template.tags.code(language="text", content=@`${message}`, extraClass="alert is-plain", plain=true)
+</div>

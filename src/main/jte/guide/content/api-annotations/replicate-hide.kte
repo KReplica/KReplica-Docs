@@ -1,0 +1,12 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<p>
+    Disables code generation for the annotated model. This can be useful for temporarily excluding a model from the
+    build process without deleting the source code. This annotation has no parameters.
+</p>
+!{ val example = vm.examples["api-replicate-hide"] }
+@if(example != null)
+    <div class="workflow-container">
+        @template.tags.guide-example(example = example)
+    </div>
+@endif

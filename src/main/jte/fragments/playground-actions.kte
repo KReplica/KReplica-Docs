@@ -1,0 +1,28 @@
+<button type="submit"
+        form="playground-form"
+        data-action="run"
+        class="button-run"
+        :disabled="isSubmitting">
+    Run
+</button>
+<div class="split-button-container" x-data="splitButton()">
+    <button type="button" data-action="reset-all" class="button-reset split-button">
+        <span class="split-button-label">Reset All</span>
+        <span class="split-button-arrow" @click.stop="toggle()">
+            <svg :class="{'rotate-180': isOpen}" xmlns="http://www.w3.org/2000/svg"
+                 width="18" height="18" viewBox="0 0 24 24">
+                <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+            </svg>
+        </span>
+    </button>
+    <div class="dropdown-menu" x-show="isOpen" x-transition @click.outside="close()" x-cloak>
+        <button type="button" data-action="reset-all" class="dropdown-item"
+                @click="close()">
+            Reset All
+        </button>
+        <button type="button" data-action="clear-output" class="dropdown-item"
+                @click="close()">
+            Clear Output
+        </button>
+    </div>
+</div>

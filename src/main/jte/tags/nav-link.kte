@@ -1,0 +1,16 @@
+@param link: io.availe.kreplicadocs.model.NavLink
+@param currentPage: io.availe.kreplicadocs.common.PageId
+@param isMobile: Boolean
+
+<li>
+    <a href="${link.href}"
+       class="${if (link.pageId == currentPage) "active" else ""}"
+       hx-get="${link.href}"
+       hx-target=".main-content"
+       hx-push-url="true"
+       hx-indicator=".page-progress"
+       @click="${if (isMobile) "isNavOpen = false" else ""}"
+       preload="${if (link.pageId == io.availe.kreplicadocs.common.PageId.PLAYGROUND) "mouseover" else ""}">
+        ${link.label}
+    </a>
+</li>

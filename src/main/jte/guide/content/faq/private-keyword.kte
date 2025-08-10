@@ -1,0 +1,9 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<h3>Why do all the examples use the <code>private</code> keyword (<code>private interface</code>)?</h3>
+
+<p>The <code>private</code> keyword is not required, but it's a recommended practice. The source interfaces
+    are only for KReplica's use; your application code will interact with the generated DTOs. Making them
+    private prevents them from polluting the global namespace. This is especially useful for versioned
+    schemas, as it allows you to nest versions (e.g., <code>private interface V1 : UserAccount</code>)
+    inside a parent scope, avoiding naming collisions.</p>

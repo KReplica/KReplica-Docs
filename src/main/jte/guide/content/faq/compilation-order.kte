@@ -1,0 +1,9 @@
+@param vm: io.availe.kreplicadocs.model.view.GuideViewModel
+
+<h3>If a <code>@Replicate.Model</code> has another <code>@Replicate.Model</code> as a field, does the order of
+    compilation matter?</h3>
+
+<p>No. KReplica uses a two-pass compilation strategy. It first generates stub files for all
+    <code>@Replicate.Model</code>
+    declarations to make their types known, then performs the main compilation. This ensures that nested
+    models resolve correctly regardless of file order.</p>
