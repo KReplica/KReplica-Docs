@@ -9,7 +9,7 @@ import io.availe.kreplicadocs.common.WebApp
 import io.availe.kreplicadocs.config.CacheNames
 import io.availe.kreplicadocs.model.*
 import io.availe.kreplicadocs.services.CodeSnippetProvider
-import io.availe.kreplicadocs.services.SourceCodeNormalizer
+import io.availe.kreplicadocs.services.playground.SourceCodeNormalizer
 import io.availe.kreplicadocs.services.ViewModelFactory
 import io.availe.kreplicadocs.services.playground.PlaygroundService
 import jakarta.annotation.PostConstruct
