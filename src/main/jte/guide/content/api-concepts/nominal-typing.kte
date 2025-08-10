@@ -1,5 +1,21 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
+@template.tags.alert(type="info", content=@`
+    <p><strong>Proposed Deprecation </strong></p>
+    <p>While automatically creating value classes for primitives seems impressive, I have come to view it as a
+        potential antipattern. Since, I've come to believe that value types should be specified in the domain
+        object-level, not the DTO-level. I'd instead recommend the <a href="#patterns-api-mappers">Compile-Safe API
+            Mapper</a> pattern instead as a means of providing safety.</p>
+    <p>Perhaps this feature might find some use for those that prefer a "flat model" where DTOs and domain models are
+        one and the same. If that's the case, it's nice to know that there are a number of edge cases KReplica's nominal
+        typing can handle. For more information, check the
+        corresponding <a
+                href="/playground?template=advanced-nominal-typing"
+                hx-get="/playground?template=advanced-nominal-typing" hx-target=".main-content" hx-push-url="true"
+                hx-indicator=".page-progress">playground example</a>.</p>
+    <p>That said, this feature is being considered for removal. Feedback on this feature would be very much
+        appreciated — especially if you should be fond of it.</p>
+`)
 <p>This feature's name is actually a bit of a misnomer, a more accurate name would be "auto nominally typed primitives."
     What it does is that it lets you type in primitively typed (Int, Double, String, etc.) variables in your KReplica
     declarations, and in the
@@ -16,21 +32,6 @@
     new <code>@JvmInline value class CustomerId(val value: Long)</code>. This provides compile-time safety, ensuring a
     <code>CustomerId</code> can never be used where an <code>OrderId</code> is expected.
 </p>
-@template.tags.alert(type="info", content=@`
-    <p><strong>Author's Note & Status: Beta</strong></p>
-    <p>While this feature provides type safety directly within DTOs, I have come to view it as a potential antipattern.
-        I believe that domain models, not DTOs, should own such business-specific types. For robust applications, I
-        strongly recommend the <a href="#patterns-api-mappers">Type-Safe API Mappers</a> pattern instead, as it promotes
-        better separation of concerns.</p>
-    <p>This feature is kept for teams that prefer a "flat model" where DTOs and domain models are one and the same. Note
-        there are a number of edge cases this feature can handle. For more information, check the
-        corresponding <a
-                href="/playground?template=advanced-nominal-typing"
-                hx-get="/playground?template=advanced-nominal-typing" hx-target=".main-content" hx-push-url="true"
-                hx-indicator=".page-progress">playground example</a>.</p>
-    <p>Note that this feature is being considered for removal. Feedback on this feature would be very much
-        appreciated — especially if you should be fond of it.</p>
-`)
 !{ val example = vm.examples["api-nominal-typing"] }
 @if(example != null)
     <div class="workflow-container">
