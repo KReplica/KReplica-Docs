@@ -158,7 +158,7 @@ class ViewModelFactory(
         val response = permanentCache.get(cacheKey, CompileResponse::class.java)
 
         return ProcessedGuideExample(
-            inputCode = sourceCodeNormalizer.forDisplay(originalSource),
+            inputCode = originalSource,
             outputFiles = response?.generatedFiles,
             inputTabLabel = "Your Interface",
             outputTabLabel = "Generated DTOs",
