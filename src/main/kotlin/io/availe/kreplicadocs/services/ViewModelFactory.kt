@@ -12,6 +12,7 @@ import io.availe.kreplicadocs.model.CompileResponse
 import io.availe.kreplicadocs.model.NavLink
 import io.availe.kreplicadocs.model.TemplateSlug
 import io.availe.kreplicadocs.model.view.*
+import io.availe.kreplicadocs.services.playground.SourceCodeNormalizer
 import org.springframework.cache.Cache
 import org.springframework.cache.CacheManager
 import org.springframework.stereotype.Service
