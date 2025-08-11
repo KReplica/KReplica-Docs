@@ -6,6 +6,12 @@
 <pre><code>public sealed interface &lt;SchemaName&gt;Schema
 </code></pre>
 <p>This design is especially helpful when making use of versioned DTOs.</p>
+
+!{ val whenTabs = vm.tabs["patterns-exhaustive-when"] }
+@if(whenTabs != null)
+    @template.tags.tabs(tabs = whenTabs)
+@endif
+
 <p>You can write <code>when</code> statements that are:</p>
 <ul>
     <li><strong>Version-specific</strong> &ndash; handle all variants for a single version (e.g., all V2 DTOs).</li>
@@ -14,7 +20,3 @@
     </li>
     <li><strong>Schema-wide</strong> &ndash; handle every possible DTO in the schema.</li>
 </ul>
-!{ val whenTabs = vm.tabs["whenTabs"] }
-@if(whenTabs != null)
-    @template.tags.tabs(tabs = whenTabs)
-@endif

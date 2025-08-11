@@ -7,7 +7,7 @@
 <p>
     You can tell KReplica to serialize a DTO by simply typing: <code>@Replicate.Apply([Serializable::class])</code>.
 </p>
-!{ val example = vm.examples["patterns-serialization-basic"] }
+!{ val example = vm.examples["patterns-kotlinx-serialization"] }
 @if(example != null)
     <div class="workflow-container">
         @template.tags.guide-example(example = example)

@@ -22,7 +22,7 @@
     <code>@Replicate.Model</code> annotation, or control it on a per-property basis using
     <code>@Replicate.Property</code>.
 </p>
-!{ val example = vm.examples["api-auto-contextual"] }
+!{ val example = vm.examples["api-auto-contextualization"] }
 @if(example != null)
     <div class="workflow-container">
         @template.tags.guide-example(example = example)
