@@ -1,7 +1,9 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
 <p>
-    In some cases, you need to add annotations to the DTO classes that KReplica generates. For example, the <code>@Serializable</code>
+    You can directly add annotations to KReplica declarations, either at the model-level or the property-level. However,
+    since KReplica model declarations are interfaces, in some cases you cannot directly apply certain annotations to it.
+    For example, the <code>@Serializable</code>
     annotation from <code>kotlinx.serialization</code> must be applied to a class, not an interface. Additionally, you
     might want to apply an annotation like <code>@Deprecated</code> to only the <code>CREATE</code> variant of a DTO,
     but not the <code>DATA</code> variant.
