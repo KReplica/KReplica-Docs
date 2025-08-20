@@ -77,7 +77,11 @@
     <footer class="main-footer">
         <div class="footer-content">
             <div class="footer-brand">
-                <a href="/" class="nav-logo">KReplica</a>
+                <a href="/" class="nav-logo"
+                   hx-get="/"
+                   hx-target=".main-content"
+                   hx-push-url="true"
+                   hx-indicator=".page-progress">KReplica</a>
                 <p>&copy; ${java.time.Year.now().value} KReplica Project. All rights reserved.</p>
             </div>
             <div class="footer-links">
