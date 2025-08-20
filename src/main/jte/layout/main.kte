@@ -11,7 +11,12 @@
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-themes@1.9.0/themes/prism-darcula.min.css">
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="prefetch" href="/playground" as="fetch" crossOrigin="anonymous">
     <link rel="prefetch" href="https://unpkg.com/monaco-editor@0.52.2/min/vs/loader.js" as="script">
+    <link rel="prefetch" href="https://unpkg.com/monaco-editor@0.52.2/min/vs/editor/editor.main.js" as="script">
+    <link rel="prefetch" href="/js/controllers/playground-controller.js" as="script">
+    <link rel="prefetch" href="/language-model.json" as="fetch" crossOrigin="anonymous">
+
     <script>
         (function () {
             try {
