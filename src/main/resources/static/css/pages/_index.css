@@ -57,8 +57,8 @@
 
 .link-cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(18.75rem, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
     margin-block-start: 1.5rem;
 }
 
@@ -69,8 +69,10 @@
     border: 1px solid var(--border-color);
     border-radius: var(--radius-3);
     text-decoration: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
     touch-action: manipulation;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
 
     h3 {
         margin: 0 0 0.5rem;
@@ -86,13 +88,25 @@
         line-height: 1.6;
     }
 
-    &:hover {
-        text-decoration: none;
-        transform: translateY(-0.25rem);
-        box-shadow: 0 0.5rem 1rem var(--shadow-dark);
+    &:active {
+        transform: scale(0.98);
+        background-color: color-mix(in oklch, var(--surface-color), black 5%);
+        transition-duration: 0.05s;
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            text-decoration: none;
+            transform: translateY(-0.25rem);
+            box-shadow: 0 0.5rem 1rem var(--shadow-dark);
+            background-color: color-mix(in oklch, var(--surface-color), black 5%);
+        }
     }
 }
 
-.link-card:hover {
-    background-color: color-mix(in oklch, var(--surface-color), black 5%);
+@media (min-width: 48.0625rem) {
+    .link-cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(18.75rem, 1fr));
+        gap: 1.5rem;
+    }
 }

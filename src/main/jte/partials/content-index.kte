@@ -18,6 +18,9 @@
        hx-push-url="/guide" hx-indicator=".page-progress">
         See the Guide
     </a>
+    <a href="https://github.com/KReplica/KReplica" class="button-secondary" target="_blank" rel="noopener noreferrer">
+        View on GitHub
+    </a>
 </div>
 
 <ul class="feature-list">
