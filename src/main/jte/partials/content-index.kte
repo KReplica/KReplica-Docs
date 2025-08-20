@@ -45,7 +45,7 @@
 <div class="feature-highlight">
     <h2>Bulletproof Your APIs</h2>
     <p>KReplica uses sealed hierarchies to enable exhaustive <code>when</code> expressions. If you add a new API
-        version, your code won't compile until you handle it—no more runtime surprises.</p>
+        version, your code won't compile until you handle all cases.</p>
 
     @template.tags.tabs(tabs = vm.whenTabs)
 </div>
