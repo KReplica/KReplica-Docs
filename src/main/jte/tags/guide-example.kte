@@ -35,12 +35,19 @@
         @template.tags.code(language="kotlin", content=@`${example.inputCode}`)
     </div>
 
-    @if (outputFiles != null && !outputFiles.isEmpty())
-        @for ((filename, code) in outputFiles)
-            <div class="workflow-content" x-show="isActive('${filename.value}')" x-cloak>
-                @template.tags.code(language="kotlin", content=@`${code}`)
+    @if (outputFiles != null)
+        @if (!outputFiles.isEmpty())
+            @for ((filename, code) in outputFiles)
+                <div class="workflow-content" x-show="isActive('${filename.value}')" x-cloak>
+                    @template.tags.code(language="kotlin", content=@`${code}`)
+                </div>
+            @endfor
+        @else
+            <div class="workflow-content" x-show="isActive('output')" x-cloak>
+                <p>Compilation was successful, but no files were generated.</p>
+                <p>This can happen if no interfaces are annotated for replication.</p>
             </div>
-        @endfor
+        @endif
     @else
         <div class="workflow-content" x-show="isActive('output')" x-cloak>
             @template.tags.code(language="text", content=@`Compiling... please wait a moment and refresh.`, plain=true)
