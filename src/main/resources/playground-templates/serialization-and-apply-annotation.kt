@@ -60,18 +60,3 @@ private interface UserAccount {
         val endTime: List<List<Instant>>
     }
 }
-
-/*
-Note if you enable both auto-contextual and auto-nominal typing, KReplica
-will insert @Contextual inside the generated inline value class wrappers.
-
-This mean any variant that uses said value class wrappers will have the
-contextual values.
-
-In almost all cases, you can safely ignore this. Having extra contextual annotations
-won't cause crashes or unexpected behavior.
-
-Fixing it is possible by making it so that KReplica doesn't insert @Contextual at
-the value class-level, but instead at the variant's property-level. But this is not
-my biggest concern at the momement, since I consider it almost a non-issue.
-*/

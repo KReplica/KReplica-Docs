@@ -10,43 +10,33 @@
     "description": "Shows how to safely evolve an API by creating a versioned, sealed hierarchy (V1, V2). This enables compile-time safety with exhaustive `when` expressions."
   },
   {
-    "slug": "nominal-typing",
-    "name": "3. Nominal Typing Part I: Usage Guide",
-    "description": "Demonstrates how to enable nominal typing to wrap primitive types in value classes, preventing common errors like mixing up different ID types."
-  },
-  {
-    "slug": "advanced-nominal-typing",
-    "name": "4. Nominal Typing Part II: Edge Case Examples",
-    "description": "Demonstrates how to enable nominal typing to wrap primitive types in value classes, preventing common errors like mixing up different ID types."
-  },
-  {
     "slug": "direct-annotations",
-    "name": "5. Directly Applying Annotations",
+    "name": "3. Directly Applying Annotations",
     "description": "Covers other useful features: applying standard annotations like @Deprecated directly, using @Replicate.Hide to disable generation, and manually setting version numbers with @Replicate.SchemaVersion."
   },
   {
     "slug": "serialization-and-apply-annotation",
-    "name": "6. Serialization Part I: The Apply Annotation",
+    "name": "4. Serialization Part I: The Apply Annotation",
     "description": "Covers other useful features: applying standard annotations like @Deprecated directly, using @Replicate.Hide to disable generation, and manually setting version numbers with @Replicate.SchemaVersion."
   },
   {
     "slug": "advanced-serialization",
-    "name": "7. Serialization Part II: Advanced Features",
+    "name": "5. Serialization Part II: Advanced Features",
     "description": "Shows integration with `kotlinx.serialization`. While many annotations can be applied directly, @Replicate.Apply serves as a workaround for those that can't (like @Serializable) or for applying annotations to specific variants."
   },
   {
     "slug": "contextual-nesting-unversioned",
-    "name": "8. Contextual Nesting (Unversioned)",
+    "name": "6. Contextual Nesting (Unversioned)",
     "description": "Illustrates how KReplica intelligently handles nested replicated models, ensuring a parent's `CreateRequest` automatically uses the child's `CreateRequest`."
   },
   {
     "slug": "contextual-nesting-versioned",
-    "name": "9. Contextual Nesting (Versioned)",
+    "name": "7. Contextual Nesting (Versioned)",
     "description": "Illustrates how KReplica intelligently handles nested replicated models, ensuring a parent's `CreateRequest` automatically uses the child's `CreateRequest`."
   },
   {
     "slug": "hide-annotation",
-    "name": "10. The Hide Annotation",
+    "name": "8. The Hide Annotation",
     "description": "Illustrates how KReplica intelligently handles nested replicated models, ensuring a parent's `CreateRequest` automatically uses the child's `CreateRequest`."
   }
 ]
