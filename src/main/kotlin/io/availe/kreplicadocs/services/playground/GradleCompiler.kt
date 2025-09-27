@@ -30,7 +30,7 @@ class GradleCompiler {
             try {
                 GradleConnector.newConnector()
                     .forProjectDirectory(projectDir)
-                    .useDistribution(URI("https://services.gradle.org/distributions/gradle-9.0.0-bin.zip"))
+                    .useDistribution(URI("https://services.gradle.org/distributions/gradle-9.1.0-bin.zip"))
                     .connect().use { connection ->
                         connection.newBuild()
                             .forTasks("build")
