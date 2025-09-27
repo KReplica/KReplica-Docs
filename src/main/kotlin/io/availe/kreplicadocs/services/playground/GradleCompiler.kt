@@ -41,7 +41,7 @@ class GradleCompiler {
                             .run()
                     }
 
-                val outputDir = File(projectDir, "build/generated-src/kotlin-poet")
+                val outputDir = File(projectDir, "build/generated/ksp")
                 val generatedFiles = if (outputDir.exists()) {
                     outputDir.walk()
                         .filter { it.isFile && it.extension == "kt" }
@@ -89,6 +89,6 @@ class GradleCompiler {
 
     private fun readResource(path: String): String {
         return javaClass.getResource(path)?.readText()
-            ?: throw IllegalStateException("Cannot find resource: $path")
+            ?: throw kotlin.IllegalStateException("Cannot find resource: $path")
     }
 }
