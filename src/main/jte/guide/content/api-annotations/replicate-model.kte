@@ -12,10 +12,6 @@
         </div>
     </li>
     <li>
-        <strong><code>nominalTyping: NominalTyping</code></strong> (Default: <code>NominalTyping.DISABLED</code>)
-        <div>When <code>ENABLED</code>, wraps primitive properties in type-safe value classes.</div>
-    </li>
-    <li>
         <strong><code>autoContextual: AutoContextual</code></strong> (Default: <code>AutoContextual.ENABLED</code>)
         <div>When <code>ENABLED</code>, automatically adds <code>@Contextual</code> to non-primitive properties if the
             <code>kotlinx.serialization</code> plugin is detected.

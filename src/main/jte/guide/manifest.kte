@@ -34,7 +34,6 @@
     parameters, it explores the underlying concepts and rationale.</p>`
 ) }
 !{ builder.addSubSection(id = "api-dto-versioning", title = "DTO Versioning", contentTemplate = GuideContentTemplate.API_CONCEPTS_DTO_VERSIONING, exampleSnippet = CodeSnippet.GUIDE_REF_VERSIONING) }
-!{ builder.addSubSection(id = "api-nominal-typing", title = "Nominal Typing", contentTemplate = GuideContentTemplate.API_CONCEPTS_NOMINAL_TYPING, exampleSnippet = CodeSnippet.GUIDE_REF_NOMINAL_TYPING) }
 !{ builder.addSubSection(id = "api-applying-annotations", title = "Applying Annotations", contentTemplate = GuideContentTemplate.API_CONCEPTS_APPLYING_ANNOTATIONS) }
 !{ builder.addSubSection(id = "api-auto-contextualization", title = "Auto-Contextualization", contentTemplate = GuideContentTemplate.API_CONCEPTS_AUTO_CONTEXTUALIZATION, exampleSnippet = CodeSnippet.API_AUTO_CONTEXTUAL) }
 !{ builder.endSection() }

@@ -16,10 +16,6 @@
         <div>Excludes the property from the specified variants.</div>
     </li>
     <li>
-        <strong><code>nominalTyping: NominalTyping</code></strong> (Default: <code>NominalTyping.INHERIT</code>)
-        <div>Overrides the model-level <code>nominalTyping</code> setting for this specific property.</div>
-    </li>
-    <li>
         <strong><code>autoContextual: AutoContextual</code></strong> (Default: <code>AutoContextual.INHERIT</code>)
         <div>Overrides the model-level <code>autoContextual</code> setting for this specific property.</div>
     </li>

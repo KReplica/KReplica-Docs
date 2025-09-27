@@ -25,13 +25,6 @@
           "valueContext": "DtoVariant",
           "sortText": "1"
         },
-        "nominalTyping": {
-          "insertText": "nominalTyping = $0",
-          "detail": "NominalTyping",
-          "documentation": "Enables/disables value class wrapping for primitive types. Default: DISABLED.",
-          "valueContext": "NominalTyping",
-          "sortText": "2"
-        },
         "autoContextual": {
           "insertText": "autoContextual = $0",
           "detail": "AutoContextual",
@@ -58,13 +51,6 @@
           "documentation": "Excludes this property from the specified variants.",
           "valueContext": "DtoVariant",
           "sortText": "2"
-        },
-        "nominalTyping": {
-          "insertText": "nominalTyping = $0",
-          "detail": "NominalTyping",
-          "documentation": "Overrides the model-level nominal typing setting for this property. Default: INHERIT.",
-          "valueContext": "NominalTyping",
-          "sortText": "3"
         },
         "autoContextual": {
           "insertText": "autoContextual = $0",

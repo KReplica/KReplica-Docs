@@ -30,7 +30,6 @@ enum class GuideContentTemplate(val path: String) {
     API_CONCEPTS_APPLYING_ANNOTATIONS("guide/content/api-concepts/applying-annotations"),
     API_CONCEPTS_AUTO_CONTEXTUALIZATION("guide/content/api-concepts/auto-contextualization"),
     API_CONCEPTS_DTO_VERSIONING("guide/content/api-concepts/dto-versioning"),
-    API_CONCEPTS_NOMINAL_TYPING("guide/content/api-concepts/nominal-typing"),
     FAQ_BROADER_REPLICATION("guide/content/faq/broader-replication"),
     FAQ_COMPILATION_ORDER("guide/content/faq/compilation-order"),
     FAQ_PRIVATE_KEYWORD("guide/content/faq/private-keyword"),

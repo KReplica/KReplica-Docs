@@ -23,7 +23,6 @@ enum class CodeSnippet(val path: String) {
     GUIDE_REF_VERSIONING("guide-reference/versioning.kt"),
     GUIDE_REF_NESTING_UNVERSIONED("guide-reference/nesting-unversioned.kt"),
     GUIDE_REF_NESTING_VERSIONED("guide-reference/nesting-versioned.kt"),
-    GUIDE_REF_NOMINAL_TYPING("guide-reference/nominal-typing.kt"),
     GUIDE_REF_SERIALIZATION_BASIC("guide-reference/serialization-basic.kt"),
 
 
