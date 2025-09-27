@@ -34,7 +34,6 @@ class GradleCompiler {
                     .connect().use { connection ->
                         connection.newBuild()
                             .forTasks("build")
-                            .setJvmArguments("-Dorg.gradle.daemon.idletimeout=2147483647")
                             .setStandardOutput(stdoutStream)
                             .setStandardError(stderrStream)
                             .withCancellationToken(cancellationTokenSource.token())
