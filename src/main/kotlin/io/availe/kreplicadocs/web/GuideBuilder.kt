@@ -1,4 +1,4 @@
-package io.availe.kreplicadocs.services
+package io.availe.kreplicadocs.web
 
 import gg.jte.Content
 import io.availe.kreplicadocs.common.CodeSnippet
