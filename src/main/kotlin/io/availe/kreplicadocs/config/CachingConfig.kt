@@ -6,10 +6,8 @@ import org.springframework.cache.caffeine.CaffeineCache
 import org.springframework.cache.support.SimpleCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import java.util.concurrent.TimeUnit
 
 object CacheNames {
-    const val COMPLETED_JOBS = "completed-jobs-cache"
     const val PERMANENT_TEMPLATES = "playground-templates-cache"
 }
 
@@ -17,14 +15,6 @@ object CacheNames {
 class CachingConfig {
     @Bean
     fun cacheManager(): CacheManager {
-        val completedJobsCache = CaffeineCache(
-            CacheNames.COMPLETED_JOBS,
-            Caffeine.newBuilder()
-                .maximumSize(100)
-                .expireAfterWrite(15, TimeUnit.MINUTES)
-                .build()
-        )
-
         val permanentTemplatesCache = CaffeineCache(
             CacheNames.PERMANENT_TEMPLATES,
             Caffeine.newBuilder()
@@ -33,7 +23,7 @@ class CachingConfig {
         )
 
         val cacheManager = SimpleCacheManager()
-        cacheManager.setCaches(listOf(completedJobsCache, permanentTemplatesCache))
+        cacheManager.setCaches(listOf(permanentTemplatesCache))
         return cacheManager
     }
 }

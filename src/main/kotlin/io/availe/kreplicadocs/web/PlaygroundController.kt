@@ -9,9 +9,9 @@ import io.availe.kreplicadocs.common.WebApp
 import io.availe.kreplicadocs.config.CacheNames
 import io.availe.kreplicadocs.model.*
 import io.availe.kreplicadocs.services.CodeSnippetProvider
-import io.availe.kreplicadocs.services.playground.SourceCodeNormalizer
 import io.availe.kreplicadocs.services.ViewModelFactory
 import io.availe.kreplicadocs.services.playground.PlaygroundService
+import io.availe.kreplicadocs.services.playground.SourceCodeNormalizer
 import jakarta.annotation.PostConstruct
 import org.gradle.tooling.CancellationTokenSource
 import org.gradle.tooling.GradleConnector
@@ -53,14 +53,11 @@ class PlaygroundController(
     private val log = LoggerFactory.getLogger(PlaygroundController::class.java)
     private val activeJobs = ConcurrentHashMap<JobId, JobContext>()
     private val activeTabJobs = ConcurrentHashMap<TabSessionId, ActiveJobState>()
-    private lateinit var completedJobsCache: Cache
     private lateinit var permanentCache: Cache
     private val sseTimeout = TimeUnit.MINUTES.toMillis(5)
 
     @PostConstruct
     fun init() {
-        completedJobsCache = cacheManager.getCache(CacheNames.COMPLETED_JOBS)
-            ?: throw IllegalStateException("Cache '${CacheNames.COMPLETED_JOBS}' not found.")
         permanentCache = cacheManager.getCache(CacheNames.PERMANENT_TEMPLATES)
             ?: throw IllegalStateException("Cache '${CacheNames.PERMANENT_TEMPLATES}' not found.")
     }
@@ -117,12 +114,6 @@ class PlaygroundController(
                 return FragmentTemplate.PLAYGROUND_COMPILING.path
             }
 
-            completedJobsCache.get(cacheKey, CompileResponse::class.java)?.let {
-                log.debug("Completed jobs cache HIT. Returning results directly.")
-                model.addAttribute("files", it.generatedFiles)
-                return FragmentTemplate.PLAYGROUND_RESULTS.path
-            }
-
             existingJobState?.let {
                 log.debug("Tab {} has existing job {}. Cancelling it.", tabSessionId.value, it.jobId.value)
                 activeJobs[it.jobId]?.cancellationTokenSource?.cancel()
@@ -151,12 +142,6 @@ class PlaygroundController(
         val typedJobId = JobId(jobId)
         log.debug("SSE client trying to connect for jobId: {}", typedJobId.value)
         val emitter = SseEmitter(sseTimeout)
-
-        completedJobsCache.get(typedJobId, CompileResponse::class.java)?.let { completedResponse ->
-            log.debug("Job {} found in COMPLETED cache. Sending result.", typedJobId.value)
-            sendSseResult(emitter, completedResponse)
-            return emitter
-        }
 
         val jobContext = activeJobs[typedJobId]
         if (jobContext != null) {
@@ -211,7 +196,6 @@ class PlaygroundController(
     private fun handleJobResult(response: CompileResponse?) {
         if (response != null && response.success) {
             val cacheKey = sourceCodeNormalizer.getCacheKey(response.sourceCode)
-            completedJobsCache.put(response.jobId, response)
             permanentCache.put(cacheKey, response)
         }
     }
