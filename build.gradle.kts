@@ -7,7 +7,7 @@ repositories {
 }
 
 plugins {
-    val kotlinVersion = "2.2.0"
+    val kotlinVersion = "2.3.0-RC"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     id("org.springframework.boot") version "3.5.3"
@@ -17,16 +17,6 @@ plugins {
 
 group = "io.availe"
 version = "0.0.1-SNAPSHOT"
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(24)
-    }
-}
-
-kotlin {
-    jvmToolchain(24)
-}
 
 repositories {
     mavenCentral()
