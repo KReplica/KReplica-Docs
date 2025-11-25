@@ -1,10 +1,10 @@
 package io.availe.kreplicadocs.services
 
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.PostConstruct
 import org.springframework.core.io.support.ResourcePatternResolver
 import org.springframework.stereotype.Service
+import tools.jackson.core.type.TypeReference
+import tools.jackson.databind.ObjectMapper
 
 data class TabDefinition(
     val id: String,

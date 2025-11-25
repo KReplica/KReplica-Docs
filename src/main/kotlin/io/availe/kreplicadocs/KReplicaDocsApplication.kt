@@ -2,7 +2,7 @@ package io.availe.kreplicadocs
 
 import io.availe.kreplicadocs.config.AppProperties
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration
+import org.springframework.boot.cache.autoconfigure.CacheAutoConfiguration
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.cache.annotation.EnableCaching

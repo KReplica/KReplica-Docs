@@ -1,13 +1,11 @@
 package io.availe.kreplicadocs.services.playground
 
-import com.fasterxml.jackson.databind.JsonNode
 import io.availe.kreplicadocs.common.CodeSnippet
 import io.availe.kreplicadocs.config.CacheNames
 import io.availe.kreplicadocs.model.CompileRequest
 import io.availe.kreplicadocs.model.JobId
 import io.availe.kreplicadocs.model.TemplateSlug
 import io.availe.kreplicadocs.services.CodeSnippetProvider
-import io.availe.kreplicadocs.services.playground.SourceCodeNormalizer
 import org.gradle.tooling.GradleConnector
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
@@ -16,6 +14,7 @@ import org.springframework.cache.CacheManager
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import tools.jackson.databind.JsonNode
 import java.util.*
 import java.util.concurrent.TimeUnit
 
