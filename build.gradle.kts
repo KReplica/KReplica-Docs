@@ -32,7 +32,7 @@ dependencies {
     compileOnly("gg.jte:jte-kotlin:3.2.1")
     implementation("io.github.wimdeblauwe:htmx-spring-boot:5.0.0-rc.1")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
-    implementation("org.gradle:gradle-tooling-api:8.14.3")
+    implementation("org.gradle:gradle-tooling-api:9.1.0-rc-3")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.3")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
