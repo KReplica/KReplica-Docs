@@ -100,6 +100,7 @@ class GradleCompiler {
             """
             org.gradle.caching=true
             org.gradle.configuration-cache=true
+            org.gradle.parallel=true
             """.trimIndent()
         )
 
