@@ -7,12 +7,12 @@ repositories {
 }
 
 plugins {
-    val kotlinVersion = "2.2.21"
+    val kotlinVersion = "2.4.10"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
-    id("org.springframework.boot") version "4.0.0"
+    id("org.springframework.boot") version "4.1.1"
     id("io.spring.dependency-management") version "1.1.7"
-    id("gg.jte.gradle") version "3.2.1"
+    id("gg.jte.gradle") version "3.2.4"
 }
 
 group = "io.availe"
