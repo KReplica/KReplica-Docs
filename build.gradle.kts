@@ -6,18 +6,18 @@ repositories {
     }
 }
 
-abstract class CssBundleTask : org.gradle.api.DefaultTask() {
-    @get:org.gradle.api.tasks.InputDirectory
-    @get:org.gradle.api.tasks.PathSensitive(org.gradle.api.tasks.PathSensitivity.RELATIVE)
-    abstract val sourceDirectory: org.gradle.api.file.DirectoryProperty
+abstract class CssBundleTask : DefaultTask() {
+    @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val sourceDirectory: DirectoryProperty
 
-    @get:org.gradle.api.tasks.Input
-    abstract val sourceSpecs: org.gradle.api.provider.ListProperty<String>
+    @get:Input
+    abstract val sourceSpecs: ListProperty<String>
 
-    @get:org.gradle.api.tasks.OutputFile
-    abstract val outputFile: org.gradle.api.file.RegularFileProperty
+    @get:OutputFile
+    abstract val outputFile: RegularFileProperty
 
-    @org.gradle.api.tasks.TaskAction
+    @TaskAction
     fun bundle() {
         val sourceDirectory = sourceDirectory.get()
         val entrypointLines = sourceDirectory.file("styles.css").asFile.readLines()
@@ -77,7 +77,7 @@ dependencies {
     compileOnly("gg.jte:jte-kotlin:3.2.4")
     implementation("io.github.wimdeblauwe:htmx-spring-boot:5.0.0-rc.1")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
-    implementation("org.gradle:gradle-tooling-api:9.1.0-rc-3")
+    implementation("org.gradle:gradle-tooling-api:9.7.1")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.3")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

@@ -45,7 +45,7 @@ class GradleCompiler {
         try {
             GradleConnector.newConnector()
                 .forProjectDirectory(sandboxDir)
-                .useDistribution(URI("https://services.gradle.org/distributions/gradle-9.1.0-bin.zip"))
+                .useDistribution(URI("https://services.gradle.org/distributions/gradle-9.7.1-bin.zip"))
                 .connect().use { connection ->
                     connection.newBuild()
                         .forTasks("kspKotlin")
