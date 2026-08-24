@@ -6,18 +6,18 @@ repositories {
     }
 }
 
-abstract class CssBundleTask : org.gradle.api.DefaultTask() {
-    @get:org.gradle.api.tasks.InputDirectory
-    @get:org.gradle.api.tasks.PathSensitive(org.gradle.api.tasks.PathSensitivity.RELATIVE)
-    abstract val sourceDirectory: org.gradle.api.file.DirectoryProperty
+abstract class CssBundleTask : DefaultTask() {
+    @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val sourceDirectory: DirectoryProperty
 
-    @get:org.gradle.api.tasks.Input
-    abstract val sourceSpecs: org.gradle.api.provider.ListProperty<String>
+    @get:Input
+    abstract val sourceSpecs: ListProperty<String>
 
-    @get:org.gradle.api.tasks.OutputFile
-    abstract val outputFile: org.gradle.api.file.RegularFileProperty
+    @get:OutputFile
+    abstract val outputFile: RegularFileProperty
 
-    @org.gradle.api.tasks.TaskAction
+    @TaskAction
     fun bundle() {
         val sourceDirectory = sourceDirectory.get()
         val entrypointLines = sourceDirectory.file("styles.css").asFile.readLines()
@@ -86,11 +86,11 @@ dependencies {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(24)
+        languageVersion = JavaLanguageVersion.of(26)
     }
 }
 kotlin {
-    jvmToolchain(24)
+    jvmToolchain(26)
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict")
     }
