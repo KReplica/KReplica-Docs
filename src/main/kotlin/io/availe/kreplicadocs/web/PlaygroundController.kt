@@ -70,13 +70,25 @@ class PlaygroundController(
     ): Any {
         model.addAttribute("vm", viewModelFactory.createPlaygroundViewModel(templateSlug))
         return if (hxRequest != null) {
-            FragmentsRendering.with(PartialTemplate.CONTENT_PLAYGROUND.path)
+            FragmentsRendering.fragment(PartialTemplate.CONTENT_PLAYGROUND.path)
                 .fragment(FragmentTemplate.NAV_UPDATE_OOB.path)
                 .fragment(FragmentTemplate.FAB_UPDATE_OOB.path)
                 .build()
         } else {
             PageTemplate.PLAYGROUND.path
         }
+    }
+
+    @GetMapping(WebApp.Endpoints.Fragments.PLAYGROUND)
+    fun playgroundFragment(
+        model: Model,
+        @RequestParam(name = "template", required = false) templateSlug: String?,
+    ): FragmentsRendering {
+        model.addAttribute("vm", viewModelFactory.createPlaygroundViewModel(templateSlug))
+        return FragmentsRendering.fragment(PartialTemplate.CONTENT_PLAYGROUND.path)
+            .fragment(FragmentTemplate.NAV_UPDATE_OOB.path)
+            .fragment(FragmentTemplate.FAB_UPDATE_OOB.path)
+            .build()
     }
 
     @GetMapping(WebApp.Endpoints.Playground.TEMPLATE_SWAP)

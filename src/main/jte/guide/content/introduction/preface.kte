@@ -1,7 +1,7 @@
 @param vm: io.availe.kreplicadocs.model.view.GuideViewModel
 
-<p>If you're new to KReplica, I implore you to check the <a href="/playground" hx-get="/playground"
-                                                            hx-target=".main-content" hx-push-url="true"
+<p>If you're new to KReplica, I implore you to check the <a href="/playground" hx-get="/fragments/playground"
+                                                             hx-target=".main-content" hx-push-url="/playground"
                                                             hx-indicator=".page-progress">Playground</a> as well. Since
     this is a code generation tool, I believe it’s very useful to see a side-by-side view of the input and codegen
     output.</p>

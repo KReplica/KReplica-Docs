@@ -17,6 +17,11 @@ import org.springframework.cache.Cache
 import org.springframework.cache.CacheManager
 import org.springframework.stereotype.Service
 
+private data class GuideDefinition(
+    val sections: List<SectionRequest>,
+    val navigation: List<GuideNavSection>,
+)
+
 @Service
 class ViewModelFactory(
     private val snippetProvider: CodeSnippetProvider,
@@ -31,6 +36,28 @@ class ViewModelFactory(
     private val permanentCache: Cache by lazy {
         cacheManager.getCache(CacheNames.PERMANENT_TEMPLATES)
             ?: throw IllegalStateException("Cache '${CacheNames.PERMANENT_TEMPLATES}' not found.")
+    }
+
+    private val guideDefinition: GuideDefinition by lazy {
+        val builder = GuideBuilder()
+        val tempVm = object : PageViewModel {
+            override val navLinks: List<NavLink> = emptyList()
+            override val properties = appProperties
+            override val currentPage = PageId.GUIDE
+        }
+        templateEngine.render("guide/manifest.kte", mapOf("vm" to tempVm, "builder" to builder), StringOutput())
+
+        val sections = builder.getSectionRequests().toList()
+        val navigation = sections.map { section ->
+            GuideNavSection(
+                id = section.id,
+                title = section.title,
+                subsections = section.subsections.map { subsection ->
+                    GuideNavSubSection(id = subsection.id, title = subsection.title)
+                },
+            )
+        }
+        GuideDefinition(sections, navigation)
     }
 
     private fun getTabsForKey(key: String): List<Tab> {
@@ -88,15 +115,7 @@ class ViewModelFactory(
     }
 
     fun createGuideViewModel(): GuideViewModel {
-        val builder = GuideBuilder()
-        val tempVm = object : PageViewModel {
-            override val navLinks: List<NavLink> = emptyList()
-            override val properties = appProperties
-            override val currentPage = PageId.GUIDE
-        }
-        templateEngine.render("guide/manifest.kte", mapOf("vm" to tempVm, "builder" to builder), StringOutput())
-
-        val sectionRequests = builder.getSectionRequests()
+        val sectionRequests = guideDefinition.sections
         val allSubSectionRequests = sectionRequests.flatMap { it.subsections }
 
         val finalExamples = mutableMapOf<String, ProcessedGuideExample>()
@@ -139,17 +158,7 @@ class ViewModelFactory(
             )
         }
 
-        val guideNav = guideContent.map { section ->
-            GuideNavSection(
-                id = section.id,
-                title = section.title,
-                subsections = section.subsections.map { subsection ->
-                    GuideNavSubSection(id = subsection.id, title = subsection.title)
-                },
-            )
-        }
-
-        return finalVm.copy(guideContent = guideContent, guideNav = guideNav)
+        return finalVm.copy(guideContent = guideContent, guideNav = guideDefinition.navigation)
     }
 
     private fun processGuideExample(snippet: CodeSnippet): ProcessedGuideExample {

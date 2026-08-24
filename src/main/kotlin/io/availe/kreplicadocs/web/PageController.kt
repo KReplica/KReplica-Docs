@@ -20,21 +20,37 @@ class PageController(private val viewModelFactory: ViewModelFactory) {
         return render(hxRequest, PageTemplate.INDEX, PartialTemplate.CONTENT_INDEX)
     }
 
+    @GetMapping(WebApp.Endpoints.Fragments.INDEX)
+    fun indexFragment(model: Model): Any {
+        model.addAttribute("vm", viewModelFactory.createIndexViewModel())
+        return renderFragment(PartialTemplate.CONTENT_INDEX)
+    }
+
     @GetMapping(WebApp.Endpoints.Pages.GUIDE)
     fun guide(model: Model, @RequestHeader(name = "HX-Request", required = false) hxRequest: String?): Any {
         model.addAttribute("vm", viewModelFactory.createGuideViewModel())
         return render(hxRequest, PageTemplate.GUIDE, PartialTemplate.CONTENT_GUIDE)
     }
 
+    @GetMapping(WebApp.Endpoints.Fragments.GUIDE)
+    fun guideFragment(model: Model): Any {
+        model.addAttribute("vm", viewModelFactory.createGuideViewModel())
+        return renderFragment(PartialTemplate.CONTENT_GUIDE)
+    }
+
     private fun render(hxRequest: String?, page: PageTemplate, partial: PartialTemplate): Any {
         return if (hxRequest != null) {
-            FragmentsRendering
-                .with(partial.path)
-                .fragment(FragmentTemplate.NAV_UPDATE_OOB.path)
-                .fragment(FragmentTemplate.FAB_UPDATE_OOB.path)
-                .build()
+            renderFragment(partial)
         } else {
             page.path
         }
+    }
+
+    private fun renderFragment(partial: PartialTemplate): FragmentsRendering {
+        return FragmentsRendering
+            .fragment(partial.path)
+            .fragment(FragmentTemplate.NAV_UPDATE_OOB.path)
+            .fragment(FragmentTemplate.FAB_UPDATE_OOB.path)
+            .build()
     }
 }

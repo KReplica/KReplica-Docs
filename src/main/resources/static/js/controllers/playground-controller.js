@@ -4,11 +4,14 @@ import {getCompletionProvider} from '../components/completion-provider.js';
 let kreplicaEditor = null;
 let cleanupFns = [];
 let resizeObserver = null;
-let outputObserver = null;
 let isInitializing = false;
 let languageModel = null;
+let monacoLoaderPromise = null;
+let visibilityFrameId = null;
 
 const MOBILE_BREAKPOINT_PX = 992;
+const MONACO_BASE_URL = 'https://unpkg.com/monaco-editor@0.52.2/min/vs';
+const MONACO_LOADER_URL = `${MONACO_BASE_URL}/loader.js`;
 
 const ACTIONS = {
     RUN: 'run',
@@ -28,13 +31,18 @@ function isElementVisibleAndSized(el) {
 
 function waitForVisibleSize(el, ready) {
     const check = () => {
+        if (!isInitializing || !el.isConnected) {
+            visibilityFrameId = null;
+            return;
+        }
         if (isElementVisibleAndSized(el)) {
+            visibilityFrameId = null;
             ready();
         } else {
-            requestAnimationFrame(check);
+            visibilityFrameId = requestAnimationFrame(check);
         }
     };
-    requestAnimationFrame(check);
+    visibilityFrameId = requestAnimationFrame(check);
 }
 
 function resizeEditorToContent() {
@@ -53,28 +61,37 @@ function resizeEditorToContent() {
     kreplicaEditor.layout({width, height});
 }
 
-function initOutputObserver() {
-    if (outputObserver) outputObserver.disconnect();
-    const outputNode = document.getElementById('playground-output');
-    if (!outputNode) return;
-    const observerCallback = mutationsList => {
-        for (const mutation of mutationsList) {
-            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                outputObserver.disconnect();
-                Prism.highlightAllUnder(outputNode);
-                outputObserver.observe(outputNode, {childList: true, subtree: true});
-                break;
-            }
+function loadMonacoLoader() {
+    if (typeof window.require?.config === 'function') return Promise.resolve();
+    if (monacoLoaderPromise) return monacoLoaderPromise;
+
+    const existingLoader = document.querySelector(`script[src="${MONACO_LOADER_URL}"]`);
+    const loaderPromise = new Promise((resolve, reject) => {
+        if (existingLoader) {
+            const timeoutId = setTimeout(() => reject(new Error('Timed out while loading Monaco editor')), 10000);
+            existingLoader.addEventListener('load', () => {
+                clearTimeout(timeoutId);
+                resolve();
+            }, {once: true});
+            existingLoader.addEventListener('error', () => {
+                clearTimeout(timeoutId);
+                reject(new Error('Failed to load Monaco editor'));
+            }, {once: true});
+            return;
         }
-    };
-    outputObserver = new MutationObserver(observerCallback);
-    outputObserver.observe(outputNode, {childList: true, subtree: true});
-    cleanupFns.push(() => {
-        if (outputObserver) {
-            outputObserver.disconnect();
-            outputObserver = null;
-        }
+
+        const script = document.createElement('script');
+        script.src = MONACO_LOADER_URL;
+        script.async = true;
+        script.onload = resolve;
+        script.onerror = () => reject(new Error('Failed to load Monaco editor.'));
+        document.head.append(script);
     });
+    monacoLoaderPromise = loaderPromise.catch(error => {
+        monacoLoaderPromise = null;
+        throw error;
+    });
+    return monacoLoaderPromise;
 }
 
 function initKReplicaPlayground() {
@@ -84,9 +101,19 @@ function initKReplicaPlayground() {
     if (!editorNode || !inputColumn) return;
     isInitializing = true;
 
-    const start = () => {
-        require.config({paths: {vs: 'https://unpkg.com/monaco-editor@0.52.2/min/vs'}});
-        require(['vs/editor/editor.main'], async () => {
+    const start = async () => {
+        try {
+            await loadMonacoLoader();
+        } catch (error) {
+            console.error(error);
+            isInitializing = false;
+            return;
+        }
+        if (!isInitializing || !editorNode.isConnected) return;
+
+        window.require.config({paths: {vs: MONACO_BASE_URL}});
+        window.require(['vs/editor/editor.main'], async () => {
+            if (!isInitializing || !editorNode.isConnected) return;
             try {
                 const res = await fetch('/language-model.json');
                 if (!res.ok) throw new Error(`Failed to load: ${res.statusText}`);
@@ -95,6 +122,7 @@ function initKReplicaPlayground() {
                 console.error('Failed to load KReplica language model:', e);
                 languageModel = null;
             }
+            if (!isInitializing || !editorNode.isConnected) return;
 
             const hiddenTextareaEl = getHiddenTextarea();
             const initialCode = hiddenTextareaEl?.value || '';
@@ -112,7 +140,11 @@ function initKReplicaPlayground() {
                 lineHeight: 20
             });
 
-            monaco.languages.registerCompletionItemProvider('kotlin', getCompletionProvider(languageModel));
+            const completionProvider = monaco.languages.registerCompletionItemProvider(
+                'kotlin',
+                getCompletionProvider(languageModel),
+            );
+            cleanupFns.push(() => completionProvider.dispose());
 
             kreplicaEditor.onDidChangeModelContent(() => {
                 const currentTextarea = getHiddenTextarea();
@@ -142,9 +174,15 @@ function initKReplicaPlayground() {
     };
 
     if (isElementVisibleAndSized(inputColumn)) {
-        start();
+        void start();
     } else {
-        waitForVisibleSize(inputColumn, start);
+        waitForVisibleSize(inputColumn, () => void start());
+        cleanupFns.push(() => {
+            if (visibilityFrameId !== null) {
+                cancelAnimationFrame(visibilityFrameId);
+                visibilityFrameId = null;
+            }
+        });
     }
 }
 
@@ -254,7 +292,6 @@ export default {
     init() {
         initKReplicaPlayground();
         setupEventListeners();
-        initOutputObserver();
         window.KREPLICA_PLAYGROUND = publicApi;
     },
     destroy() {

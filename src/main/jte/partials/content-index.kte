@@ -10,11 +10,11 @@
 @template.tags.tabs(tabs = vm.heroDemoTabs)
 
 <div class="hero-cta">
-    <a href="/playground" class="button-primary" hx-get="/playground" hx-target=".main-content"
-       hx-push-url="true" hx-indicator=".page-progress">
+    <a href="/playground" class="button-primary" hx-get="/fragments/playground" hx-target=".main-content"
+       hx-push-url="/playground" hx-indicator=".page-progress">
         Try in Playground
     </a>
-    <a href="/guide" class="button-secondary" hx-get="/guide" hx-target=".main-content"
+    <a href="/guide" class="button-secondary" hx-get="/fragments/guide" hx-target=".main-content"
        hx-push-url="/guide" hx-indicator=".page-progress">
         See the Guide
     </a>
@@ -61,12 +61,12 @@
 <div>
     <h2>Important Links:</h2>
     <div class="link-cards-grid">
-        <a href="/playground" class="link-card" hx-get="/playground" hx-target=".main-content"
-           hx-push-url="true">
+        <a href="/playground" class="link-card" hx-get="/fragments/playground" hx-target=".main-content"
+           hx-push-url="/playground">
             <h3>Playground</h3>
             <p>Run and explore live KReplica code samples.</p>
         </a>
-        <a href="/guide" class="link-card" hx-get="/guide" hx-target=".main-content" hx-push-url="true">
+        <a href="/guide" class="link-card" hx-get="/fragments/guide" hx-target=".main-content" hx-push-url="/guide">
             <h3>Guide</h3>
             <p>API reference and recommended usage patterns.</p>
         </a>

@@ -3,9 +3,8 @@
 @param extraClass: String? = null
 @param plain: Boolean = false
 
-<div class="code-block-wrapper ${extraClass ?: ""}" x-data="{ highlighted: false }"
-     x-init="$nextTick(() => { Prism.highlightAllUnder($el); highlighted = true; })"
-     :class="{ 'is-highlighted': highlighted }">
+<div class="code-block-wrapper ${extraClass ?: ""}"
+     x-init="$nextTick(() => Prism.highlightAllUnder($el))">
     <button type="button" class="copy-code-button"
             x-data="copyButton()"
             :disabled="copied"

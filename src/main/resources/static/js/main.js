@@ -46,6 +46,7 @@ document.addEventListener('alpine:init', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+    Prism.highlightAllUnder(document);
     const mainContent = document.querySelector('.main-content > [data-controller]');
     if (mainContent) {
         const controllerName = mainContent.dataset.controller;
@@ -67,7 +68,9 @@ document.body.addEventListener('htmx:beforeSwap', (event) => {
 });
 
 document.body.addEventListener('htmx:afterSwap', e => {
-    const mainContent = e.detail.target.querySelector('[data-controller]') || e.detail.target;
+    const swapTarget = e.detail.target;
+    if (!swapTarget) return;
+    const mainContent = swapTarget.querySelector('[data-controller]') || swapTarget;
     if (mainContent && mainContent.dataset.controller) {
         void loadController(mainContent.dataset.controller, mainContent);
     }
@@ -75,4 +78,13 @@ document.body.addEventListener('htmx:afterSwap', e => {
     if (e.detail.elt.id === 'playground-output') {
         window.dispatchEvent(new CustomEvent('output-ready'));
     }
+});
+
+document.body.addEventListener('htmx:historyRestore', () => {
+    destroyActiveController();
+    const mainContent = document.querySelector('.main-content > [data-controller]');
+    if (mainContent) {
+        void loadController(mainContent.dataset.controller, mainContent);
+    }
+    Prism.highlightAllUnder(document.querySelector('.main-content'));
 });

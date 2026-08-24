@@ -6,8 +6,53 @@ repositories {
     }
 }
 
+abstract class CssBundleTask : org.gradle.api.DefaultTask() {
+    @get:org.gradle.api.tasks.InputDirectory
+    @get:org.gradle.api.tasks.PathSensitive(org.gradle.api.tasks.PathSensitivity.RELATIVE)
+    abstract val sourceDirectory: org.gradle.api.file.DirectoryProperty
+
+    @get:org.gradle.api.tasks.Input
+    abstract val sourceSpecs: org.gradle.api.provider.ListProperty<String>
+
+    @get:org.gradle.api.tasks.OutputFile
+    abstract val outputFile: org.gradle.api.file.RegularFileProperty
+
+    @org.gradle.api.tasks.TaskAction
+    fun bundle() {
+        val sourceDirectory = sourceDirectory.get()
+        val entrypointLines = sourceDirectory.file("styles.css").asFile.readLines()
+        val entrypointBody = entrypointLines
+            .filterNot { line ->
+                val trimmed = line.trimStart()
+                trimmed.startsWith("@import ") || trimmed.startsWith("@layer reset, base,")
+            }
+            .joinToString("\n")
+
+        val bundle = buildString {
+            appendLine("@layer reset, base, layout, components, pages, utilities;")
+            sourceSpecs.get().forEach { sourceSpec ->
+                val path = sourceSpec.substringBeforeLast('|')
+                val layer = sourceSpec.substringAfterLast('|')
+                appendLine()
+                appendLine("@layer $layer {")
+                append(sourceDirectory.file(path).asFile.readText().trimEnd().prependIndent("    "))
+                appendLine()
+                appendLine("}")
+            }
+            appendLine()
+            append(entrypointBody.trimStart())
+            appendLine()
+        }
+
+        outputFile.get().asFile.apply {
+            parentFile.mkdirs()
+            writeText(bundle)
+        }
+    }
+}
+
 plugins {
-    val kotlinVersion = "2.4.10"
+    val kotlinVersion = "2.2.21"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     id("org.springframework.boot") version "4.1.1"
@@ -28,8 +73,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("tools.jackson.module:jackson-module-kotlin")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("gg.jte:jte-spring-boot-starter-3:3.2.1")
-    compileOnly("gg.jte:jte-kotlin:3.2.1")
+    implementation("gg.jte:jte-spring-boot-starter-3:3.2.4")
+    compileOnly("gg.jte:jte-kotlin:3.2.4")
     implementation("io.github.wimdeblauwe:htmx-spring-boot:5.0.0-rc.1")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.gradle:gradle-tooling-api:9.1.0-rc-3")
@@ -48,6 +93,44 @@ kotlin {
     jvmToolchain(24)
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict")
+    }
+}
+
+val cssBundleSources = listOf(
+    "base/_variables.css" to "base",
+    "base/_typography.css" to "base",
+    "components/_icons.css" to "components",
+    "components/_buttons.css" to "components",
+    "components/_code-blocks.css" to "components",
+    "components/_animations.css" to "components",
+    "components/_fab.css" to "components",
+    "components/_theme-switcher.css" to "components",
+    "layout/_header.css" to "layout",
+    "layout/_footer.css" to "layout",
+    "layout/_sidebar.css" to "layout",
+    "pages/_playground.css" to "pages",
+    "pages/_index.css" to "pages",
+)
+val cssSourceDirectory = layout.projectDirectory.dir("src/main/resources/static/css")
+val bundledCssFile = layout.buildDirectory.file("generated-resources/static/css/styles.css")
+val bundleCss = tasks.register<CssBundleTask>("bundleCss") {
+    group = "build"
+    description = "Bundles layered CSS into one deployable stylesheet."
+    sourceDirectory.set(cssSourceDirectory)
+    sourceSpecs.set(cssBundleSources.map { (path, layer) -> "$path|$layer" })
+    outputFile.set(bundledCssFile)
+}
+
+sourceSets {
+    main {
+        resources.exclude("static/css/styles.css")
+    }
+}
+
+tasks.processResources {
+    dependsOn(bundleCss)
+    from(bundledCssFile) {
+        into("static/css")
     }
 }
 
