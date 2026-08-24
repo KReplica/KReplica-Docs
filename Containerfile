@@ -1,4 +1,4 @@
-FROM docker.io/library/eclipse-temurin:24-jdk AS build
+FROM docker.io/library/eclipse-temurin:26-jdk AS build
 WORKDIR /app
 
 COPY gradlew .
@@ -10,7 +10,7 @@ RUN ./gradlew --no-daemon dependencies
 COPY . .
 RUN ./gradlew bootJar -x test
 
-FROM docker.io/library/eclipse-temurin:24-jdk-alpine
+FROM docker.io/library/eclipse-temurin:26-jdk-alpine
 WORKDIR /app
 COPY --from=build /app/build/libs/*.jar ./application.jar
 EXPOSE 8080
